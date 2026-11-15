@@ -1,0 +1,1 @@
+{"west": 29.7283, "south": -15.247055, "east": 33.7996, "north": -11.3252, "width": 1400, "height": 1386, "projection": "EPSG:3857", "ramp": [{"m": 300, "colour": "#3f7a52"}, {"m": 600, "colour": "#7fa06a"}, {"m": 900, "colour": "#c2bf86"}, {"m": 1100, "colour": "#d8c391"}, {"m": 1300, "colour": "#bf956b"}, {"m": 1500, "colour": "#99705a"}, {"m": 1800, "colour": "#7a6157"}]}
