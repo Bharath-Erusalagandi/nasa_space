@@ -11,3 +11,4 @@ export const metadata: Metadata = { other: { [FILES_META]: present.join(" ") || 
 export default function MissionPage() {
   return <MissionShell />;
 }
+
