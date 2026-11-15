@@ -1,0 +1,20 @@
+{
+ "note": "Plan section A4 table: slope per decade and Mann-Kendall p, 45 seasons 1981/82 to 2025/26.",
+ "places": [
+  {"name": "Katete", "lat": -14.06, "lon": 32.04},
+  {"name": "Chipata", "lat": -13.63, "lon": 32.65},
+  {"name": "Mfuwe", "lat": -13.26, "lon": 31.93},
+  {"name": "Lundazi", "lat": -12.29, "lon": 33.18},
+  {"name": "Petauke", "lat": -14.24, "lon": 31.33}
+ ],
+ "table": {
+  "wet_season_rain_mm": {"Katete": [0.92, 0.992], "Chipata": [-7.84, 0.837], "Mfuwe": [-3.90, 0.868], "Lundazi": [-5.00, 0.883], "Petauke": [7.35, 0.837]},
+  "wet_days": {"Katete": [-1.50, 0.294], "Chipata": [-3.19, 0.025], "Mfuwe": [-1.11, 0.400], "Lundazi": [-5.22, 0.004], "Petauke": [-0.91, 0.445]},
+  "heavy_rain_days": {"Katete": [0.94, 0.091], "Chipata": [0.95, 0.132], "Mfuwe": [0.60, 0.275], "Lundazi": [1.67, 0.037], "Petauke": [0.77, 0.109]},
+  "wettest_day_mm": {"Katete": [1.24, 0.506], "Chipata": [2.44, 0.111], "Mfuwe": [1.28, 0.525], "Lundazi": [8.78, 0.002], "Petauke": [2.50, 0.221]},
+  "rain_onset_day": {"Katete": [2.86, 0.232], "Chipata": [1.82, 0.323], "Mfuwe": [2.22, 0.248], "Lundazi": [2.71, 0.168], "Petauke": [2.50, 0.260]},
+  "wet_season_temp_c": {"Katete": [0.12, 0.200], "Chipata": [0.16, 0.039], "Mfuwe": [0.11, 0.221], "Lundazi": [0.17, 0.002], "Petauke": [0.09, 0.278]},
+  "october_temp_c": {"Katete": [0.36, 0.007], "Chipata": [0.42, "<0.001"], "Mfuwe": [0.34, 0.001], "Lundazi": [0.42, "<0.001"], "Petauke": [0.34, 0.003]}
+ },
+ "katete_october_windows": {"10": [-1.04, 0.474], "20": [-0.47, 0.127], "30": [0.16, 0.498]}
+}

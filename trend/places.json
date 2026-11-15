@@ -1,0 +1,1389 @@
+[
+ {
+  "id": "katete",
+  "name": "Katete",
+  "lat": -14.06,
+  "lon": 32.04,
+  "kind": "town"
+ },
+ {
+  "id": "chipata",
+  "name": "Chipata",
+  "lat": -13.63,
+  "lon": 32.65,
+  "kind": "town"
+ },
+ {
+  "id": "mfuwe",
+  "name": "Mfuwe",
+  "lat": -13.26,
+  "lon": 31.93,
+  "kind": "town"
+ },
+ {
+  "id": "lundazi",
+  "name": "Lundazi",
+  "lat": -12.29,
+  "lon": 33.18,
+  "kind": "town"
+ },
+ {
+  "id": "petauke",
+  "name": "Petauke",
+  "lat": -14.24,
+  "lon": 31.33,
+  "kind": "town"
+ },
+ {
+  "id": "bwanunkha-health-post",
+  "name": "Bwanunkha Health Post",
+  "lat": -13.9408,
+  "lon": 32.6667,
+  "kind": "facility",
+  "type": "Health Post",
+  "district": "Chipata"
+ },
+ {
+  "id": "chadiza-health-post",
+  "name": "Chadiza Health Post",
+  "lat": -14.2011,
+  "lon": 32.4956,
+  "kind": "facility",
+  "type": "Health Post",
+  "district": "Chadiza"
+ },
+ {
+  "id": "chalubilo-health-post",
+  "name": "Chalubilo Health Post",
+  "lat": -14.4083,
+  "lon": 30.7036,
+  "kind": "facility",
+  "type": "Health Post",
+  "district": "Nyimba"
+ },
+ {
+  "id": "champhande-health-post",
+  "name": "Champhande Health Post",
+  "lat": -13.9542,
+  "lon": 32.6475,
+  "kind": "facility",
+  "type": "Health Post",
+  "district": "Chadiza"
+ },
+ {
+  "id": "chanida-health-post",
+  "name": "Chanida Health Post",
+  "lat": -14.2661,
+  "lon": 32.4147,
+  "kind": "facility",
+  "type": "Health Post",
+  "district": "Chadiza"
+ },
+ {
+  "id": "chanjobwe-health-post",
+  "name": "Chanjobwe Health Post",
+  "lat": -14.0186,
+  "lon": 32.5456,
+  "kind": "facility",
+  "type": "Health Post",
+  "district": "Chadiza"
+ },
+ {
+  "id": "chasefu-health-post",
+  "name": "Chasefu Health Post",
+  "lat": -11.9522,
+  "lon": 33.1725,
+  "kind": "facility",
+  "type": "Health Post",
+  "district": "Chasefu"
+ },
+ {
+  "id": "chataika-rural-health-centre",
+  "name": "Chataika Rural Health Centre",
+  "lat": -14.4486,
+  "lon": 31.8294,
+  "kind": "facility",
+  "type": "Rural Health Centre",
+  "district": "Sinda"
+ },
+ {
+  "id": "chidwale-health-post",
+  "name": "Chidwale Health Post",
+  "lat": -14.3203,
+  "lon": 32.0619,
+  "kind": "facility",
+  "type": "Health Post",
+  "district": "Katete"
+ },
+ {
+  "id": "chikando-health-post",
+  "name": "Chikando Health Post",
+  "lat": -13.9211,
+  "lon": 32.6042,
+  "kind": "facility",
+  "type": "Health Post",
+  "district": "Chipata"
+ },
+ {
+  "id": "chikoma-health-post",
+  "name": "Chikoma Health Post",
+  "lat": -14.0767,
+  "lon": 32.9772,
+  "kind": "facility",
+  "type": "Health Post",
+  "district": "Vubwi"
+ },
+ {
+  "id": "chikomeni-health-post",
+  "name": "Chikomeni Health Post",
+  "lat": -12.7603,
+  "lon": 32.9472,
+  "kind": "facility",
+  "type": "Health Post",
+  "district": "Lumezi"
+ },
+ {
+  "id": "chikowa-health-post",
+  "name": "Chikowa Health Post",
+  "lat": -13.9119,
+  "lon": 32.3064,
+  "kind": "facility",
+  "type": "Health Post",
+  "district": "Chipata"
+ },
+ {
+  "id": "chikowa-rural-health-centre",
+  "name": "Chikowa Rural Health Centre",
+  "lat": -13.7969,
+  "lon": 31.4164,
+  "kind": "facility",
+  "type": "Rural Health Centre",
+  "district": "Lusangazi"
+ },
+ {
+  "id": "chikuse-rural-health-centre",
+  "name": "Chikuse Rural Health Centre",
+  "lat": -14.1189,
+  "lon": 31.4056,
+  "kind": "facility",
+  "type": "Rural Health Centre",
+  "district": "Petauke"
+ },
+ {
+  "id": "chimtende-rural-health-centre",
+  "name": "Chimtende Rural Health Centre",
+  "lat": -14.0417,
+  "lon": 31.9678,
+  "kind": "facility",
+  "type": "Rural Health Centre",
+  "district": "Katete"
+ },
+ {
+  "id": "chimunsi-rural-health-centre",
+  "name": "Chimunsi Rural Health Centre",
+  "lat": -14.2639,
+  "lon": 31.6969,
+  "kind": "facility",
+  "type": "Rural Health Centre",
+  "district": "Sinda"
+ },
+ {
+  "id": "chinambi-health-post",
+  "name": "Chinambi Health Post",
+  "lat": -14.4872,
+  "lon": 30.7064,
+  "kind": "facility",
+  "type": "Health Post",
+  "district": "Nyimba"
+ },
+ {
+  "id": "chinkombe-health-post",
+  "name": "Chinkombe Health Post",
+  "lat": -14.07,
+  "lon": 32.0689,
+  "kind": "facility",
+  "type": "Health Post",
+  "district": "Katete"
+ },
+ {
+  "id": "chinsimbwe-health-post",
+  "name": "Chinsimbwe Health Post",
+  "lat": -14.055,
+  "lon": 31.1144,
+  "kind": "facility",
+  "type": "Health Post",
+  "district": "Petauke"
+ },
+ {
+  "id": "chinunda-health-post",
+  "name": "Chinunda Health Post",
+  "lat": -13.3478,
+  "lon": 32.6892,
+  "kind": "facility",
+  "type": "Health Post",
+  "district": "Chipangali"
+ },
+ {
+  "id": "chipangali-health-post",
+  "name": "Chipangali Health Post",
+  "lat": -12.694,
+  "lon": 32.9836,
+  "kind": "facility",
+  "type": "Health Post",
+  "district": "Lumezi"
+ },
+ {
+  "id": "chiparamba-health-post",
+  "name": "Chiparamba Health Post",
+  "lat": -13.5967,
+  "lon": 32.6103,
+  "kind": "facility",
+  "type": "Health Post",
+  "district": "Chipata"
+ },
+ {
+  "id": "chipata-general-level-2-hospital",
+  "name": "Chipata General Level 2 Hospital",
+  "lat": -13.7158,
+  "lon": 32.6811,
+  "kind": "facility",
+  "type": "Level 2 Hospital",
+  "district": "Chipata"
+ },
+ {
+  "id": "chipembe-health-post",
+  "name": "Chipembe Health Post",
+  "lat": -14.5575,
+  "lon": 31.0419,
+  "kind": "facility",
+  "type": "Health Post",
+  "district": "Petauke"
+ },
+ {
+  "id": "chipungo-health-post",
+  "name": "Chipungo Health Post",
+  "lat": -13.8647,
+  "lon": 32.5217,
+  "kind": "facility",
+  "type": "Health Post",
+  "district": "Chipata"
+ },
+ {
+  "id": "chipungu-rural-health-centre",
+  "name": "Chipungu Rural Health Centre",
+  "lat": -14.1931,
+  "lon": 31.3394,
+  "kind": "facility",
+  "type": "Rural Health Centre",
+  "district": "Petauke"
+ },
+ {
+  "id": "chisemo-health-post",
+  "name": "Chisemo Health Post",
+  "lat": -12.4594,
+  "lon": 33.3019,
+  "kind": "facility",
+  "type": "Health Post",
+  "district": "Lundazi"
+ },
+ {
+  "id": "chisenjere-rural-health-centre",
+  "name": "Chisenjere Rural Health Centre",
+  "lat": -14.455,
+  "lon": 31.3964,
+  "kind": "facility",
+  "type": "Rural Health Centre",
+  "district": "Petauke"
+ },
+ {
+  "id": "chitawe-health-post",
+  "name": "Chitawe Health Post",
+  "lat": -14.1639,
+  "lon": 31.7539,
+  "kind": "facility",
+  "type": "Health Post",
+  "district": "Sinda"
+ },
+ {
+  "id": "chitungulu-health-post",
+  "name": "Chitungulu Health Post",
+  "lat": -12.4911,
+  "lon": 32.3228,
+  "kind": "facility",
+  "type": "Health Post",
+  "district": "Lumezi"
+ },
+ {
+  "id": "chiwoko-health-post",
+  "name": "Chiwoko Health Post",
+  "lat": -13.9167,
+  "lon": 32.1833,
+  "kind": "facility",
+  "type": "Health Post",
+  "district": "Kasenengwa"
+ },
+ {
+  "id": "chizenje-health-post",
+  "name": "Chizenje Health Post",
+  "lat": -13.7389,
+  "lon": 32.3761,
+  "kind": "facility",
+  "type": "Health Post",
+  "district": "Kasenengwa"
+ },
+ {
+  "id": "hofmeyr-health-post",
+  "name": "Hofmeyr Health Post",
+  "lat": -14.7372,
+  "lon": 30.9428,
+  "kind": "facility",
+  "type": "Health Post",
+  "district": "Nyimba"
+ },
+ {
+  "id": "jerusalem-health-post",
+  "name": "Jerusalem Health Post",
+  "lat": -13.85,
+  "lon": 32.7228,
+  "kind": "facility",
+  "type": "Health Post",
+  "district": "Chipata"
+ },
+ {
+  "id": "kacholola-health-post",
+  "name": "Kacholola Health Post",
+  "lat": -14.8305,
+  "lon": 30.6227,
+  "kind": "facility",
+  "type": "Health Post",
+  "district": "Nyimba"
+ },
+ {
+  "id": "kafumbwe-rural-health-centre",
+  "name": "Kafumbwe Rural Health Centre",
+  "lat": -14.3007,
+  "lon": 32.2494,
+  "kind": "facility",
+  "type": "Rural Health Centre",
+  "district": "Katete"
+ },
+ {
+  "id": "kagoro-rural-health-centre",
+  "name": "Kagoro Rural Health Centre",
+  "lat": -14.3342,
+  "lon": 32.1142,
+  "kind": "facility",
+  "type": "Rural Health Centre",
+  "district": "Katete"
+ },
+ {
+  "id": "kakula-health-post",
+  "name": "Kakula Health Post",
+  "lat": -14.3525,
+  "lon": 32.1344,
+  "kind": "facility",
+  "type": "Health Post",
+  "district": "Katete"
+ },
+ {
+  "id": "kakumbi-health-post",
+  "name": "Kakumbi Health Post",
+  "lat": -13.2131,
+  "lon": 32.5325,
+  "kind": "facility",
+  "type": "Health Post",
+  "district": "Chipangali"
+ },
+ {
+  "id": "kakwiya-rural-health-centre",
+  "name": "Kakwiya Rural Health Centre",
+  "lat": -14.2058,
+  "lon": 31.3222,
+  "kind": "facility",
+  "type": "Rural Health Centre",
+  "district": "Petauke"
+ },
+ {
+  "id": "kalindawalo-rural-health-centre",
+  "name": "Kalindawalo Rural Health Centre",
+  "lat": -14.4114,
+  "lon": 31.5053,
+  "kind": "facility",
+  "type": "Rural Health Centre",
+  "district": "Sinda"
+ },
+ {
+  "id": "kamiza-rural-health-centre",
+  "name": "Kamiza Rural Health Centre",
+  "lat": -13.8953,
+  "lon": 32.1583,
+  "kind": "facility",
+  "type": "Rural Health Centre",
+  "district": "Kasenengwa"
+ },
+ {
+  "id": "kamoto-mission-level-1-hospital",
+  "name": "Kamoto Mission Level 1 Hospital",
+  "lat": -13.5003,
+  "lon": 32.2564,
+  "kind": "facility",
+  "type": "Level 1 Hospital",
+  "district": "Kasenengwa"
+ },
+ {
+  "id": "kamsaro-health-post",
+  "name": "Kamsaro Health Post",
+  "lat": -12.3683,
+  "lon": 33.1642,
+  "kind": "facility",
+  "type": "Health Post",
+  "district": "Lundazi"
+ },
+ {
+  "id": "kamulaza-health-post",
+  "name": "Kamulaza Health Post",
+  "lat": -13.8731,
+  "lon": 32.46,
+  "kind": "facility",
+  "type": "Health Post",
+  "district": "Chipata"
+ },
+ {
+  "id": "kanyanga-health-post",
+  "name": "Kanyanga Health Post",
+  "lat": -12.06,
+  "lon": 33.15,
+  "kind": "facility",
+  "type": "Health Post",
+  "district": "Chasefu"
+ },
+ {
+  "id": "kapara-health-post",
+  "name": "Kapara Health Post",
+  "lat": -13.5633,
+  "lon": 32.6667,
+  "kind": "facility",
+  "type": "Health Post",
+  "district": "Chipangali"
+ },
+ {
+  "id": "kapata-health-centre",
+  "name": "Kapata Health Centre",
+  "lat": -13.7363,
+  "lon": 32.7761,
+  "kind": "facility",
+  "type": "Health Centre",
+  "district": "Chipata"
+ },
+ {
+  "id": "kapichila-health-post",
+  "name": "Kapichila Health Post",
+  "lat": -12.4739,
+  "lon": 33.3972,
+  "kind": "facility",
+  "type": "Health Post",
+  "district": "Lundazi"
+ },
+ {
+  "id": "kasamanda-health-post",
+  "name": "Kasamanda Health Post",
+  "lat": -14.1931,
+  "lon": 32.6186,
+  "kind": "facility",
+  "type": "Health Post",
+  "district": "Chadiza"
+ },
+ {
+  "id": "kasenengwa-health-post",
+  "name": "Kasenengwa Health Post",
+  "lat": -13.725,
+  "lon": 32.3781,
+  "kind": "facility",
+  "type": "Health Post",
+  "district": "Kasenengwa"
+ },
+ {
+  "id": "kasenga-health-post",
+  "name": "Kasenga Health Post",
+  "lat": -13.4311,
+  "lon": 32.8664,
+  "kind": "facility",
+  "type": "Health Post",
+  "district": "Chipangali"
+ },
+ {
+  "id": "katandala-health-post",
+  "name": "Katandala Health Post",
+  "lat": -13.8644,
+  "lon": 32.7711,
+  "kind": "facility",
+  "type": "Health Post",
+  "district": "Chipata"
+ },
+ {
+  "id": "katete-boma-rural-health-centre",
+  "name": "Katete Boma Rural Health Centre",
+  "lat": -14.1653,
+  "lon": 32.1956,
+  "kind": "facility",
+  "type": "Rural Health Centre",
+  "district": "Katete"
+ },
+ {
+  "id": "katondo-health-post",
+  "name": "Katondo Health Post",
+  "lat": -13.675,
+  "lon": 32.4617,
+  "kind": "facility",
+  "type": "Health Post",
+  "district": "Kasenengwa"
+ },
+ {
+  "id": "kayeka-health-post",
+  "name": "Kayeka Health Post",
+  "lat": -13.7522,
+  "lon": 32.7711,
+  "kind": "facility",
+  "type": "Health Post",
+  "district": "Chipata"
+ },
+ {
+  "id": "kazembe-health-post",
+  "name": "Kazembe Health Post",
+  "lat": -12.2547,
+  "lon": 32.6875,
+  "kind": "facility",
+  "type": "Health Post",
+  "district": "Lumezi"
+ },
+ {
+  "id": "kwenje-health-post",
+  "name": "Kwenje Health Post",
+  "lat": -13.9467,
+  "lon": 32.2533,
+  "kind": "facility",
+  "type": "Health Post",
+  "district": "Katete"
+ },
+ {
+  "id": "luamphaande-health-post",
+  "name": "Luamphaande Health Post",
+  "lat": -14.2347,
+  "lon": 31.4703,
+  "kind": "facility",
+  "type": "Health Post",
+  "district": "Petauke"
+ },
+ {
+  "id": "lumezi-health-post",
+  "name": "Lumezi Health Post",
+  "lat": -12.5758,
+  "lon": 33.0628,
+  "kind": "facility",
+  "type": "Health Post",
+  "district": "Lumezi"
+ },
+ {
+  "id": "lundazi-district-level-1-hospital",
+  "name": "Lundazi District Level 1 Hospital",
+  "lat": -12.3783,
+  "lon": 33.1883,
+  "kind": "facility",
+  "type": "Level 1 Hospital",
+  "district": "Lundazi"
+ },
+ {
+  "id": "lundazi-health-post",
+  "name": "Lundazi Health Post",
+  "lat": -12.3758,
+  "lon": 33.2958,
+  "kind": "facility",
+  "type": "Health Post",
+  "district": "Lundazi"
+ },
+ {
+  "id": "lunkwakwa-health-post",
+  "name": "Lunkwakwa Health Post",
+  "lat": -13.7283,
+  "lon": 32.6256,
+  "kind": "facility",
+  "type": "Health Post",
+  "district": "Chipata"
+ },
+ {
+  "id": "lunzi-health-post",
+  "name": "Lunzi Health Post",
+  "lat": -11.7902,
+  "lon": 33.3002,
+  "kind": "facility",
+  "type": "Health Post",
+  "district": "Chasefu"
+ },
+ {
+  "id": "lusuntha-health-post",
+  "name": "Lusuntha Health Post",
+  "lat": -12.2451,
+  "lon": 33.3081,
+  "kind": "facility",
+  "type": "Health Post",
+  "district": "Chasefu"
+ },
+ {
+  "id": "madzaela-health-post",
+  "name": "Madzaela Health Post",
+  "lat": -14.0211,
+  "lon": 32.5036,
+  "kind": "facility",
+  "type": "Health Post",
+  "district": "Chadiza"
+ },
+ {
+  "id": "madziatuwa-health-post",
+  "name": "Madziatuwa Health Post",
+  "lat": -13.1117,
+  "lon": 32.8267,
+  "kind": "facility",
+  "type": "Health Post",
+  "district": "Lumezi"
+ },
+ {
+  "id": "madzimawe-health-post",
+  "name": "Madzimawe Health Post",
+  "lat": -13.8089,
+  "lon": 32.5192,
+  "kind": "facility",
+  "type": "Health Post",
+  "district": "Chipata"
+ },
+ {
+  "id": "madzimoyo-health-post",
+  "name": "Madzimoyo Health Post",
+  "lat": -13.8467,
+  "lon": 32.5239,
+  "kind": "facility",
+  "type": "Health Post",
+  "district": "Chipata"
+ },
+ {
+  "id": "magwero-health-post",
+  "name": "Magwero Health Post",
+  "lat": -13.7095,
+  "lon": 32.8243,
+  "kind": "facility",
+  "type": "Health Post",
+  "district": "Chipata"
+ },
+ {
+  "id": "makwe-health-post",
+  "name": "Makwe Health Post",
+  "lat": -13.8931,
+  "lon": 32.6889,
+  "kind": "facility",
+  "type": "Health Post",
+  "district": "Chipata"
+ },
+ {
+  "id": "malama-health-post",
+  "name": "Malama Health Post",
+  "lat": -13.8728,
+  "lon": 32.1103,
+  "kind": "facility",
+  "type": "Health Post",
+  "district": "Katete"
+ },
+ {
+  "id": "malandula-health-post",
+  "name": "Malandula Health Post",
+  "lat": -11.8817,
+  "lon": 33.2858,
+  "kind": "facility",
+  "type": "Health Post",
+  "district": "Chasefu"
+ },
+ {
+  "id": "manyane-rural-health-centre",
+  "name": "Manyane Rural Health Centre",
+  "lat": -14.6442,
+  "lon": 31.2981,
+  "kind": "facility",
+  "type": "Rural Health Centre",
+  "district": "Petauke"
+ },
+ {
+  "id": "mapamba-health-post",
+  "name": "Mapamba Health Post",
+  "lat": -12.1658,
+  "lon": 32.4897,
+  "kind": "facility",
+  "type": "Health Post",
+  "district": "Lumezi"
+ },
+ {
+  "id": "masumba-health-post",
+  "name": "Masumba Health Post",
+  "lat": -13.2925,
+  "lon": 32.0478,
+  "kind": "facility",
+  "type": "Health Post",
+  "district": "Mambwe"
+ },
+ {
+  "id": "matambazi-rural-health-centre",
+  "name": "Matambazi Rural Health Centre",
+  "lat": -14.4572,
+  "lon": 31.6422,
+  "kind": "facility",
+  "type": "Rural Health Centre",
+  "district": "Sinda"
+ },
+ {
+  "id": "mawanda-rural-health-centre",
+  "name": "Mawanda Rural Health Centre",
+  "lat": -14.0175,
+  "lon": 31.4853,
+  "kind": "facility",
+  "type": "Rural Health Centre",
+  "district": "Lusangazi"
+ },
+ {
+  "id": "mchenjeza-health-post",
+  "name": "Mchenjeza Health Post",
+  "lat": -14.0639,
+  "lon": 32.9875,
+  "kind": "facility",
+  "type": "Health Post",
+  "district": "Vubwi"
+ },
+ {
+  "id": "merwe-rural-health-centre",
+  "name": "Merwe Rural Health Centre",
+  "lat": -14.4281,
+  "lon": 31.2264,
+  "kind": "facility",
+  "type": "Rural Health Centre",
+  "district": "Petauke"
+ },
+ {
+  "id": "miinga-mission-health-centre",
+  "name": "Miinga Mission Health Centre",
+  "lat": -14.3707,
+  "lon": 31.279,
+  "kind": "facility",
+  "type": "Health Centre",
+  "district": "Petauke"
+ },
+ {
+  "id": "mindola-rural-health-centre",
+  "name": "Mindola Rural Health Centre",
+  "lat": -14.2614,
+  "lon": 32.2214,
+  "kind": "facility",
+  "type": "Rural Health Centre",
+  "district": "Katete"
+ },
+ {
+  "id": "minga-mission-level-1-hospital",
+  "name": "Minga Mission Level 1 Hospital",
+  "lat": -14.3683,
+  "lon": 31.2967,
+  "kind": "facility",
+  "type": "Level 1 Hospital",
+  "district": "Petauke"
+ },
+ {
+  "id": "miti-health-post",
+  "name": "Miti Health Post",
+  "lat": -14.1242,
+  "lon": 32.7136,
+  "kind": "facility",
+  "type": "Health Post",
+  "district": "Vubwi"
+ },
+ {
+  "id": "mkanda-health-post",
+  "name": "Mkanda Health Post",
+  "lat": -13.5028,
+  "lon": 32.8182,
+  "kind": "facility",
+  "type": "Health Post",
+  "district": "Chipangali"
+ },
+ {
+  "id": "mkopeka-health-post",
+  "name": "Mkopeka Health Post",
+  "lat": -14.4413,
+  "lon": 31.0219,
+  "kind": "facility",
+  "type": "Health Post",
+  "district": "Nyimba"
+ },
+ {
+  "id": "mkumbuzi-health-post",
+  "name": "Mkumbuzi Health Post",
+  "lat": -13.7042,
+  "lon": 32.6881,
+  "kind": "facility",
+  "type": "Health Post",
+  "district": "Chipata"
+ },
+ {
+  "id": "mng-omba-rural-health-centre",
+  "name": "Mng'omba Rural Health Centre",
+  "lat": -14.2478,
+  "lon": 31.6319,
+  "kind": "facility",
+  "type": "Rural Health Centre",
+  "district": "Sinda"
+ },
+ {
+  "id": "mnoro-health-post",
+  "name": "Mnoro Health Post",
+  "lat": -13.5592,
+  "lon": 32.7413,
+  "kind": "facility",
+  "type": "Health Post",
+  "district": "Chipangali"
+ },
+ {
+  "id": "mphangwe-rural-health-centre",
+  "name": "Mphangwe Rural Health Centre",
+  "lat": -14.1119,
+  "lon": 32.1922,
+  "kind": "facility",
+  "type": "Rural Health Centre",
+  "district": "Katete"
+ },
+ {
+  "id": "msanzala-rural-health-centre",
+  "name": "Msanzala Rural Health Centre",
+  "lat": -14.3192,
+  "lon": 31.4675,
+  "kind": "facility",
+  "type": "Rural Health Centre",
+  "district": "Petauke"
+ },
+ {
+  "id": "msekera-health-post",
+  "name": "Msekera Health Post",
+  "lat": -13.7444,
+  "lon": 32.6864,
+  "kind": "facility",
+  "type": "Health Post",
+  "district": "Chipata"
+ },
+ {
+  "id": "mshawa-health-post",
+  "name": "Mshawa Health Post",
+  "lat": -13.6764,
+  "lon": 32.7567,
+  "kind": "facility",
+  "type": "Health Post",
+  "district": "Chipata"
+ },
+ {
+  "id": "mtandaza-rural-health-centre",
+  "name": "Mtandaza Rural Health Centre",
+  "lat": -14.3776,
+  "lon": 32.0004,
+  "kind": "facility",
+  "type": "Rural Health Centre",
+  "district": "Sinda"
+ },
+ {
+  "id": "mthunya-rural-health-centre",
+  "name": "Mthunya Rural Health Centre",
+  "lat": -14.3069,
+  "lon": 31.7747,
+  "kind": "facility",
+  "type": "Rural Health Centre",
+  "district": "Sinda"
+ },
+ {
+  "id": "mtilizi-health-post",
+  "name": "Mtilizi Health Post",
+  "lat": -14.5797,
+  "lon": 31.0367,
+  "kind": "facility",
+  "type": "Health Post",
+  "district": "Petauke"
+ },
+ {
+  "id": "mtwalo-health-post",
+  "name": "Mtwalo Health Post",
+  "lat": -11.8961,
+  "lon": 33.3011,
+  "kind": "facility",
+  "type": "Health Post",
+  "district": "Chasefu"
+ },
+ {
+  "id": "mucheleka-health-post",
+  "name": "Mucheleka Health Post",
+  "lat": -12.2956,
+  "lon": 33.1383,
+  "kind": "facility",
+  "type": "Health Post",
+  "district": "Lundazi"
+ },
+ {
+  "id": "mumbi-rural-health-centre",
+  "name": "Mumbi Rural Health Centre",
+  "lat": -14.5903,
+  "lon": 31.4067,
+  "kind": "facility",
+  "type": "Rural Health Centre",
+  "district": "Petauke"
+ },
+ {
+  "id": "munyukwa-health-post",
+  "name": "Munyukwa Health Post",
+  "lat": -12.0592,
+  "lon": 32.9844,
+  "kind": "facility",
+  "type": "Health Post",
+  "district": "Chasefu"
+ },
+ {
+  "id": "muzeyi-health-post",
+  "name": "Muzeyi Health Post",
+  "lat": -13.5306,
+  "lon": 32.4572,
+  "kind": "facility",
+  "type": "Health Post",
+  "district": "Kasenengwa"
+ },
+ {
+  "id": "mwami-level-1-hospital",
+  "name": "Mwami Level 1 Hospital",
+  "lat": -13.8764,
+  "lon": 32.9064,
+  "kind": "facility",
+  "type": "Level 1 Hospital",
+  "district": "Vubwi"
+ },
+ {
+  "id": "mwanika-health-post",
+  "name": "Mwanika Health Post",
+  "lat": -13.9903,
+  "lon": 31.8839,
+  "kind": "facility",
+  "type": "Health Post",
+  "district": "Katete"
+ },
+ {
+  "id": "mwanjawanthu-rural-health-centre",
+  "name": "Mwanjawanthu Rural Health Centre",
+  "lat": -14.6036,
+  "lon": 31.4485,
+  "kind": "facility",
+  "type": "Rural Health Centre",
+  "district": "Petauke"
+ },
+ {
+  "id": "mwanya-health-post",
+  "name": "Mwanya Health Post",
+  "lat": -12.7342,
+  "lon": 32.3631,
+  "kind": "facility",
+  "type": "Health Post",
+  "district": "Lumezi"
+ },
+ {
+  "id": "mwape-health-post",
+  "name": "Mwape Health Post",
+  "lat": -14.1283,
+  "lon": 30.8377,
+  "kind": "facility",
+  "type": "Health Post",
+  "district": "Nyimba"
+ },
+ {
+  "id": "mwase-lundazi-health-post",
+  "name": "Mwase Lundazi Health Post",
+  "lat": -12.5147,
+  "lon": 33.3989,
+  "kind": "facility",
+  "type": "Health Post",
+  "district": "Lundazi"
+ },
+ {
+  "id": "mwase-mphangwe-zonal-health-post",
+  "name": "Mwase-Mphangwe Zonal Health Post",
+  "lat": -13.1683,
+  "lon": 32.9695,
+  "kind": "facility",
+  "type": "Health Post",
+  "district": "Lumezi"
+ },
+ {
+  "id": "mwimba-health-post",
+  "name": "Mwimba Health Post",
+  "lat": -12.7197,
+  "lon": 32.9603,
+  "kind": "facility",
+  "type": "Health Post",
+  "district": "Lumezi"
+ },
+ {
+  "id": "namseche-health-post",
+  "name": "Namseche Health Post",
+  "lat": -13.7656,
+  "lon": 32.7714,
+  "kind": "facility",
+  "type": "Health Post",
+  "district": "Chipata"
+ },
+ {
+  "id": "ng-onga-health-post",
+  "name": "Ng'onga Health Post",
+  "lat": -12.5696,
+  "lon": 33.2041,
+  "kind": "facility",
+  "type": "Health Post",
+  "district": "Lundazi"
+ },
+ {
+  "id": "nkhanga-health-post",
+  "name": "Nkhanga Health Post",
+  "lat": -12.1947,
+  "lon": 33.1025,
+  "kind": "facility",
+  "type": "Health Post",
+  "district": "Chasefu"
+ },
+ {
+  "id": "nsadzu-health-post",
+  "name": "Nsadzu Health Post",
+  "lat": -14.1017,
+  "lon": 32.3908,
+  "kind": "facility",
+  "type": "Health Post",
+  "district": "Chadiza"
+ },
+ {
+  "id": "nsefu-health-post",
+  "name": "Nsefu Health Post",
+  "lat": -13.4444,
+  "lon": 32.6733,
+  "kind": "facility",
+  "type": "Health Post",
+  "district": "Chipangali"
+ },
+ {
+  "id": "nyalugwe-health-post",
+  "name": "Nyalugwe Health Post",
+  "lat": -14.7969,
+  "lon": 30.5036,
+  "kind": "facility",
+  "type": "Health Post",
+  "district": "Nyimba"
+ },
+ {
+  "id": "nyamphande-rural-health-centre",
+  "name": "Nyamphande Rural Health Centre",
+  "lat": -14.3122,
+  "lon": 31.3414,
+  "kind": "facility",
+  "type": "Rural Health Centre",
+  "district": "Petauke"
+ },
+ {
+  "id": "nyamphondolo-rural-health-centre",
+  "name": "Nyamphondolo Rural Health Centre",
+  "lat": -14.1642,
+  "lon": 31.445,
+  "kind": "facility",
+  "type": "Rural Health Centre",
+  "district": "Petauke"
+ },
+ {
+  "id": "nyangwe-health-post",
+  "name": "Nyangwe Health Post",
+  "lat": -12.4132,
+  "lon": 33.4541,
+  "kind": "facility",
+  "type": "Health Post",
+  "district": "Lundazi"
+ },
+ {
+  "id": "nyanje-mission-level-1-hospital",
+  "name": "Nyanje Mission Level 1 Hospital",
+  "lat": -14.4192,
+  "lon": 31.8876,
+  "kind": "facility",
+  "type": "Level 1 Hospital",
+  "district": "Sinda"
+ },
+ {
+  "id": "nyembe-rural-health-centre",
+  "name": "Nyembe Rural Health Centre",
+  "lat": -14.1739,
+  "lon": 31.9933,
+  "kind": "facility",
+  "type": "Rural Health Centre",
+  "district": "Katete"
+ },
+ {
+  "id": "nyimba-health-centre",
+  "name": "Nyimba Health Centre",
+  "lat": -14.6116,
+  "lon": 30.9407,
+  "kind": "facility",
+  "type": "Health Centre",
+  "district": "Nyimba"
+ },
+ {
+  "id": "petauke-district-level-1-hospital",
+  "name": "Petauke District Level 1 Hospital",
+  "lat": -14.3875,
+  "lon": 31.4683,
+  "kind": "facility",
+  "type": "Level 1 Hospital",
+  "district": "Petauke"
+ },
+ {
+  "id": "petauke-urban-clinic-clinic",
+  "name": "Petauke Urban Clinic Clinic",
+  "lat": -14.3378,
+  "lon": 31.4264,
+  "kind": "facility",
+  "type": "Clinic",
+  "district": "Petauke"
+ },
+ {
+  "id": "phikamalanza-health-post",
+  "name": "Phikamalanza Health Post",
+  "lat": -12.2144,
+  "lon": 33.2939,
+  "kind": "facility",
+  "type": "Health Post",
+  "district": "Chasefu"
+ },
+ {
+  "id": "rukuzye-health-post",
+  "name": "Rukuzye Health Post",
+  "lat": -13.3823,
+  "lon": 32.9016,
+  "kind": "facility",
+  "type": "Health Post",
+  "district": "Chipangali"
+ },
+ {
+  "id": "samuel-health-post",
+  "name": "Samuel Health Post",
+  "lat": -13.8081,
+  "lon": 32.2394,
+  "kind": "facility",
+  "type": "Health Post",
+  "district": "Kasenengwa"
+ },
+ {
+  "id": "sandwe-rural-health-centre",
+  "name": "Sandwe Rural Health Centre",
+  "lat": -14.3914,
+  "lon": 31.4731,
+  "kind": "facility",
+  "type": "Rural Health Centre",
+  "district": "Petauke"
+ },
+ {
+  "id": "satelite-18-rural-health-centre",
+  "name": "Satelite 18 Rural Health Centre",
+  "lat": -14.0231,
+  "lon": 31.7233,
+  "kind": "facility",
+  "type": "Rural Health Centre",
+  "district": "Sinda"
+ },
+ {
+  "id": "satelite-30-rural-health-centre",
+  "name": "Satelite 30 Rural Health Centre",
+  "lat": -14.0556,
+  "lon": 31.7042,
+  "kind": "facility",
+  "type": "Rural Health Centre",
+  "district": "Sinda"
+ },
+ {
+  "id": "sinato-health-post",
+  "name": "Sinato Health Post",
+  "lat": -14.2844,
+  "lon": 32.3417,
+  "kind": "facility",
+  "type": "Health Post",
+  "district": "Chadiza"
+ },
+ {
+  "id": "sinda-rural-health-centre",
+  "name": "Sinda Rural Health Centre",
+  "lat": -14.3656,
+  "lon": 31.8961,
+  "kind": "facility",
+  "type": "Rural Health Centre",
+  "district": "Sinda"
+ },
+ {
+  "id": "sindemisale-health-post",
+  "name": "Sindemisale Health Post",
+  "lat": -14.021,
+  "lon": 33.1339,
+  "kind": "facility",
+  "type": "Health Post",
+  "district": "Vubwi"
+ },
+ {
+  "id": "st-francis-mission-level-2-hospital",
+  "name": "St Francis Mission Level 2 Hospital",
+  "lat": -14.2089,
+  "lon": 32.1481,
+  "kind": "facility",
+  "type": "Level 2 Hospital",
+  "district": "Katete"
+ },
+ {
+  "id": "st-luke-msoro-health-post",
+  "name": "St. Luke Msoro Health Post",
+  "lat": -14.0708,
+  "lon": 32.6283,
+  "kind": "facility",
+  "type": "Health Post",
+  "district": "Chadiza"
+ },
+ {
+  "id": "tafelansoni-health-post",
+  "name": "Tafelansoni Health Post",
+  "lat": -14.2325,
+  "lon": 32.5138,
+  "kind": "facility",
+  "type": "Health Post",
+  "district": "Chadiza"
+ },
+ {
+  "id": "tamanda-health-post",
+  "name": "Tamanda Health Post",
+  "lat": -13.4336,
+  "lon": 32.8118,
+  "kind": "facility",
+  "type": "Health Post",
+  "district": "Chipangali"
+ },
+ {
+  "id": "ukwimi-a-rural-health-centre",
+  "name": "Ukwimi A Rural Health Centre",
+  "lat": -13.9658,
+  "lon": 31.7919,
+  "kind": "facility",
+  "type": "Rural Health Centre",
+  "district": "Lusangazi"
+ },
+ {
+  "id": "ukwimi-b-rural-health-centre",
+  "name": "Ukwimi B Rural Health Centre",
+  "lat": -13.9606,
+  "lon": 31.8964,
+  "kind": "facility",
+  "type": "Rural Health Centre",
+  "district": "Katete"
+ },
+ {
+  "id": "undi-rural-health-centre",
+  "name": "Undi Rural Health Centre",
+  "lat": -14.1344,
+  "lon": 32.1094,
+  "kind": "facility",
+  "type": "Rural Health Centre",
+  "district": "Katete"
+ },
+ {
+  "id": "vizenge-health-post",
+  "name": "Vizenge Health Post",
+  "lat": -13.3221,
+  "lon": 32.8926,
+  "kind": "facility",
+  "type": "Health Post",
+  "district": "Chipangali"
+ },
+ {
+  "id": "vulamkoko-rural-health-centre",
+  "name": "Vulamkoko Rural Health Centre",
+  "lat": -14.1486,
+  "lon": 31.8578,
+  "kind": "facility",
+  "type": "Rural Health Centre",
+  "district": "Katete"
+ },
+ {
+  "id": "zemba-health-post",
+  "name": "Zemba Health Post",
+  "lat": -14.0944,
+  "lon": 32.4139,
+  "kind": "facility",
+  "type": "Health Post",
+  "district": "Chadiza"
+ },
+ {
+  "id": "zumwanda-health-post",
+  "name": "Zumwanda Health Post",
+  "lat": -12.5067,
+  "lon": 33.0589,
+  "kind": "facility",
+  "type": "Health Post",
+  "district": "Lumezi"
+ },
+ {
+  "id": "cell-s15-000-30-000",
+  "name": "Grid cell -15.000_30.000",
+  "lat": -15.0,
+  "lon": 30.0,
+  "kind": "cell"
+ },
+ {
+  "id": "cell-s15-000-31-250",
+  "name": "Grid cell -15.000_31.250",
+  "lat": -15.0,
+  "lon": 31.25,
+  "kind": "cell"
+ },
+ {
+  "id": "cell-s14-500-30-000",
+  "name": "Grid cell -14.500_30.000",
+  "lat": -14.5,
+  "lon": 30.0,
+  "kind": "cell"
+ },
+ {
+  "id": "cell-s14-000-30-000",
+  "name": "Grid cell -14.000_30.000",
+  "lat": -14.0,
+  "lon": 30.0,
+  "kind": "cell"
+ },
+ {
+  "id": "cell-s13-500-31-250",
+  "name": "Grid cell -13.500_31.250",
+  "lat": -13.5,
+  "lon": 31.25,
+  "kind": "cell"
+ },
+ {
+  "id": "cell-s13-000-31-875",
+  "name": "Grid cell -13.000_31.875",
+  "lat": -13.0,
+  "lon": 31.875,
+  "kind": "cell"
+ },
+ {
+  "id": "cell-s12-500-31-875",
+  "name": "Grid cell -12.500_31.875",
+  "lat": -12.5,
+  "lon": 31.875,
+  "kind": "cell"
+ },
+ {
+  "id": "cell-s11-500-33-125",
+  "name": "Grid cell -11.500_33.125",
+  "lat": -11.5,
+  "lon": 33.125,
+  "kind": "cell"
+ }
+]
