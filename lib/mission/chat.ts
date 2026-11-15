@@ -1,6 +1,6 @@
 // A scripted conversation, no language model: what was heard sets the questions, the answers set the triage.
-// Wording follows WHO fact sheets (malaria, dengue, West Nile virus), WHO IMCI and Zambia's malaria guidelines;
-// the sources are in docs/REFERENCES.md.
+// Wording follows WHO fact sheets (malaria, dengue, West Nile virus), WHO IMCI and Zambia's malaria guidelines,
+// linked in formulary.ts.
 import { speciesFor, type VectorGroup } from "@/lib/pod/species";
 import { DANGER_SIGNS, signsFromText, type DangerSign, type TriageResult } from "./triage";
 import type { Answer, Findings } from "./session";

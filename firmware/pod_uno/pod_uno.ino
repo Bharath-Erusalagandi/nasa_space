@@ -1,4 +1,3 @@
-// written with Claude (Anthropic), see docs/AI_USE.md
 // Pod K-01 early prototype on an Arduino Uno robot car kit (Uno + Sensor Shield V5).
 // Prints one JSON object per line (115200 baud over USB, or 9600 through the Bluetooth module):
 //   {"k":"dist","v":23.4}   ultrasonic distance in cm, twice a second

@@ -1,5 +1,5 @@
 // The 8 species the mosquito model knows (the HumBugDB species task), with what each can carry and its photo.
-// Sources for the roles are in docs/REFERENCES.md (WHO fact sheets, Zambia NMESP 2022-2026, CDC DPDx).
+// Sources for the roles: WHO fact sheets, Zambia NMESP 2022-2026 and CDC DPDx.
 
 export type VectorGroup = "anopheles" | "aedes" | "culex" | "mansonia";
 

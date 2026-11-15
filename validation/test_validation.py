@@ -140,7 +140,6 @@ def test_report_on_small_csvs(tmp_path):
     report.build(tmp_path)
 
     results = json.loads((tmp_path / "public" / "validation" / "results.json").read_text())
-    assert json.loads((tmp_path / "docs" / "validation_results.json").read_text()) == results
     assert set(results) == {"heart_rate", "spo2", "air_temp_c", "mosquito"}
     assert results["heart_rate"] == {"n": 4, "bias": 1.0, "sd": 2.45, "loa_low": -3.8, "loa_high": 5.8,
                                      "mae": 2.0, "within_tolerance": 1.0, "people": 2}
@@ -158,7 +157,7 @@ def test_report_on_small_csvs(tmp_path):
         "n": 6,
     }
 
-    md = (tmp_path / "docs" / "VALIDATION.md").read_text()
+    md = (tmp_path / "validation" / "report" / "REPORT.md").read_text()
     assert "Not tested" not in md
     assert '"bench-compared on 2 adults against a consumer fingertip oximeter"' in md
     assert "| Rows excluded (blank or non-numeric reading) | 1 |" in md
@@ -180,28 +179,27 @@ def test_report_on_small_csvs(tmp_path):
     assert "not field accuracy" in md
     assert "NASA POWER" in md
     for kind in ("heart_rate", "spo2", "air_temp_c"):
-        assert (tmp_path / "docs" / "validation" / f"{kind}_bland_altman.png").stat().st_size > 0
-        assert f"validation/{kind}_bland_altman.png" in md
+        assert (tmp_path / "validation" / "report" / "plots" / f"{kind}_bland_altman.png").stat().st_size > 0
+        assert f"plots/{kind}_bland_altman.png" in md
     assert not any(ord(c) in (0x2013, 0x2014) for c in md)
 
 
 def test_report_on_header_only_files(tmp_path):
     write_csvs(tmp_path)
-    for path in (tmp_path / "public" / "validation" / "results.json", tmp_path / "docs" / "validation_results.json"):
+    for path in (tmp_path / "public" / "validation" / "results.json",):
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text("{}")
-    old_plot = tmp_path / "docs" / "validation" / "spo2_bland_altman.png"
+    old_plot = tmp_path / "validation" / "report" / "plots" / "spo2_bland_altman.png"
     old_plot.parent.mkdir(parents=True)
     old_plot.write_bytes(b"x")
 
     assert report.build(tmp_path) == {}
 
-    md = (tmp_path / "docs" / "VALIDATION.md").read_text()
+    md = (tmp_path / "validation" / "report" / "REPORT.md").read_text()
     for heading in ("## Heart rate", "## SpO2", "## Air temperature", "## Mosquito listener"):
         assert f"{heading}\n\nNot tested\n" in md
     assert md.count("Not tested") == 4
     assert json.loads((tmp_path / "public" / "validation" / "results.json").read_text()) == {}
-    assert json.loads((tmp_path / "docs" / "validation_results.json").read_text()) == {}
     assert not old_plot.exists()
 
 
@@ -221,7 +219,7 @@ def test_report_lists_unknown_conditions_and_blank_people(tmp_path):
     results = report.build(tmp_path)
     assert results["heart_rate"]["n"] == 3
     assert results["heart_rate"]["people"] == 1
-    md = (tmp_path / "docs" / "VALIDATION.md").read_text()
+    md = (tmp_path / "validation" / "report" / "REPORT.md").read_text()
     assert "Rows left out because the condition is not rest, post_exercise or motion: 2 (values seen: blank, walking)." in md
     assert "The person was not recorded for 2 of 3 pairs." in md
     assert '"bench-compared on at least 1 adult against a consumer fingertip oximeter"' in md
@@ -230,7 +228,7 @@ def test_report_lists_unknown_conditions_and_blank_people(tmp_path):
 def test_no_allowed_claim_without_pairs(tmp_path):
     write_csvs(tmp_path, "P01,motion,1,110,75,88,97,\n")
     assert report.build(tmp_path) == {}
-    md = (tmp_path / "docs" / "VALIDATION.md").read_text()
+    md = (tmp_path / "validation" / "report" / "REPORT.md").read_text()
     assert "No pairs with both readings." in md
     assert "Allowed claim" not in md
     assert json.loads((tmp_path / "public" / "validation" / "results.json").read_text()) == {}

@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/banner.jpg" alt="Project Astrophage: the map of Eastern Province, Zambia coloured by October temperature trend, beside the SKY panel for Katete showing +0.36 °C per decade over 45 seasons" width="100%" />
+  <img src="assets/banner.jpg" alt="Project Astrophage: the map of Eastern Province, Zambia coloured by October temperature trend, beside the SKY panel for Katete showing +0.36 °C per decade over 45 seasons" width="100%" />
 </p>
 
 <h1 align="center">Project Astrophage</h1>
@@ -7,7 +7,7 @@
 <p align="center"><b>Is the rainy season in eastern Zambia changing, and what should a health team do about it?</b></p>
 
 <p align="center">
-  <a href="docs/media/mission-walkthrough.mp4"><img alt="Demo video" src="https://img.shields.io/badge/Demo-Watch_the_walkthrough-0b5a8a?style=for-the-badge"></a>
+  <a href="assets/demo.mp4"><img alt="Demo video" src="https://img.shields.io/badge/Demo-Watch_the_walkthrough-0b5a8a?style=for-the-badge"></a>
   <img alt="Status" src="https://img.shields.io/badge/Status-Hackathon_Demo-c25e43?style=for-the-badge">
   <img alt="Hackathon" src="https://img.shields.io/badge/RiverHacks_x_NASA_Space_Apps-2026-141414?style=for-the-badge">
   <a href="LICENSE"><img alt="License" src="https://img.shields.io/badge/License-MIT-3b3f45?style=for-the-badge"></a>
@@ -91,8 +91,6 @@ We trained on [HumBugDB](https://doi.org/10.5281/zenodo.4904800), split by recor
 | Read speech flagged as a mosquito | under 1% |
 | Species, 8 classes, balanced per recording | **53%** (chance is 12.5%) |
 
-The full statistics and every limit are in [`docs/METHODS.md`](docs/METHODS.md).
-
 ---
 
 ## The pod
@@ -150,7 +148,7 @@ npm run e2e                      # browser tests; run npm run build first
 
 python3 -m venv .venv && . .venv/bin/activate
 pip install -r trend/requirements.txt -r validation/requirements.txt
-python -m pytest trend validation scripts -q
+python -m pytest trend validation -q
 ```
 
 ### Connect the real pod
@@ -165,7 +163,6 @@ You don't need to do this to run the app; the built files are already in `public
 python trend/build_trends.py --places trend/places.json --out public/trends   # NASA POWER trends
 python trend/cross_check.py --trends public/trends                            # ERA5 cross-check
 SERPAPI_API_KEY=your_key python trend/evidence.py                             # optional research list
-python scripts/fill_docs.py                                                   # writes the numbers into the docs
 ```
 
 Downloads are cached in `trend/cache/`, so a second run doesn't hit the APIs again. Run `build_trends.py` before `cross_check.py`, since the build rewrites the cell files. If Python hits a certificate error on macOS, `pip install certifi` and put `SSL_CERT_FILE=$(python -m certifi)` in front of the command.
@@ -178,7 +175,7 @@ Downloads are cached in `trend/cache/`, so a second run doesn't hit the APIs aga
 python trend/normals.py --lat 30.2672 --lon -97.7431 --name "Austin, Texas" --out public/trends/pod_site.json
 ```
 
-**Validation.** Put real paired readings into `validation/pulse/readings.csv`, `validation/mosquito/trials.csv` and `validation/weather/log.csv`, then run `python validation/report.py`, `python scripts/fill_docs.py` and `npm run build`. The GROUND panel then shows each sensor's tested error.
+**Validation.** Put real paired readings into `validation/pulse/readings.csv`, `validation/mosquito/trials.csv` and `validation/weather/log.csv`, then run `python validation/report.py` and `npm run build`. The GROUND panel then shows each sensor's tested error.
 
 **Recording a replay.** Open `/mission/?record=1`, connect the pod, take some readings, press "Download session", save it as `public/pod/replay.json` and rebuild.
 
@@ -213,8 +210,7 @@ NASASpaceApps/
 ├── validation/           # CSVs for pod vs reference readings, and the report
 ├── firmware/             # pod K-01 (XIAO) and the early Uno robot-car prototype
 ├── hardware/             # parametric CAD, print files, renders
-├── docs/                 # methods, validation, references, submission, AI use
-├── scripts/              # fill_docs.py writes the numbers into the docs
+├── assets/               # the README banner and the demo video
 └── e2e/                  # Playwright browser tests
 ```
 
@@ -230,9 +226,10 @@ The trend analysis is complete and every number comes from files in this repo. T
 
 The code is under the [MIT License](LICENSE). The data keeps its own licences:
 
-NASA POWER data comes from the NASA Langley Research Center POWER project, with values from the MERRA-2 reanalysis (NASA GMAO). The cross-check uses the ECMWF ERA5 reanalysis through the Open-Meteo archive API. Mosquito recordings are from HumBugDB (Kiskin et al. 2021, CC BY 4.0). Full citations are in [`docs/REFERENCES.md`](docs/REFERENCES.md). Map and facility data:
+NASA POWER data comes from the NASA Langley Research Center POWER project, with values from the MERRA-2 reanalysis (NASA GMAO). The cross-check uses the ECMWF ERA5 reanalysis through the Open-Meteo archive API. Mosquito recordings are from HumBugDB (Kiskin et al. 2021, CC BY 4.0). Map and facility data:
 
-<!-- fill_docs:credits -->
+The data was obtained from National Aeronautics and Space Administration (NASA) Langley Research Center's Prediction Of Worldwide Energy Resources (POWER) project funded through the NASA Earth Science Division. We acknowledge the use of imagery provided by services from NASA's Global Imagery Browse Services (GIBS), part of NASA's Earth Science Data and Information System (ESDIS).
+
 | Data | Licence | Used for |
 |---|---|---|
 | [geoBoundaries Zambia ADM1 (Zambia Data Hub)](https://github.com/wmgeolab/geoBoundaries/raw/9469f09/releaseData/gbOpen/ZMB/ADM1/geoBoundaries-ZMB-ADM1.geojson) | Creative Commons Attribution 4.0 International (CC BY 4.0) | province outline |
@@ -242,9 +239,6 @@ NASA POWER data comes from the NASA Langley Research Center POWER project, with 
 | [Public health facilities in sub Saharan Africa (Maina et al. 2019, Scientific Data, doi:10.1038/s41597-019-0142-2)](https://doi.org/10.6084/m9.figshare.7725374.v1) | CC0 (https://creativecommons.org/publicdomain/zero/1.0/) | health facility names, types and locations |
 | [OpenStreetMap Zambia extract (Geofabrik)](https://download.geofabrik.de/africa/zambia-latest.osm.pbf) | Open Database License 1.0 (ODbL), (c) OpenStreetMap contributors | roads, rivers, towns and road routing (OSRM) |
 | [Copernicus DEM GLO-90 (AWS Open Data, copernicus-dem-90m)](https://copernicus-dem-90m.s3.amazonaws.com) | Copernicus DEM GLO-90, free licence; produced using Copernicus WorldDEM-90 (c) DLR e.V. 2010-2014 and (c) Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved | hillshade relief (49 tiles) |
-<!-- /fill_docs:credits -->
-
-
 
 ---
 

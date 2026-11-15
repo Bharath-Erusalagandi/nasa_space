@@ -94,7 +94,7 @@ The MAX30101 runs red and infrared at 100 samples per second. Beat-to-beat inter
 
 Taking the finger off clears all of this, so a new finger starts from empty.
 
-q measures how steady the sensor's own readings are. It is not an accuracy figure. The SpO2 function comes with the library and has not been calibrated against a reference for this board; the hardware validation in `docs/VALIDATION.md` is where accuracy gets measured.
+q measures how steady the sensor's own readings are. It is not an accuracy figure. The SpO2 function comes with the library and has not been calibrated against a reference for this board; the hardware validation in `validation/` (run `python validation/report.py`) is where accuracy gets measured.
 
 ## Not checked without hardware
 

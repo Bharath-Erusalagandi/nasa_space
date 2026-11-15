@@ -1,4 +1,3 @@
-# written with Claude (Anthropic), see docs/AI_USE.md
 """Published evidence for each indicator, found with SerpApi.
 
 For every indicator this asks Google Scholar and Google News, through SerpApi, what has been published about that

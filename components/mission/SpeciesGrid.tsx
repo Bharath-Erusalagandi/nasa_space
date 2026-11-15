@@ -45,7 +45,7 @@ export function SpeciesSources() {
         Recordings: HumBugDB test set (Kiskin et al. 2021, CC BY 4.0), never used in training; each is the test recording of its
         species the model gets right most often, as recorded and through a simulated speaker. On
         all test recordings it names the species {pct(results.species.recording_balanced_accuracy)} of the time, and{" "}
-        {pct(results.species.through_the_air.recording_balanced_accuracy)} through a simulated speaker and room (docs/METHODS.md).
+        {pct(results.species.through_the_air.recording_balanced_accuracy)} through a simulated speaker and room.
       </Note>
       {SPECIES.filter((s, i) => SPECIES.findIndex((t) => t.photo.file === s.photo.file) === i).map((s) => (
         <Note key={s.photo.file}>

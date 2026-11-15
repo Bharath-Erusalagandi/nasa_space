@@ -99,7 +99,7 @@ def agreement_block(pairs, excluded, spec, people, plots, extra=()):
     if stats["sd"] is not None and "kind" in spec:
         name = spec["kind"] + PLOT_SUFFIX
         bland_altman(plots / name, pairs, stats, spec["title"], spec["unit"], extra)
-        parts.append(f"![Bland-Altman plot for {spec['title']}](validation/{name})")
+        parts.append(f"![Bland-Altman plot for {spec['title']}](plots/{name})")
     return "\n\n".join(parts), stats
 
 
@@ -250,8 +250,8 @@ def write_results(paths, results):
 def build(root):
     root = Path(root)
     data = root / "validation"
-    docs = root / "docs"
-    plots = docs / "validation"
+    out = root / "validation" / "report"
+    plots = out / "plots"
     for old in plots.glob("*" + PLOT_SUFFIX):
         old.unlink()
 
@@ -266,9 +266,9 @@ def build(root):
         if item is not None:
             results[kind] = item
 
-    docs.mkdir(parents=True, exist_ok=True)
-    (docs / "VALIDATION.md").write_text(INTRO + "".join("\n" + text for _, text, _ in sections), encoding="utf-8")
-    write_results([docs / "validation_results.json", root / "public" / "validation" / "results.json"], results)
+    out.mkdir(parents=True, exist_ok=True)
+    (out / "REPORT.md").write_text(INTRO + "".join("\n" + text for _, text, _ in sections), encoding="utf-8")
+    write_results([root / "public" / "validation" / "results.json"], results)
     if plots.exists() and not any(plots.iterdir()):
         plots.rmdir()
     return results

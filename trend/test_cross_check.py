@@ -1,4 +1,3 @@
-# written with Claude (Anthropic), see docs/AI_USE.md
 import io
 import json
 import urllib.error
