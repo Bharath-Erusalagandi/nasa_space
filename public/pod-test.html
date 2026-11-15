@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pod K-01 quick test</title>
+<style>
+  body { font: 16px/1.5 system-ui, sans-serif; margin: 32px; color: #111; background: #fff; }
+  @media (prefers-color-scheme: dark) { body { color: #eee; background: #111; } }
+  h1 { font-size: 20px; margin: 0 0 4px; }
+  p { margin: 4px 0; color: #777; }
+  .row { display: flex; flex-wrap: wrap; gap: 56px; margin: 28px 0; }
+  .label { font-size: 13px; color: #777; }
+  .value { font-size: 72px; font-weight: 600; font-variant-numeric: tabular-nums; line-height: 1.1; }
+  .unit { font-size: 20px; color: #777; margin-left: 6px; }
+  button { font: inherit; padding: 8px 14px; border: 1px solid #999; background: none; color: inherit; border-radius: 6px; cursor: pointer; }
+  button:disabled { opacity: 0.4; cursor: default; }
+  canvas { width: 100%; height: 140px; border-bottom: 1px solid #999; }
+  pre { font: 12px/1.4 ui-monospace, Menlo, monospace; height: 160px; overflow: auto; color: #777; margin: 12px 0 0; }
+</style>
+</head>
+<body>
+<h1>Pod K-01 quick test</h1>
+<p id="state">Not connected. Open this page in Chrome or Edge, plug the Uno in, then press Connect.</p>
+<p>
+  <button id="connect">Connect</button>
+  <button id="zero" disabled>Set dry level</button>
+  <button id="dispatch" disabled>Dispatch</button>
+  <button id="stop" disabled>Stop</button>
+</p>
+<div class="row">
+  <div><div class="label">Distance to the surface</div><div><span class="value" id="dist">--</span><span class="unit">cm</span></div></div>
+  <div><div class="label">Level above the dry mark</div><div><span class="value" id="level">--</span><span class="unit">cm</span></div></div>
+  <div><div class="label">Light on the solar panel, uncalibrated</div><div><span class="value" id="light">--</span><span class="unit">%</span></div></div>
+</div>
+<canvas id="plot" width="1400" height="280" aria-label="Distance over the last minute"></canvas>
+<pre id="log" aria-label="Raw lines from the pod"></pre>
+<script>
+const $ = (id) => document.getElementById(id);
+const points = [];
+let port, writer, dry = null, last = null, lastAt = 0;
+
+function show(id, text) { $(id).textContent = text; }
+
+function draw() {
+  const c = $("plot"), g = c.getContext("2d");
+  g.clearRect(0, 0, c.width, c.height);
+  if (points.length < 2) return;
+  const lo = Math.min(...points), hi = Math.max(...points), span = Math.max(hi - lo, 1);
+  g.strokeStyle = getComputedStyle(document.body).color;
+  g.lineWidth = 3;
+  g.beginPath();
+  points.forEach((v, i) => {
+    const x = (i / 119) * c.width, y = c.height - 12 - ((v - lo) / span) * (c.height - 24);
+    if (i) g.lineTo(x, y); else g.moveTo(x, y);
+  });
+  g.stroke();
+}
+
+function handle(line) {
+  const log = $("log");
+  log.textContent = (log.textContent + line + "\n").split("\n").slice(-40).join("\n");
+  log.scrollTop = log.scrollHeight;
+  let m;
+  try { m = JSON.parse(line); } catch { return; }
+  if (!m || typeof m.v !== "number") return;
+  lastAt = Date.now();
+  if (m.k === "dist" && m.v >= 2 && m.v <= 400) {
+    last = m.v;
+    show("dist", m.v.toFixed(1));
+    show("level", dry === null ? "--" : (dry - m.v).toFixed(1));
+    points.push(m.v);
+    if (points.length > 120) points.shift();
+    draw();
+  } else if (m.k === "light" && m.v >= 0 && m.v <= 100) {
+    show("light", String(Math.round(m.v)));
+  }
+}
+
+async function send(text) {
+  if (writer) await writer.write(new TextEncoder().encode(text + "\n"));
+}
+
+async function connect() {
+  if (!("serial" in navigator)) { show("state", "This browser cannot read the pod. Use Chrome or Edge."); return; }
+  try {
+    port = await navigator.serial.requestPort();
+    await port.open({ baudRate: 115200 });
+  } catch (err) { show("state", "Could not open the port: " + err.message); return; }
+  writer = port.writable.getWriter();
+  for (const id of ["zero", "dispatch", "stop"]) $(id).disabled = false;
+  show("state", "Connected. Waiting for the first line.");
+  const reader = port.readable.pipeThrough(new TextDecoderStream()).getReader();
+  let rest = "";
+  try {
+    for (;;) {
+      const { value, done } = await reader.read();
+      if (done) break;
+      rest += value;
+      const lines = rest.split(/\r?\n/);
+      rest = lines.pop().slice(-4096);
+      for (const line of lines) if (line.trim()) handle(line.trim());
+    }
+  } catch (err) { show("state", "Pod disconnected: " + err.message); }
+}
+
+setInterval(() => {
+  if (!port) return;
+  show("state", Date.now() - lastAt > 3000 ? "Connected, but no reading for 3 seconds." : "Live from the pod.");
+}, 1000);
+
+$("connect").onclick = connect;
+$("zero").onclick = () => { dry = last; show("level", last === null ? "--" : "0.0"); };
+$("dispatch").onclick = () => send("dispatch");
+$("stop").onclick = () => send("stop");
+</script>
+</body>
+</html>
