@@ -25,26 +25,6 @@
 
 > **Try it in two minutes:** `npm ci && npm run build && npm start`, then open **http://localhost:3000/mission/?story=1&sim=1** and press the right arrow key to walk through the demo. No internet, accounts or API keys needed.
 
----
-
-## The 30-second pitch
-
-Malaria medicine in rural Zambia travels on dirt roads, and those roads close when the rains come. Delivery calendars quietly assume the rainy season never changes. If it does shift, the calendar is wrong and clinics run out right when they need stock most.
-
-The catch is that nobody in the supply chain can easily tell whether the rains are *really* changing, or whether last year was just a bad year.
-
-**Project Astrophage answers that with 45 seasons of NASA data, checks it on the ground with a small village pod, and turns the answer into a real decision: a triage, a medicine order and a delivery on real roads.**
-
-What we found surprised us. Total rainfall isn't changing. The heat is: October is getting hotter in 27 of 28 NASA grid cells, and the wettest day of the season is getting heavier in 13. Not drier, just hotter, with heavier downpours.
-
-<p align="center">
-  <img src="docs/media/mission-sky.jpg" alt="The SKY panel for Katete: October temperature rising 0.36 °C per decade over 45 seasons, beside a map of Eastern Province coloured by trend" width="860" />
-  <br/>
-  <em>The SKY panel for Katete: 45 seasons of October temperature, the trend line and the map of every NASA cell.</em>
-</p>
-
----
-
 ## What it does
 
 Everything lives on one page, `/mission/`, and follows one loop: **Detect, Verify, Act.**
