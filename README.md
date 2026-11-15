@@ -214,14 +214,6 @@ NASASpaceApps/
 └── e2e/                  # Playwright browser tests
 ```
 
----
-
-## What's tested, honestly
-
-The trend analysis is complete and every number comes from files in this repo. The firmware compiles, but we haven't run the pod hardware with this app yet; the serial link is tested against a simulated port. The validation CSVs are still empty, so every pod reading says "not yet tested". The enclosure is a CAD design with renders and hasn't been printed. NASA POWER values come from the MERRA-2 model, and one cell covers about 56 × 67 km, so it isn't a village-level measurement. That's exactly why the pod exists.
-
----
-
 ## Credits and licences
 
 The code is under the [MIT License](LICENSE). The data keeps its own licences:
