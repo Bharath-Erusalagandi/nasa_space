@@ -1,5 +1,5 @@
 import type { RecordedEvent } from "@/lib/pod/recorder";
-import type { CellFile, MapFiles, MapName, PodSite, TrendIndex, ValidationResults } from "./types";
+import type { CellFile, Evidence, EvidenceItem, MapFiles, MapName, PodSite, TrendIndex, ValidationResults } from "./types";
 
 const cache = new Map<string, Promise<unknown>>();
 
@@ -20,7 +20,7 @@ function cached<T>(path: string): Promise<T> {
 }
 
 // files the team adds later; the build lists the ones it found in a meta tag, so the page never asks for a missing one
-export const OPTIONAL_FILES = ["trends/pod_site.json", "validation/results.json", "pod/replay.json"] as const;
+export const OPTIONAL_FILES = ["trends/pod_site.json", "validation/results.json", "pod/replay.json", "evidence/index.json"] as const;
 export const FILES_META = "orbit-files";
 
 export function isListed(path: string, listed: string | null | undefined): boolean {
@@ -60,6 +60,26 @@ export const loadValidation = async () => {
   const data = await optional<unknown>("/validation/results.json");
   return data === undefined ? undefined : testedOnly(data);
 };
+// only web links are kept, so a result can never carry a script or a local address into the page
+export const safeItems = (items: unknown): EvidenceItem[] =>
+  Array.isArray(items)
+    ? items.filter((i): i is EvidenceItem => isObject(i) && typeof i.title === "string" && i.title !== "" && typeof i.link === "string" && /^https?:\/\//.test(i.link))
+    : [];
+
+export const loadEvidence = async (): Promise<Evidence | undefined> => {
+  const data = await optional<unknown>("/evidence/index.json");
+  if (!isObject(data) || !isObject(data.indicators)) return undefined;
+  const indicators = Object.fromEntries(
+    Object.entries(data.indicators)
+      .filter(([, entry]) => isObject(entry))
+      .map(([key, entry]) => {
+        const e = entry as Record<string, unknown>;
+        return [key, { query: String(e.query ?? ""), google_scholar: safeItems(e.google_scholar), google_news: safeItems(e.google_news) }];
+      }),
+  );
+  return { generated: String(data.generated ?? ""), source: String(data.source ?? ""), region: String(data.region ?? ""), indicators };
+};
+
 export const loadReplay = () => optional<RecordedEvent[]>("/pod/replay.json");
 
 export const clearCache = () => cache.clear();

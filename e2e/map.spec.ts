@@ -252,7 +252,7 @@ for (const [width, height] of [
       const svg = await map(page).boundingBox();
       const footer = await page.locator('footer[aria-label="Map legend"]').boundingBox();
       expect(svg!.y + svg!.height).toBeLessThanOrEqual(footer!.y + 0.5);
-      // the climate map shares the column with the terrain map below it
+      // the map shares the column with its legend
       expect(svg!.height).toBeGreaterThan(height * 0.3);
       const name = await map(page).locator("[data-selected-label]").boundingBox();
       expect(name!.x >= svg!.x && name!.x + name!.width <= svg!.x + svg!.width).toBe(true);

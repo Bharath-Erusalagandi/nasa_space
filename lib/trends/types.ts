@@ -8,6 +8,8 @@ export const INDICATOR_KEYS = [
   "rain_onset_day",
   "wet_season_temp_c",
   "october_temp_c",
+  "wet_season_humidity_pct",
+  "wet_season_soil_wetness_pct",
 ] as const;
 
 export type IndicatorKey = (typeof INDICATOR_KEYS)[number];
@@ -172,3 +174,8 @@ export type MapFiles = {
 export type MapName = keyof MapFiles;
 
 export const displayUnit = (unit: string) => unit.replace(/deg C/g, "°C");
+
+// written by trend/evidence.py from SerpApi searches; titles and links only
+export type EvidenceItem = { title: string; link: string; source?: string | null; year?: number | null; date?: string | null };
+export type EvidenceEntry = { query: string; google_scholar: EvidenceItem[]; google_news: EvidenceItem[] };
+export type Evidence = { generated: string; source: string; region: string; indicators: Partial<Record<IndicatorKey, EvidenceEntry>> };

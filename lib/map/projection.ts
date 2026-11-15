@@ -80,3 +80,14 @@ export function scaleBar(projection: GeoProjection, view: View, lat: number, lon
   const km = [...NICE_KM].reverse().find((d) => d * pxPerKm <= maxPx) ?? NICE_KM[0];
   return { km, px: km * pxPerKm };
 }
+
+// the longitude and latitude under a point on screen, or null when the point is off the projection
+export function unproject(projection: GeoProjection, view: View, [px, py]: Point): { lon: number; lat: number } | null {
+  const at = projection.invert?.([(px - view.x) / view.k, (py - view.y) / view.k]);
+  return at && Number.isFinite(at[0]) && Number.isFinite(at[1]) ? { lon: at[0], lat: at[1] } : null;
+}
+
+// "13.52°S 32.10°E"
+export function coordinates({ lon, lat }: { lon: number; lat: number }, digits = 2): string {
+  return `${Math.abs(lat).toFixed(digits)}°${lat < 0 ? "S" : "N"} ${Math.abs(lon).toFixed(digits)}°${lon < 0 ? "W" : "E"}`;
+}

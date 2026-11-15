@@ -205,7 +205,8 @@ def test_index_records_the_last_day_of_data(tmp_path):
         payload = december_rain_payload(1981, 12)
         t2m = payload["properties"]["parameter"]["T2M"]
         t2m["19930630"] = -999.0
-        payload["properties"]["parameter"]["PRECTOTCORR"].pop("19930630")
+        for name in ("PRECTOTCORR", "RH2M", "GWETROOT"):
+            payload["properties"]["parameter"][name].pop("19930630")
         return payload
 
     index = run(tmp_path, PLACES[:1], fetch=fetch)

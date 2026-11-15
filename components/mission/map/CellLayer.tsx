@@ -87,6 +87,8 @@ export function CellLayer({ cells, ramp, reversed, projection, view, describe, o
             fillOpacity={cell.error ? 1 : FILL_OPACITY}
             className="transition-[fill] duration-200 ease-out motion-reduce:transition-none"
           />
+          {/* the cell under the pointer */}
+          <rect {...inset(rect, 1)} data-hover className="pointer-events-none fill-none stroke-text-primary opacity-0 [stroke-width:2px] group-hover:opacity-70" />
           <rect
             {...inset(rect, 2)}
             className="pointer-events-none fill-none stroke-border-focus-ring opacity-0 [stroke-width:2px] group-focus-visible:opacity-100"

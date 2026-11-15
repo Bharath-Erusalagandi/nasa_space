@@ -1,6 +1,6 @@
 "use client";
 
-import type { ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { LinkButton } from "@/components/base/buttons/link-button";
 import { Drawer, DrawerBody, DrawerHeader, DrawerTrigger } from "@/components/base/drawer/drawer";
 import {
@@ -15,7 +15,8 @@ import {
   signed,
 } from "@/lib/trends/format";
 import { cellSizeLabel } from "@/lib/trends/geo";
-import { displayUnit, type CellFile, type IndicatorKey, type Trend, type WindowChoice } from "@/lib/trends/types";
+import { loadEvidence } from "@/lib/trends/load";
+import { displayUnit, type CellFile, type Evidence, type EvidenceItem, type IndicatorKey, type Trend, type WindowChoice } from "@/lib/trends/types";
 
 function Section({ title, children }: { title: string; children: ReactNode }) {
   return (
@@ -38,6 +39,57 @@ type Props = {
   cellCount: number;
   generated: string | undefined;
 };
+
+function EvidenceList({ title, items }: { title: string; items: EvidenceItem[] }) {
+  if (!items.length) return null;
+  return (
+    <div className="flex flex-col gap-1">
+      <p className="text-caption-1-semibold text-text-secondary">{title}</p>
+      <ul className="flex flex-col gap-1.5">
+        {items.map((item) => (
+          <li key={item.link} className="flex flex-col">
+            <a
+              href={item.link}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-body-regular text-text-primary underline underline-offset-3 outline-none focus-visible:ring-2 focus-visible:ring-border-focus-ring"
+            >
+              {item.title}
+            </a>
+            {item.source || item.date ? <span className="text-caption-1-regular text-text-secondary">{[item.source, item.date].filter(Boolean).join(", ")}</span> : null}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+// what has been published about this change, found by trend/evidence.py through SerpApi; absent until that script has run
+function PublishedEvidence({ indicatorKey }: { indicatorKey: IndicatorKey }) {
+  const [evidence, setEvidence] = useState<Evidence | null>(null);
+  useEffect(() => {
+    let live = true;
+    void loadEvidence().then((e) => live && setEvidence(e ?? null));
+    return () => {
+      live = false;
+    };
+  }, []);
+  const entry = evidence?.indicators[indicatorKey];
+  if (!evidence || !entry || !(entry.google_scholar.length || entry.google_news.length)) return null;
+  return (
+    <Section title="What others have found">
+      <div className="flex flex-col gap-3" data-evidence>
+        <EvidenceList title="Research (Google Scholar)" items={entry.google_scholar} />
+        <EvidenceList title="News (Google News)" items={entry.google_news} />
+        <p className="text-caption-1-regular text-text-secondary">
+          Search results for &ldquo;{entry.query}&rdquo; from {evidence.source}
+          {evidence.generated ? ` on ${evidence.generated}` : ""}. They are listed as found; the team has not reviewed them, and a result here does not confirm the trend
+          above. The links open other websites and need an internet connection.
+        </p>
+      </div>
+    </Section>
+  );
+}
 
 export function HowWeKnow({ cell, indicatorKey, placeName, trend, window, q, cellCount, generated }: Props) {
   const indicator = cell.indicators[indicatorKey];
@@ -121,6 +173,8 @@ export function HowWeKnow({ cell, indicatorKey, placeName, trend, window, q, cel
               </p>
             </Section>
           ) : null}
+
+          <PublishedEvidence indicatorKey={indicatorKey} />
 
           <Section title="Limits">
             <ul className="flex list-disc flex-col gap-1 ps-5">

@@ -22,7 +22,7 @@ TODO (team): link to the public repository. It must open without a login.
 
 The app is one static page, `/mission/`, with a map and three panels in the order Detect -> Verify -> Act.
 
-SKY tests seven seasonal indicators for the grid cell around the selected place: wet-season rainfall, rainy days, heavy-rain days, wettest day, start of the rains, wet-season temperature and October temperature. Each verdict gives Sen's slope per decade, its 95% range and a two-sided Mann-Kendall p, with the least-squares slope and t-test p beside it for comparison. A record switch reruns the test on the last 10, 20 or 30 seasons, so you can see how a short record changes the answer. The map colours every cell by its trend and outlines a cell only when it stays significant after a Benjamini-Hochberg correction across all 28 cells. October temperature rises by 0.23 to 0.45 °C per decade across the cells (Sen's slope).
+SKY tests nine seasonal indicators for the grid cell around the selected place: wet-season rainfall, rainy days, heavy-rain days, wettest day, start of the rains, wet-season temperature, October temperature, wet-season humidity and wet-season soil wetness. Each verdict gives Sen's slope per decade, its 95% range and a two-sided Mann-Kendall p, with the least-squares slope and t-test p beside it for comparison. A record switch reruns the test on the last 10, 20 or 30 seasons, so you can see how a short record changes the answer. The map colours every cell by its trend and outlines a cell only when it stays significant after a Benjamini-Hochberg correction across all 28 cells. October temperature rises by 0.23 to 0.45 °C per decade across the cells (Sen's slope).
 
 GROUND shows pod K-01, read over USB through the browser's Web Serial API: heart rate, SpO2, air temperature and humidity, with the air temperature set against NASA POWER's 1981 to 2026-09-15 normal range for today's date. The validation CSV files in `validation/` hold no rows yet, so no pod sensor error has been measured and every reading on screen says "not yet tested".
 
@@ -32,11 +32,15 @@ Limits we state on screen and in `docs/METHODS.md`: MERRA-2 is a model reanalysi
 
 ## NASA data
 
-NASA POWER daily point API (NASA Langley Research Center), with values from the MERRA-2 reanalysis (NASA GMAO): corrected precipitation (`PRECTOTCORR`) and 2 m air temperature (`T2M`), 1 January 1981 to 2026-09-15, one request per 0.5 x 0.625 degree cell, 28 cells. We use it to build seven seasonal indicators, test each one for a trend, and give the normal temperature range that the pod's live air reading is compared with.
+NASA POWER daily point API (NASA Langley Research Center), with values from the MERRA-2 reanalysis (NASA GMAO): corrected precipitation (`PRECTOTCORR`), 2 m air temperature (`T2M`), 2 m relative humidity (`RH2M`) and root-zone soil wetness (`GWETROOT`), 1 January 1981 to 2026-09-15, one request per 0.5 x 0.625 degree cell, 28 cells. We use it to build nine seasonal indicators, test each one for a trend, and give the normal temperature range that the pod's live air reading is compared with.
 
 TODO (team): paste the acknowledgement sentence that NASA POWER asks users to include. `docs/REFERENCES.md` gives the sentence and its source.
 
+NASA GIBS (Global Imagery Browse Services, NASA ESDIS): the map's Satellite ground shows the MODIS Terra corrected reflectance, true colour, picture of 20 August 2025. It is the one thing the page loads from the internet, and only when that ground is chosen.
+
 ## Space agency partner and other data
+
+- SerpApi (Google Scholar and Google News search): `trend/evidence.py` searches for published research and news about each indicator's change in Zambia and saves the titles and links, which "How we know" lists under "What others have found". The search runs when the data is built, not when the page is used.
 
 - ECMWF ERA5 reanalysis through the Open-Meteo archive API: daily precipitation and mean 2 m temperature, used as a second source to cross-check the NASA trends in 28 of 28 cells.
 - geoBoundaries Zambia ADM1 (Zambia Data Hub), Creative Commons Attribution 4.0 International (CC BY 4.0), used for province outline. https://github.com/wmgeolab/geoBoundaries/raw/9469f09/releaseData/gbOpen/ZMB/ADM1/geoBoundaries-ZMB-ADM1.geojson

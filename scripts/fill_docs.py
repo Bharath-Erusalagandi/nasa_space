@@ -13,6 +13,8 @@ SHORT = {
     "rain_onset_day": "onset",
     "wet_season_temp_c": "wet_temp",
     "october_temp_c": "october",
+    "wet_season_humidity_pct": "humidity",
+    "wet_season_soil_wetness_pct": "soil",
 }
 BLOCKS = ("indicators", "findings", "windows", "cross_check", "grid", "mosquito")
 WINDOWS = ("10", "20", "30")

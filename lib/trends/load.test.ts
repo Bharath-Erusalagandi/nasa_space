@@ -67,4 +67,18 @@ describe("load", () => {
     expect(isListed("/pod/replay.json", "")).toBe(false);
     expect(isListed("/pod/replay.json", null)).toBe(true);
   });
+
+  test("evidence keeps only titled results with web links", async () => {
+    const { safeItems } = await import("./load");
+    expect(
+      safeItems([
+        { title: "A paper", link: "https://example.org/a", source: "Journal, 2019", year: 2019 },
+        { title: "Script", link: "javascript:alert(1)" },
+        { title: "", link: "https://example.org/untitled" },
+        { link: "https://example.org/no-title" },
+        "not an object",
+      ]),
+    ).toEqual([{ title: "A paper", link: "https://example.org/a", source: "Journal, 2019", year: 2019 }]);
+    expect(safeItems(undefined)).toEqual([]);
+  });
 });

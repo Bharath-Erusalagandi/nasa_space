@@ -56,9 +56,17 @@ Data reference, the page's template ("The data was obtained from the POWER Proje
 
 ## Data
 
-**NASA POWER daily point API**, NASA Langley Research Center; source MERRA-2 (NASA GMAO). Fields PRECTOTCORR and T2M. Citation and acknowledgement as above.
+**NASA POWER daily point API**, NASA Langley Research Center; source MERRA-2 (NASA GMAO). Fields PRECTOTCORR, T2M, RH2M and GWETROOT. Citation and acknowledgement as above.
 https://power.larc.nasa.gov/api/temporal/daily/point
-Used for: the seven seasonal indicators and the pod-site normals.
+Used for: the nine seasonal indicators and the pod-site normals.
+
+**NASA GIBS**, Global Imagery Browse Services, part of NASA's Earth Science Data and Information System (ESDIS). Layer MODIS_Terra_CorrectedReflectance_TrueColor, 20 August 2025.
+https://gibs.earthdata.nasa.gov/wms/epsg3857/best/wms.cgi
+Used for: the map's Satellite ground.
+TODO (team): paste NASA's current GIBS acknowledgement sentence here. NASA has published more than one wording over the years; copy the current one from https://www.earthdata.nasa.gov/gibs.
+
+**SerpApi**, Google Scholar API and Google News API. https://serpapi.com/
+Used for: the "What others have found" list in How we know. `trend/evidence.py` keeps each result's title, source, date and link, not its text.
 
 **geoBoundaries Zambia ADM1 and ADM2.** Runfola, D. et al. (2020) geoBoundaries: A global database of political administrative boundaries. PLoS ONE 15(4): e0231866. https://doi.org/10.1371/journal.pone.0231866 (short form requested at https://www.geoboundaries.org/). Licence CC BY 4.0. ADM2 lineage: GRID3, Office of the Surveyor General.
 https://github.com/wmgeolab/geoBoundaries/raw/9469f09/releaseData/gbOpen/ZMB/ADM1/geoBoundaries-ZMB-ADM1.geojson and .../ADM2/geoBoundaries-ZMB-ADM2.geojson

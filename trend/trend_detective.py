@@ -13,8 +13,12 @@ from scipy import stats
 POWER_URL = "https://power.larc.nasa.gov/api/temporal/daily/point"
 SOURCE = (
     "NASA POWER daily point API (MERRA-2 reanalysis): "
-    "PRECTOTCORR (rain, mm/day) and T2M (air temperature at 2 m, deg C)"
+    "PRECTOTCORR (rain, mm/day), T2M (air temperature at 2 m, deg C), "
+    "RH2M (relative humidity at 2 m, %) and GWETROOT (root-zone soil wetness, 0 to 1)"
 )
+# every variable asked of NASA POWER; the first two are the ones the original seven indicators need
+PARAMETERS = ("PRECTOTCORR", "T2M", "RH2M", "GWETROOT")
+REQUIRED = ("PRECTOTCORR", "T2M")
 MIN_SEASONS = 10
 
 INDICATORS = {
@@ -30,12 +34,21 @@ INDICATORS = {
     ),
     "wet_season_temp_c": ("Wet-season temperature", "deg C", "deg C", "Mean air temperature from 1 Nov to 30 Apr."),
     "october_temp_c": ("October temperature", "deg C", "deg C", "Mean air temperature in October, the hottest month."),
+    "wet_season_humidity_pct": ("Wet-season humidity", "%", "%", "Mean relative humidity at 2 m from 1 Nov to 30 Apr."),
+    "wet_season_soil_wetness_pct": (
+        "Wet-season soil wetness",
+        "%",
+        "%",
+        "Mean root-zone soil wetness from 1 Nov to 30 Apr, from 0% (completely dry) to 100% (saturated).",
+    ),
 }
+# indicators built from variables the ERA5 cross-check does not download, so they have no second source
+NASA_ONLY = ("wet_season_humidity_pct", "wet_season_soil_wetness_pct")
 
 
 def fetch_power(lat, lon, start, end, timeout=120):
     query = urllib.parse.urlencode({
-        "parameters": "PRECTOTCORR,T2M",
+        "parameters": ",".join(PARAMETERS),
         "community": "AG",
         "longitude": lon,
         "latitude": lat,
@@ -51,7 +64,7 @@ def parse_power(payload):
     fill = payload.get("header", {}).get("fill_value", -999)
     params = payload["properties"]["parameter"]
     out = {}
-    for name in ("PRECTOTCORR", "T2M"):
+    for name in PARAMETERS:
         out[name] = {
             datetime.strptime(day, "%Y%m%d").date(): float(value)
             for day, value in params.get(name, {}).items()
@@ -96,8 +109,8 @@ def _round(value):
     return None if value is None else round(float(value), 4)
 
 
-def seasonal_indicators(rain, temp=None, wet_mm=1.0, heavy_mm=20.0, onset_mm=25.0, onset_days=10):
-    temp = temp or {}
+def seasonal_indicators(rain, temp=None, wet_mm=1.0, heavy_mm=20.0, onset_mm=25.0, onset_days=10, humidity=None, soil=None):
+    temp, humidity, soil = temp or {}, humidity or {}, soil or {}
     out = {key: [] for key in INDICATORS}
     if not rain:
         return out
@@ -109,6 +122,8 @@ def seasonal_indicators(rain, temp=None, wet_mm=1.0, heavy_mm=20.0, onset_mm=25.
         wet = _window(rain, date(season, 11, 1), date(season + 1, 4, 30))
         wet_t = _window(temp, date(season, 11, 1), date(season + 1, 4, 30))
         oct_t = _window(temp, date(season, 10, 1), date(season, 10, 31))
+        wet_h = _window(humidity, date(season, 11, 1), date(season + 1, 4, 30))
+        wet_s = _window(soil, date(season, 11, 1), date(season + 1, 4, 30))
         values = {
             "wet_season_rain_mm": None if wet is None else wet.sum(),
             "wet_days": None if wet is None else int((wet >= wet_mm).sum()),
@@ -117,6 +132,9 @@ def seasonal_indicators(rain, temp=None, wet_mm=1.0, heavy_mm=20.0, onset_mm=25.
             "rain_onset_day": _onset(rain, season, onset_mm, onset_days),
             "wet_season_temp_c": None if wet_t is None else wet_t.mean(),
             "october_temp_c": None if oct_t is None else oct_t.mean(),
+            "wet_season_humidity_pct": None if wet_h is None else wet_h.mean(),
+            # GWETROOT is a fraction from 0 to 1; shown as a percentage of saturation
+            "wet_season_soil_wetness_pct": None if wet_s is None else wet_s.mean() * 100.0,
         }
         for key, value in values.items():
             out[key].append({"season": season, "label": season_label(season), "value": _round(value)})
@@ -217,7 +235,7 @@ def verdict(result, unit):
 
 def analyse(payload, place, lat=None, lon=None):
     data = parse_power(payload)
-    series = seasonal_indicators(data["PRECTOTCORR"], data["T2M"])
+    series = seasonal_indicators(data["PRECTOTCORR"], data["T2M"], humidity=data.get("RH2M"), soil=data.get("GWETROOT"))
     seasons = [row["season"] for rows in series.values() for row in rows]
     period = f"{season_label(min(seasons))} to {season_label(max(seasons))}" if seasons else ""
     indicators = {}
@@ -252,7 +270,7 @@ def card(indicator):
 
 
 def main(argv=None):
-    parser = argparse.ArgumentParser(description="Seasonal rain and temperature trends from NASA POWER.")
+    parser = argparse.ArgumentParser(description="Seasonal rain, temperature, humidity and soil wetness trends from NASA POWER.")
     parser.add_argument("--lat", type=float, required=True)
     parser.add_argument("--lon", type=float, required=True)
     parser.add_argument("--name", default="")

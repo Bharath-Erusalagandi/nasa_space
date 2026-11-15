@@ -12,6 +12,7 @@ from scipy import stats
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from trend_detective import (  # noqa: E402
+    PARAMETERS, REQUIRED,
     INDICATORS, MIN_SEASONS, SOURCE, analyse, default_end, fetch_power, parse_power, trend,
 )
 
@@ -92,21 +93,24 @@ def payload_problem(payload):
     params = (payload.get("properties") or {}).get("parameter")
     if not isinstance(params, dict) or not params:
         return f"no data in response: {str(payload.get('messages') or payload)[:120]}"
-    missing = [name for name in ("PRECTOTCORR", "T2M") if not params.get(name)]
+    missing = [name for name in REQUIRED if not params.get(name)]
     return f"response lacks {' and '.join(missing)}" if missing else None
 
 
-def read_cache(path):
+def read_cache(path, need=REQUIRED):
+    # a cached file from before a variable was added lacks it, and is downloaded again
     try:
         payload = json.loads(path.read_text())
-        return payload if payload_problem(payload) is None else None
+        if payload_problem(payload) is not None:
+            return None
+        return payload if all(payload["properties"]["parameter"].get(name) for name in need) else None
     except (OSError, ValueError, AttributeError, TypeError):
         return None
 
 
-def load_cell(cell, cache_dir, fetch, pause, end):
+def load_cell(cell, cache_dir, fetch, pause, end, need=REQUIRED):
     path = cache_dir / f"{cell_id(cell)}.json"
-    payload = read_cache(path)
+    payload = read_cache(path, need)
     if payload is not None:
         return payload, "cached"
     try:
@@ -142,7 +146,7 @@ def build(places, cache_dir, out_dir, fetch=fetch_power, pause=1.0, today=None):
         cell = cells[cid]
         head = {"id": cid, "lat": cell[0], "lon": cell[1], "bounds": cell_bounds(cell)}
         try:
-            payload, how = load_cell(cell, cache_dir, fetch, pause, end)
+            payload, how = load_cell(cell, cache_dir, fetch, pause, end, need=PARAMETERS)
             result = analyse(payload, cid, cell[0], cell[1])
             for indicator in result["indicators"].values():
                 indicator["windows"] = window_trends(indicator["series"])

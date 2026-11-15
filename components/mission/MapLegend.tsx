@@ -6,8 +6,13 @@ import { cx } from "@/utils/cx";
 import { FILL_OPACITY, HatchPattern, OUTLINE_CLASS, OUTLINE_DASH } from "./map/CellLayer";
 import { Note } from "./primitives";
 
+export type ElevationRamp = { m: number; colour: string }[];
+
 type Props = {
-  legend: Legend;
+  // the trend colours; null when the map is not coloured by the trend
+  legend: Legend | null;
+  // the elevation colours, when the map is coloured by height
+  elevation?: ElevationRamp | null;
   title: string;
   scale: { km: number; px: number } | null;
   attribution: string;
@@ -76,11 +81,28 @@ const SYMBOLS = [
   { key: "contour", words: "Contour, every 100 m (500 m bolder)", mark: <KeyLine className="stroke-text-secondary opacity-60 [stroke-width:0.8px]" /> },
 ];
 
-export function MapLegend({ legend, title, scale, attribution }: Props) {
+const metres = (m: number) => `${m.toLocaleString("en-GB")} m`;
+
+function ElevationBar({ ramp }: { ramp: ElevationRamp }) {
+  const low = ramp[0].m;
+  const high = ramp[ramp.length - 1].m;
+  const stops = ramp.map((r) => `${r.colour} ${(((r.m - low) / (high - low)) * 100).toFixed(1)}%`).join(", ");
+  return (
+    <div data-elevation-legend className="flex flex-col gap-1.5">
+      <div className="h-2.5 rounded-full" style={{ background: `linear-gradient(to right, ${stops})` }} aria-hidden />
+      <div className="flex justify-between gap-4 text-caption-1-regular text-text-secondary tabular-nums">
+        <span>{metres(low)}</span>
+        <span className="text-end">{metres(high)}</span>
+      </div>
+    </div>
+  );
+}
+
+export function MapLegend({ legend, elevation, title, scale, attribution }: Props) {
   const hatchId = `legend-hatch-${useId().replace(/[^a-zA-Z0-9-]/g, "")}`;
   const keyId = useId();
   const [open, setOpen] = useState(false);
-  const colors = rampColors(legend.ramp, legend.reversed);
+  const colors = legend ? rampColors(legend.ramp, legend.reversed) : [];
 
   return (
     <footer className="flex flex-col gap-2" aria-label="Map legend">
@@ -91,20 +113,26 @@ export function MapLegend({ legend, title, scale, attribution }: Props) {
       </svg>
       <div className="flex flex-col gap-1.5" data-legend>
         <div className="flex items-end justify-between gap-4">
-          <p className="min-w-0 text-caption-1-medium text-text-secondary">{title}</p>
+          <p className="min-w-0 text-body-2-medium text-text-primary">{title}</p>
           {scale ? <ScaleBar {...scale} /> : null}
         </div>
-        <div className="flex h-2 gap-px" aria-hidden>
-          {colors.map((color) => (
-            <span key={color} className="flex-1 bg-background-primary-default">
-              <span className="block size-full" style={{ backgroundColor: color, opacity: FILL_OPACITY }} />
-            </span>
-          ))}
-        </div>
-        <div className="flex justify-between gap-4 text-caption-1-regular text-text-secondary">
-          <span>{perDecade(legend.low)}</span>
-          <span className="text-end">{perDecade(legend.high)}</span>
-        </div>
+        {legend ? (
+          <>
+            <div className="flex h-2.5 gap-px overflow-hidden rounded-full" aria-hidden>
+              {colors.map((color) => (
+                <span key={color} className="flex-1 bg-background-primary-default">
+                  <span className="block size-full" style={{ backgroundColor: color, opacity: FILL_OPACITY }} />
+                </span>
+              ))}
+            </div>
+            <div className="flex justify-between gap-4 text-caption-1-regular text-text-secondary">
+              <span>{perDecade(legend.low)}</span>
+              <span className="text-end">{perDecade(legend.high)}</span>
+            </div>
+          </>
+        ) : elevation ? (
+          <ElevationBar ramp={elevation} />
+        ) : null}
         <div className="flex items-center justify-between gap-4 pt-1">
           <Note>Roads and rivers © OpenStreetMap contributors</Note>
           <LinkButton size="small" aria-expanded={open} aria-controls={keyId} onClick={() => setOpen(!open)}>
@@ -113,7 +141,7 @@ export function MapLegend({ legend, title, scale, attribution }: Props) {
         </div>
         <div id={keyId} hidden={!open} className={cx(open && "grid", "grid-cols-[minmax(0,1fr)_auto] gap-x-6 text-caption-1-regular text-text-secondary")}>
           <ul className="flex flex-col gap-1">
-            {legend.outlines.map((o) => (
+            {(legend?.outlines ?? []).map((o) => (
               <li key={o.style} className="flex items-start gap-2">
                 <OutlineSample style={o.style} hatchId={hatchId} />
                 <span>{OUTLINE_WORDS[o.style]}</span>

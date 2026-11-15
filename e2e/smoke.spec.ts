@@ -31,5 +31,6 @@ test("mission view loads offline from the static build with no failed request an
 
 test("the root sends the visitor to the mission view", async ({ page }) => {
   await page.goto("/");
-  await expect(page).toHaveURL(/\/mission\/$/);
+  // the mission view adds the selected place to the address as soon as the index loads
+  await expect(page).toHaveURL(/\/mission\/(\?place=[\w-]+)?$/);
 });

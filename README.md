@@ -2,7 +2,7 @@
 
 Orbit Health is one web page, `/mission/`, for one question: is the  rainy season in Eastern Province, Zambia changing, and what should a health team do about it? It follows the loop Detect -> Verify -> Act. SKY tests 45 seasons of NASA POWER data for the grid cell around a village. GROUND shows live readings from a USB pod, K-01, each beside its tested error. ACTION turns a patient's danger-sign answer into a medicine order and a delivery on real roads.
 
-The app is static. It reads JSON files under `public/` that the Python scripts in this repo write, works with Wi-Fi off, and makes no AI model calls. `docs/METHODS.md` explains the statistics and lists every limit, `docs/VALIDATION.md` holds the pod sensor checks, and `docs/SUBMISSION.md` is the NASA Space Apps entry.
+The app is static. It reads JSON files under `public/` that the Python scripts in this repo write, works with Wi-Fi off, and makes no AI model calls. One thing needs a connection: the map's Satellite ground, which loads a single NASA GIBS picture when you choose it. `docs/METHODS.md` explains the statistics and lists every limit, `docs/VALIDATION.md` holds the pod sensor checks, and `docs/SUBMISSION.md` is the NASA Space Apps entry.
 
 ## Run it
 
@@ -24,6 +24,14 @@ python trend/build_trends.py --places trend/places.json --out public/trends
 python trend/cross_check.py --trends public/trends
 python scripts/fill_docs.py
 ```
+
+Optional: list published research and news for each indicator under "What others have found" in How we know. This needs a SerpApi key and uses two searches per indicator the first time:
+
+```
+SERPAPI_API_KEY=your_key python trend/evidence.py
+```
+
+It writes `public/evidence/index.json` and caches the raw responses in `trend/cache/serpapi/`. Without that file the section does not appear. If Python reports a certificate error on macOS, run `pip install certifi` and put `SSL_CERT_FILE=$(python -m certifi)` in front of the command.
 
 `build_trends.py` downloads one file per grid cell into `trend/cache/` and pauses 1 second between requests. A second run reads the cache and downloads nothing. `cross_check.py` does the same for ERA5 into `trend/cache/era5/`, with a 3 second pause; a cell whose request fails is listed at the end and keeps its NASA result. Both scripts take `--cache <folder>` to reuse a cache kept somewhere else. Run `build_trends.py` before `cross_check.py`: the build rewrites the cell files and drops the ERA5 results.
 
@@ -50,6 +58,7 @@ npm run e2e
 
 | Key or flag | What it does |
 |---|---|
+| Map: Trend, Elevation, Satellite, Plain | Chooses what colours the map. "Layers" switches hill shading, contours, rivers, roads, districts and health facilities. |
 | `?place=<id>` | Selects a place by its id in `trend/places.json`, for example `/mission/?place=katete`. |
 | `?story=1` | Story mode. Right and left arrows step through the demo. |
 | `R` | Starts or stops replay of `public/pod/replay.json`, under a REPLAY badge. Without the file, a message says no replay is recorded yet. |

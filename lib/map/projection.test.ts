@@ -63,3 +63,24 @@ describe("unionFrame", () => {
     expect(unionFrame(frame, cells)).toEqual({ ...frame, east: 34.0625 });
   });
 });
+
+describe("pointer coordinates", () => {
+  const frame = { west: 30, south: -15, east: 34, north: -11 };
+  const size = { width: 600, height: 500 };
+
+  it("reads back the place a point was projected from, at any zoom", async () => {
+    const { fitProjection, project, unproject } = await import("./projection");
+    const projection = fitProjection(frame, size);
+    for (const view of [{ k: 1, x: 0, y: 0 }, { k: 3, x: -220, y: -140 }]) {
+      const at = unproject(projection, view, project(projection, view, 32.04, -14.06));
+      expect(at?.lon).toBeCloseTo(32.04, 4);
+      expect(at?.lat).toBeCloseTo(-14.06, 4);
+    }
+  });
+
+  it("writes south and east the way a map does", async () => {
+    const { coordinates } = await import("./projection");
+    expect(coordinates({ lon: 32.04, lat: -14.06 })).toBe("14.06°S 32.04°E");
+    expect(coordinates({ lon: -97.7431, lat: 30.2672 })).toBe("30.27°N 97.74°W");
+  });
+});

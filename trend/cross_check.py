@@ -12,7 +12,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from build_trends import START, short, write_json  # noqa: E402
-from trend_detective import INDICATORS, MIN_SEASONS, default_end, seasonal_indicators, trend  # noqa: E402
+from trend_detective import INDICATORS, MIN_SEASONS, NASA_ONLY, default_end, seasonal_indicators, trend  # noqa: E402
 
 ARCHIVE_URL = "https://archive-api.open-meteo.com/v1/archive"
 NAME = "ECMWF ERA5 via Open-Meteo"
@@ -77,6 +77,9 @@ def second_source(payload):
     series = seasonal_indicators(data["PRECTOTCORR"], data["T2M"])
     out = {}
     for key in INDICATORS:
+        if key in NASA_ONLY:
+            # ERA5 rain and temperature cannot check humidity or soil wetness
+            continue
         rows = series[key]
         values = [row["value"] for row in rows]
         enough = sum(v is not None for v in values) >= MIN_SEASONS

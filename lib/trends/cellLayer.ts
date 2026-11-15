@@ -17,6 +17,8 @@ const META: Record<IndicatorKey, Meta> = {
   rain_onset_day: { ramp: "rainfall", reversed: true, rateUnit: "days", low: "rains start earlier", high: "rains start later" },
   wet_season_temp_c: { ramp: "temperature", reversed: false, rateUnit: "°C", low: "cooler wet season", high: "warmer wet season" },
   october_temp_c: { ramp: "temperature", reversed: false, rateUnit: "°C", low: "cooler October", high: "warmer October" },
+  wet_season_humidity_pct: { ramp: "rainfall", reversed: false, rateUnit: "%", low: "drier air in the wet season", high: "more humid air in the wet season" },
+  wet_season_soil_wetness_pct: { ramp: "rainfall", reversed: false, rateUnit: "%", low: "drier soil in the wet season", high: "wetter soil in the wet season" },
 };
 
 export const rampFor = (key: IndicatorKey) => ({ ramp: META[key].ramp, reversed: META[key].reversed });
@@ -97,3 +99,6 @@ export function layerLegend(key: IndicatorKey, domain: number): Legend {
     ],
   };
 }
+
+// the plain words for a change in one direction, for example "warmer October" for a rising October temperature
+export const changeWords = (key: IndicatorKey, direction: "increasing" | "decreasing") => (direction === "increasing" ? META[key].high : META[key].low);

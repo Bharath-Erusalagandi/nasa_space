@@ -127,7 +127,8 @@ def test_cross_check_adds_second_source_and_skips_failed_cells(tmp_path, capsys)
     assert second["trend"]["direction"] == "increasing"
     assert a["indicators"]["wet_season_rain_mm"]["second_source"]["trend"]["direction"] == "flat"
     assert set(a["indicators"]) == set(cc.INDICATORS)
-    assert all("second_source" in v for v in a["indicators"].values())
+    # humidity and soil wetness come from NASA only; ERA5 rain and temperature cannot check them
+    assert all(("second_source" in v) == (k not in cc.NASA_ONLY) for k, v in a["indicators"].items())
     assert "second_source" not in json.loads((out / "cells" / "b.json").read_text())["indicators"]["october_temp_c"]
     assert json.loads((out / "index.json").read_text()) == index
     assert "b" in capsys.readouterr().out

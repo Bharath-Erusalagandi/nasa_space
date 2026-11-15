@@ -12,7 +12,6 @@ import { MissionMap } from "./MissionMap";
 import { Note } from "./primitives";
 import { SkyPanel } from "./SkyPanel";
 import { StoryLine } from "./StoryLine";
-import { TerrainMap } from "./TerrainMap";
 import { TopBar } from "./TopBar";
 
 function inTextField(target: EventTarget | null): boolean {
@@ -95,10 +94,9 @@ export function MissionShell() {
         </Note>
       ) : null}
       <main className="grid min-h-0 flex-1 grid-cols-2 grid-rows-1">
-        {/* two maps of the same province, one above the other: the climate trend, and the terrain under it */}
-        <div className="grid min-h-0 min-w-0 grid-rows-2 divide-y divide-separator-border border-e border-separator-border">
+        {/* one map of the province; its layer switches choose between the climate trend and the terrain */}
+        <div className="min-h-0 min-w-0 border-e border-separator-border">
           <MissionMap />
-          <TerrainMap />
         </div>
         <PanelColumn />
       </main>

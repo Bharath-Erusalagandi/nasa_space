@@ -24,7 +24,22 @@ function ReliefFilter({ id, slope, intercept }: { id: string; slope: number; int
 }
 
 // geometry is projected once at zoom 1; the group transform zooms it and strokes keep their width
-export const Ground = memo(function Ground({ paths, relief, view }: { paths: BasePaths; relief: Box | null; view: View }) {
+// elevation is the tinted terrain picture (colour times hillshade, clear outside the province); it replaces the grey relief
+export type Satellite = { href: string; box: Box; onError: () => void };
+
+export const Ground = memo(function Ground({
+  paths,
+  relief,
+  elevation,
+  satellite,
+  view,
+}: {
+  paths: BasePaths;
+  relief: Box | null;
+  elevation: Box | null;
+  satellite?: Satellite | null;
+  view: View;
+}) {
   return (
     <g transform={zoomed(view)} aria-hidden className="pointer-events-none">
       <defs>
@@ -34,32 +49,48 @@ export const Ground = memo(function Ground({ paths, relief, view }: { paths: Bas
           <path d={paths.province} />
         </clipPath>
       </defs>
-      <path d={paths.province} className="fill-background-primary-default" />
+      {/* the satellite picture covers the whole frame, so the neighbouring country shows too */}
+      {satellite ? <image data-satellite href={satellite.href} {...satellite.box} preserveAspectRatio="none" onError={satellite.onError} /> : null}
+      {satellite ? null : <path d={paths.province} className="fill-background-primary-default" />}
       {relief ? (
         <g data-relief>
           <image href="/map/relief.webp" {...relief} preserveAspectRatio="none" clipPath="url(#map-province-clip)" filter="url(#map-relief-light)" className="opacity-35 mix-blend-multiply dark:hidden" />
           <image href="/map/relief.webp" {...relief} preserveAspectRatio="none" clipPath="url(#map-province-clip)" filter="url(#map-relief-dark)" className="hidden opacity-25 mix-blend-screen dark:inline" />
         </g>
       ) : null}
-
+      {elevation ? <image data-elevation href="/map/terrain.webp" {...elevation} preserveAspectRatio="none" /> : null}
     </g>
   );
 });
 
+export type LineFlags = { contours: boolean; rivers: boolean; roads: boolean; districts: boolean; riversBlue: boolean };
+
 // lines go above the cell fills so roads and rivers read through the colour
-export const Lines = memo(function Lines({ paths, view }: { paths: BasePaths; view: View }) {
+export const Lines = memo(function Lines({ paths, view, show }: { paths: BasePaths; view: View; show: LineFlags }) {
   return (
     <g transform={zoomed(view)} aria-hidden className="pointer-events-none">
       {/* contours sit above the cell colours so the terrain reads through them */}
-      <g data-contours>
-        <path d={paths.contours.minor} className={cx(line, "stroke-text-primary opacity-15 [stroke-width:0.5px]")} />
-        <path d={paths.contours.major} className={cx(line, "stroke-text-primary opacity-35 [stroke-width:0.9px]")} />
-      </g>
-      <path d={paths.districts} className={cx(line, "stroke-separator-border [stroke-width:1px]")} />
-      <path d={paths.rivers} className={cx(line, "stroke-foreground-icon-quaternary [stroke-width:0.6px]")} />
-      <path d={paths.roads.tertiary} className={cx(line, "stroke-foreground-icon-quaternary [stroke-width:0.75px]")} />
-      <path d={paths.roads.secondary} className={cx(line, "stroke-foreground-icon-tertiary [stroke-width:0.9px]")} />
-      <path d={`${paths.roads.primary}${paths.roads.trunk}`} className={cx(line, "stroke-foreground-icon-secondary [stroke-width:1.25px]")} />
+      {show.contours ? (
+        <g data-contours>
+          <path d={paths.contours.minor} className={cx(line, "stroke-text-primary opacity-15 [stroke-width:0.5px]")} />
+          <path d={paths.contours.major} className={cx(line, "stroke-text-primary opacity-35 [stroke-width:0.9px]")} />
+        </g>
+      ) : null}
+      {show.districts ? <path data-districts d={paths.districts} className={cx(line, "stroke-separator-border [stroke-width:1px]")} /> : null}
+      {show.rivers ? (
+        <path
+          data-rivers
+          d={paths.rivers}
+          className={cx(line, show.riversBlue ? "stroke-chart-1 opacity-80 [stroke-width:0.9px]" : "stroke-foreground-icon-quaternary [stroke-width:0.6px]")}
+        />
+      ) : null}
+      {show.roads ? (
+        <g data-roads>
+          <path d={paths.roads.tertiary} className={cx(line, "stroke-foreground-icon-quaternary [stroke-width:0.75px]")} />
+          <path d={paths.roads.secondary} className={cx(line, "stroke-foreground-icon-tertiary [stroke-width:0.9px]")} />
+          <path d={`${paths.roads.primary}${paths.roads.trunk}`} className={cx(line, "stroke-foreground-icon-secondary [stroke-width:1.25px]")} />
+        </g>
+      ) : null}
       <path d={paths.borders} className={cx(line, "stroke-text-tertiary [stroke-width:1px]")} />
     </g>
   );

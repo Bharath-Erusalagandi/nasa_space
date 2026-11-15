@@ -108,11 +108,12 @@ type Props = Geo & {
   places: Place[];
   context: ContextLabel[];
   layout: Layout;
+  showFacilities?: boolean;
   onSelect: (id: string) => void;
 };
 
-export function PlaceLayer({ places, context, layout, projection, view, size, onSelect }: Props) {
-  const facilities = places.filter((p) => p.kind === "facility");
+export function PlaceLayer({ places, context, layout, projection, view, size, showFacilities = true, onSelect }: Props) {
+  const facilities = showFacilities ? places.filter((p) => p.kind === "facility") : [];
   const towns = places.filter((p) => p.kind === "town");
   const at = (p: Place) => project(projection, view, p.lon, p.lat);
 
@@ -135,9 +136,9 @@ export function PlaceLayer({ places, context, layout, projection, view, size, on
               onClick={() => onSelect(place.id)}
               onKeyDown={activate(() => onSelect(place.id))}
             >
-              <title>{place.name}</title>
               <circle cx={x} cy={y} r={7} className="fill-transparent" />
-              <circle cx={x} cy={y} r={2.5} className="fill-text-secondary stroke-background-primary-default [stroke-width:1px]" />
+              <circle cx={x} cy={y} r={6} className="fill-background-primary-default stroke-text-primary opacity-0 [stroke-width:1.5px] group-hover:opacity-100" />
+              <circle cx={x} cy={y} r={2.5} className="fill-text-secondary stroke-background-primary-default [stroke-width:1px] group-hover:fill-text-primary" />
               <circle cx={x} cy={y} r={6} className="fill-none stroke-border-focus-ring opacity-0 [stroke-width:2px] group-focus-visible:opacity-100" />
             </g>
           );
@@ -160,6 +161,7 @@ export function PlaceLayer({ places, context, layout, projection, view, size, on
               onKeyDown={activate(() => onSelect(place.id))}
             >
               <circle cx={x} cy={y} r={9} className="fill-transparent" />
+              <circle cx={x} cy={y} r={8} className="fill-background-primary-default stroke-text-primary opacity-0 [stroke-width:1.5px] group-hover:opacity-100" />
               <circle cx={x} cy={y} r={3.5} className="fill-text-primary stroke-background-primary-default [stroke-width:1.5px]" />
               {label ? (
                 <text x={label.x} y={label.y} dy="0.35em" textAnchor={label.anchor} data-town-label={place.id} className={cx("fill-text-primary text-caption-1-medium", HALO)}>
@@ -181,6 +183,8 @@ export function SelectedPlace({ selected }: { selected: Layout["selected"] }) {
   const [x, y] = at;
   return (
     <g data-selected-place={place.id} aria-hidden className="pointer-events-none">
+      {/* a slow ring that spreads from the selected place, so the eye finds it on a busy map */}
+      <circle cx={x} cy={y} r={8} data-pulse className="origin-center fill-none stroke-text-primary opacity-60 [stroke-width:1.5px] [transform-box:fill-box] motion-safe:animate-ping motion-reduce:hidden" />
       <circle cx={x} cy={y} r={8} className="fill-none stroke-background-primary-default [stroke-width:4px]" />
       <circle cx={x} cy={y} r={8} className="fill-none stroke-text-primary [stroke-width:2px]" />
       <circle cx={x} cy={y} r={2.5} className="fill-text-primary" />

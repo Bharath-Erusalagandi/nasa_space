@@ -113,7 +113,7 @@ export function SkyPanel() {
   } else {
     body = (
       <div className="flex min-h-0 flex-1 flex-col gap-4">
-        <Verdict indicator={indicator} trend={trend} window={window} q={q} />
+        <Verdict indicator={indicator} trend={trend} window={window} q={q} indicatorKey={indicatorKey} placeName={placeName} />
         <div className="flex min-h-64 min-w-0 flex-1 flex-col gap-3">
           <TrendChart layerKey={`${cell.cell.id}-${indicatorKey}`} indicator={indicator} trend={trend} window={window} />
           <div className="flex items-end justify-between gap-4">

@@ -88,7 +88,8 @@ export function Figure({ value, unit, muted, hero, className }: FigureProps) {
 }
 
 export function Note({ children, className }: TextProps) {
-  return <p className={cx("text-caption-1-regular text-text-tertiary", className)}>{children}</p>;
+  // secondary, not tertiary: notes carry limits and sources, so they have to be readable
+  return <p className={cx("text-caption-1-regular text-text-secondary", className)}>{children}</p>;
 }
 
 export function EmptyState({ children = "No reading yet", className }: Partial<TextProps>) {

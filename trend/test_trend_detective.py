@@ -13,20 +13,23 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import trend_detective as td  # noqa: E402
 
 KEYS = ["wet_season_rain_mm", "wet_days", "heavy_rain_days", "wettest_day_mm",
-        "rain_onset_day", "wet_season_temp_c", "october_temp_c"]
+        "rain_onset_day", "wet_season_temp_c", "october_temp_c",
+        "wet_season_humidity_pct", "wet_season_soil_wetness_pct"]
 
 
 def days(start, end):
     return [start + timedelta(days=i) for i in range((end - start).days + 1)]
 
 
-def power_payload(start, end, rain=lambda d: 0.0, temp=lambda d: 20.0, fill=-999.0):
+def power_payload(start, end, rain=lambda d: 0.0, temp=lambda d: 20.0, fill=-999.0, humidity=lambda d: 60.0, soil=lambda d: 0.5):
     span = days(start, end)
     return {
         "header": {"fill_value": fill},
         "properties": {"parameter": {
             "PRECTOTCORR": {d.strftime("%Y%m%d"): rain(d) for d in span},
             "T2M": {d.strftime("%Y%m%d"): temp(d) for d in span},
+            "RH2M": {d.strftime("%Y%m%d"): humidity(d) for d in span},
+            "GWETROOT": {d.strftime("%Y%m%d"): soil(d) for d in span},
         }},
     }
 
@@ -367,7 +370,7 @@ def test_analyse_shape_and_period():
     assert (result["place"], result["lat"], result["lon"]) == ("Katete", -14.06, 32.04)
     assert result["period"] == "1981/82 to 1992/93"
     assert list(result["indicators"]) == KEYS
-    assert all(w in result["source"] for w in ("NASA POWER", "MERRA-2", "PRECTOTCORR", "T2M"))
+    assert all(w in result["source"] for w in ("NASA POWER", "MERRA-2", "PRECTOTCORR", "T2M", "RH2M", "GWETROOT"))
     for ind in result["indicators"].values():
         assert set(ind) == {"label", "unit", "definition", "series", "trend", "verdict"}
     assert result["indicators"]["october_temp_c"]["unit"] == "deg C"
@@ -395,3 +398,30 @@ def test_analyse_with_nine_seasons_has_no_trend():
 ])
 def test_verdict_wording(t, unit, text):
     assert td.verdict(t, unit) == text
+
+
+def test_humidity_is_the_wet_season_mean_and_soil_wetness_becomes_a_percentage():
+    payload = power_payload(date(1981, 1, 1), date(1993, 12, 31),
+                            humidity=lambda d: 80.0 if d.month in (11, 12, 1, 2, 3, 4) else 40.0,
+                            soil=lambda d: 0.5 + 0.01 * (d.year - 1981))
+    result = td.analyse(payload, "x")
+    humidity = result["indicators"]["wet_season_humidity_pct"]
+    assert {row["value"] for row in humidity["series"]} == {80.0}
+    assert humidity["unit"] == "%"
+    soil = result["indicators"]["wet_season_soil_wetness_pct"]
+    # GWETROOT 0.5 is 50%; it rises a point a year, so every season is wetter than the last
+    assert 50.0 < soil["series"][0]["value"] < 52.0
+    assert soil["trend"]["direction"] == "increasing"
+    assert soil["trend"]["slope_per_decade"] == pytest.approx(10.0, abs=0.2)
+
+
+def test_a_response_without_the_new_variables_still_gives_the_first_seven_indicators():
+    payload = power_payload(date(1981, 1, 1), date(1993, 12, 31), rain=lambda d: 5.0)
+    for name in ("RH2M", "GWETROOT"):
+        del payload["properties"]["parameter"][name]
+    result = td.analyse(payload, "x")
+    assert result["indicators"]["wet_season_rain_mm"]["trend"] is not None
+    for key in td.NASA_ONLY:
+        assert result["indicators"][key]["trend"] is None
+        assert all(row["value"] is None for row in result["indicators"][key]["series"])
+

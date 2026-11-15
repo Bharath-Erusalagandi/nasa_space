@@ -8,7 +8,7 @@ Detect -> Verify -> Act. Detect: we test 45 seasons of NASA POWER data for each 
 
 ## Data
 
-`trend/build_trends.py` sends one request per NASA POWER grid cell to the daily point API (`https://power.larc.nasa.gov/api/temporal/daily/point`, community `AG`). It asks for two parameters: `PRECTOTCORR`, corrected precipitation in mm per day, and `T2M`, mean air temperature at 2 m in °C. POWER takes both from the MERRA-2 reanalysis (NASA GMAO). The request runs from 1 January 1981 to 60 days before the build date, because the newest POWER days are preliminary. Responses are cached in `trend/cache/` and reused, so a second build downloads nothing. Values equal to the response's fill value are dropped.
+`trend/build_trends.py` sends one request per NASA POWER grid cell to the daily point API (`https://power.larc.nasa.gov/api/temporal/daily/point`, community `AG`). It asks for four parameters: `PRECTOTCORR`, corrected precipitation in mm per day; `T2M`, mean air temperature at 2 m in °C; `RH2M`, relative humidity at 2 m in %; and `GWETROOT`, root-zone soil wetness from 0 (completely dry) to 1 (saturated), which the build shows as a percentage. POWER takes all four from the MERRA-2 reanalysis (NASA GMAO). Humidity and soil wetness have no ERA5 cross-check, because that check downloads rain and temperature only. The request runs from 1 January 1981 to 60 days before the build date, because the newest POWER days are preliminary. Responses are cached in `trend/cache/` and reused, so a second build downloads nothing. Values equal to the response's fill value are dropped.
 
 The places come from `trend/places.json`, which `mapdata/places.py` writes: the five reference towns of the plan, every public health facility in the province from Maina et al. (2019), and one entry for each NASA cell that overlaps the province and holds no town or facility. Each place is assigned to the cell whose centre is nearest on the 0.5 x 0.625 degree grid, and the build makes one request per cell, not per place.
 
@@ -30,6 +30,8 @@ Each season gives one value per indicator. The table is copied from the cell fil
 | `rain_onset_day` | Start of the rains | days after 1 Oct | Days after 1 Oct until the rain of the last 10 days first adds up to at least 25 mm. |
 | `wet_season_temp_c` | Wet-season temperature | °C | Mean air temperature from 1 Nov to 30 Apr. |
 | `october_temp_c` | October temperature | °C | Mean air temperature in October, the hottest month. |
+| `wet_season_humidity_pct` | Wet-season humidity | % | Mean relative humidity at 2 m from 1 Nov to 30 Apr. |
+| `wet_season_soil_wetness_pct` | Wet-season soil wetness | % | Mean root-zone soil wetness from 1 Nov to 30 Apr, from 0% (completely dry) to 100% (saturated). |
 <!-- /fill_docs:indicators -->
 
 The start of the rains counts days from 1 October to the first day on which the rain of the last 10 days adds up to at least 25 mm. If that never happens by 30 June, or a day is missing before it happens, the season has no value. We chose this rule for this tool; it is not an agronomic standard.
@@ -60,6 +62,8 @@ One row per indicator across all cells in `public/trends/index.json`.
 | Start of the rains | 0 of 28 | 0 / 0 | 24 / 0 / 4 | 2 | 0.00 to +5.75 days |
 | Wet-season temperature | 4 of 28 | 4 / 0 | 28 / 0 / 0 | 8 | +0.04 to +0.20 °C |
 | October temperature | 27 of 28 | 27 / 0 | 28 / 0 / 0 | 27 | +0.23 to +0.45 °C |
+| Wet-season humidity | 0 of 28 | 0 / 0 | 23 / 5 / 0 | 0 | -0.10 to +0.78 % |
+| Wet-season soil wetness | 0 of 28 | 0 / 0 | 23 / 5 / 0 | 0 | -0.60 to +1.33 % |
 <!-- /fill_docs:findings -->
 
 Record length changes the answer. The next table counts the cells with Mann-Kendall p < 0.05 when only the last 10, 20 or 30 seasons are tested, against the full record (no correction for multiple tests in this table).
@@ -74,6 +78,8 @@ Record length changes the answer. The next table counts the cells with Mann-Kend
 | Start of the rains | 1 of 28 | 1 of 28 | 0 of 28 | 2 of 28 |
 | Wet-season temperature | 0 of 28 | 4 of 28 | 0 of 28 | 8 of 28 |
 | October temperature | 0 of 28 | 0 of 28 | 4 of 28 | 27 of 28 |
+| Wet-season humidity | 0 of 28 | 0 of 28 | 9 of 28 | 0 of 28 |
+| Wet-season soil wetness | 0 of 28 | 1 of 28 | 16 of 28 | 0 of 28 |
 <!-- /fill_docs:windows -->
 
 ## Grid cells
@@ -100,6 +106,8 @@ ERA5 trends exist for 28 of the 28 cells.
 | Start of the rains | 28 | 19 | 3 |
 | Wet-season temperature | 28 | 28 | 12 |
 | October temperature | 28 | 28 | 28 |
+| Wet-season humidity | 0 | 0 | 0 |
+| Wet-season soil wetness | 0 | 0 | 0 |
 <!-- /fill_docs:cross_check -->
 
 ## The NASA normal beside the live air reading
