@@ -39,12 +39,6 @@ Everything lives on one page, `/mission/`, and follows one loop: **Detect, Verif
 | **ACTION (Act)** | A short danger-sign check turns a patient's answer into a triage outcome, a medicine order and a delivery from Chipata along a real road route. |
 | **How we know** | The methods, the limits, every data source and a list of published research on each change. |
 
-<p align="center">
-  <img src="docs/media/mission-ground-dark.jpg" alt="The GROUND panel with pod readings, the mosquito species grid and the patient check" width="860" />
-  <br/>
-  <em>GROUND: pod readings, the 8 mosquito species and the patient check.</em>
-</p>
-
 ---
 
 ## How it works
