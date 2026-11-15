@@ -14,6 +14,7 @@ import { minusSigns, num } from "@/lib/trends/format";
 import { loadPodSite, loadValidation } from "@/lib/trends/load";
 import type { PodSite, ValidationResults } from "@/lib/trends/types";
 import { Chat } from "./Chat";
+import { MicrophoneRow } from "./MicrophoneRow";
 import { SpeciesGrid } from "./SpeciesGrid";
 import { PodActions, PodStatus, usePodState } from "./PodStatus";
 import { FieldLabel, Figure, Note, PanelFrame } from "./primitives";
@@ -134,7 +135,7 @@ function Quiet() {
   if (connection === "unsupported") return <Note>This browser cannot read the pod. Open the page in Chrome or Edge.</Note>;
   if (status === "denied") return <Note>The microphone is blocked for this page. Allow it in the browser to listen.</Note>;
   if (status === "failed") return <Note>{note}</Note>;
-  if (status === "on") return <Note>Listening through the microphone. A mosquito shows on its card below.</Note>;
+  if (status === "on") return <MicrophoneRow />;
   return null;
 }
 

@@ -132,23 +132,27 @@ The firmware prints one JSON object per line at 115200 baud. The app reads lines
 
 ## Mosquito models
 
-"Listen for mosquitoes" opens the microphone the browser is given (the pod's microphone is a USB audio input) at 8 kHz with the browser's echo, noise and gain filters off. Every 0.5 s the newest 2.1 s of audio becomes a 128-band log-mel window (2048-point FFT, hop 512, decibels against the window's loudest bin with an 80 dB floor, then standardised within the window). Two small convolutional networks score it in the browser with no library (`lib/pod/mosquitoModel.ts`): a detector (mosquito or not) and a species model for the 8 species of the HumBugDB species task. A mosquito counts as heard when 3 of the last 4 windows pass the detector at 0.5; the species is the mean of the species model over those windows. Tapping a species card plays a held-out HumBugDB recording and scores the file the same way; that result is labelled as a recording, never as a live reading.
+"Listen for mosquitoes" opens the microphone the browser is given (the pod's microphone is a USB audio input) at 8 kHz with the browser's echo, noise and gain filters off. The panel names that microphone, shows its level and the detector's score for the newest window, and lets the user pick another one; a microphone that sends exact silence for two seconds is flagged. Every 0.5 s the newest 2.1 s of audio becomes a 128-band log-mel window (2048-point FFT, hop 512, decibels against the window's loudest bin with an 80 dB floor, then standardised within the window). Two small convolutional networks score it in the browser with no library (`lib/pod/mosquitoModel.ts`): a detector (mosquito or not) and a species model for the 8 species of the HumBugDB species task. A mosquito counts as heard when 3 of the last 4 windows pass the detector at 0.5; the species is the mean of the species model over those windows. The species cards on the Mission page make no sound. For a demonstration, `/sounds/` opened on a phone plays a held-out HumBugDB recording of each species on a loop, and the laptop hears it through the same microphone path as a live mosquito, so a played recording and a live mosquito look the same on screen.
 
-Both networks were trained by `models/mosquito/train.py` on HumBugDB (Kiskin et al. 2021). The species classes and the recording split follow the HumBugDB species notebook (Tanzania IHI cup recordings, 75% of recordings for training, seed 42); the detector uses every mosquito and background recording, split the same way. `lib/pod/mosquitoModel.test.ts` checks that the browser features and outputs match PyTorch on test recordings.
+Both networks were trained by `models/mosquito/train.py` on HumBugDB (Kiskin et al. 2021). Because the page is shown with recordings played from a phone to a laptop, 85% of training windows pass through a random simulated speaker, room and room noise (`models/mosquito/channel.py`); the species model was first trained on the recordings as they are and then adapted this way for 10 epochs. The species classes and the recording split follow the HumBugDB species notebook (Tanzania IHI cup recordings, 75% of recordings for training, seed 42); the detector uses every mosquito and background recording, split the same way. `lib/pod/mosquitoModel.test.ts` checks that the browser features and outputs match PyTorch on test recordings.
 
 <!-- fill_docs:mosquito -->
 Held-out test: split by recording, 75% train / 25% test, seed 42. No test recording was used in training or to pick the epoch.
 
 | Model | Test set | Result |
 |---|---|---|
-| Detector: mosquito or not | 804 recordings, 14581 windows of 2.1 s | ROC AUC 0.991. At 0.5 it finds 95% of mosquito windows and flags 2% of background windows |
-| Species: 8 classes | 353 recordings, 8937 windows | Balanced accuracy 55% per recording (mean over its windows), 48% per single window |
+| Detector: mosquito or not | 804 recordings, 14581 windows of 2.1 s | ROC AUC 0.988. At 0.5 it finds 95% of mosquito windows and flags 4% of background windows |
+| Species: 8 classes | 353 recordings, 8937 windows | Balanced accuracy 53% per recording (mean over its windows), 47% per single window |
 
-Species recall per recording: An. arabiensis 66% of 129, Cx. pipiens complex 71% of 84, Ae. aegypti 77% of 13, An. funestus 89% of 62, An. squamosus 57% of 23, An. coustani 31% of 13, Ma. uniformis 53% of 19, Ma. africanus 0% of 10.
+Species recall per recording: An. arabiensis 53% of 129, Cx. pipiens complex 63% of 84, Ae. aegypti 69% of 13, An. funestus 85% of 62, An. squamosus 61% of 23, An. coustani 38% of 13, Ma. uniformis 53% of 19, Ma. africanus 0% of 10.
 
-By genus, which is what the conversation acts on: Anopheles 87% of 227, Culex 71% of 84, Aedes 77% of 13, Mansonia 69% of 29 (balanced 76%).
+By genus, which is what the conversation acts on: Anopheles 83% of 227, Culex 63% of 84, Aedes 69% of 13, Mansonia 66% of 29 (balanced 70%).
 
-The recording on each species card is the longest test recording of that species the model gets right, so the cards show the model at its best; the figures above are the honest rate.
+The same test recordings through a simulated phone speaker, room and room noise (one random path per window, `models/mosquito/channel.py`): the detector finds 93% of mosquito windows and flags 5% of background windows; the species model is right for 44% of recordings (balanced) and names the right genus for 75%. This is a simulation. The models have not been measured with a real phone and laptop.
+
+Voices, none of them a mosquito: of 2212 windows of read speech from speakers the detector never heard (LibriSpeech dev-clean), it flags 0% as recorded and 1% through the simulated path; of 1000 synthetic steady tones in the voice range, 0% and 1%.
+
+The recording for each species on the phone page is, of the 30 longest test recordings, the one the model gets right as recorded and through the most of 8 simulated paths, so the page shows the model at its best; the figures above are the honest rate.
 <!-- /fill_docs:mosquito -->
 
 After a detection, the conversation in GROUND (`lib/mission/chat.ts`, scripted, no language model) asks what that mosquito makes relevant: net use for Anopheles, daytime bites for Aedes, night bites for Culex and Mansonia; fever in the last two days; for Aedes with fever, dengue symptoms; the WHO IMCI general danger signs; and then the disease's warning signs (Zambia's severe malaria signs for Anopheles; WHO dengue warning signs for Aedes with fever; WHO West Nile neurological signs for Culex with fever). Any danger or warning sign refers; a fever without one orders a malaria rapid test, as Zambia's guidelines test every fever.

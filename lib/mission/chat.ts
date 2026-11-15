@@ -5,7 +5,7 @@ import { speciesFor, type VectorGroup } from "@/lib/pod/species";
 import { DANGER_SIGNS, signsFromText, type DangerSign, type TriageResult } from "./triage";
 import type { Answer, Findings } from "./session";
 
-export type Heard = { label: string; confidence: number; via: "microphone" | "recording"; genus?: string; genusConfidence?: number };
+export type Heard = { label: string; confidence: number; genus?: string; genusConfidence?: number };
 
 type Step = "bites" | "fever" | "symptoms" | "danger" | "warning" | "done";
 
@@ -54,7 +54,7 @@ function opening(heard: Heard | null): string {
   const species = speciesFor(heard.label);
   const genus = heard.genus ?? heard.label;
   const sure = pct(heard.genusConfidence ?? heard.confidence);
-  const where = heard.via === "microphone" ? "I just heard a mosquito near the pod" : "This recording is a mosquito";
+  const where = "I just heard a mosquito near the pod";
   if (!species) return `${where}: ${heard.label} (${sure} sure). ${FEVER}`;
   const likely = `Most likely ${heard.label} (${pct(heard.confidence)}).`;
   if (species.group === "anopheles") {

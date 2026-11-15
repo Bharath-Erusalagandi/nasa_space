@@ -1,6 +1,6 @@
 {
  "source": "HumBugDB (Kiskin et al. 2021), CC BY 4.0, doi:10.5281/zenodo.4904800. Test-set recordings, cut to 6 s and normalised.",
- "picked": "per species, the longest test recording the model gets right; the longest one if none is right",
+ "picked": "per species, of the 30 longest test recordings, the one the model gets right as recorded and through the most of 8 simulated speaker-and-room paths",
  "clips": [
   {
    "file": "clips/an-arabiensis.wav",
@@ -8,23 +8,26 @@
    "humbugdb_id": 222324,
    "seconds": 6.0,
    "model_says": "An. arabiensis",
-   "picked_because_right": true
+   "picked_because_right": true,
+   "right_through_simulated_paths": "8 of 8"
   },
   {
    "file": "clips/cx-pipiens-complex.wav",
    "label": "Cx. pipiens complex",
-   "humbugdb_id": 220054,
+   "humbugdb_id": 220208,
    "seconds": 6.0,
    "model_says": "Cx. pipiens complex",
-   "picked_because_right": true
+   "picked_because_right": true,
+   "right_through_simulated_paths": "8 of 8"
   },
   {
    "file": "clips/ae-aegypti.wav",
    "label": "Ae. aegypti",
-   "humbugdb_id": 220405,
+   "humbugdb_id": 220498,
    "seconds": 6.0,
    "model_says": "Ae. aegypti",
-   "picked_because_right": true
+   "picked_because_right": true,
+   "right_through_simulated_paths": "8 of 8"
   },
   {
    "file": "clips/an-funestus.wav",
@@ -32,39 +35,44 @@
    "humbugdb_id": 221358,
    "seconds": 6.0,
    "model_says": "An. funestus",
-   "picked_because_right": true
+   "picked_because_right": true,
+   "right_through_simulated_paths": "8 of 8"
   },
   {
    "file": "clips/an-squamosus.wav",
    "label": "An. squamosus",
-   "humbugdb_id": 221796,
+   "humbugdb_id": 220456,
    "seconds": 6.0,
    "model_says": "An. squamosus",
-   "picked_because_right": true
+   "picked_because_right": true,
+   "right_through_simulated_paths": "7 of 8"
   },
   {
    "file": "clips/an-coustani.wav",
    "label": "An. coustani",
-   "humbugdb_id": 222170,
+   "humbugdb_id": 222001,
    "seconds": 6.0,
    "model_says": "An. coustani",
-   "picked_because_right": true
+   "picked_because_right": true,
+   "right_through_simulated_paths": "8 of 8"
   },
   {
    "file": "clips/ma-uniformis.wav",
    "label": "Ma. uniformis",
-   "humbugdb_id": 220600,
+   "humbugdb_id": 220879,
    "seconds": 6.0,
    "model_says": "Ma. uniformis",
-   "picked_because_right": true
+   "picked_because_right": true,
+   "right_through_simulated_paths": "8 of 8"
   },
   {
    "file": "clips/ma-africanus.wav",
    "label": "Ma. africanus",
-   "humbugdb_id": 221522,
+   "humbugdb_id": 220797,
    "seconds": 6.0,
-   "model_says": "Ma. uniformis",
-   "picked_because_right": false
+   "model_says": "Ma. africanus",
+   "picked_because_right": true,
+   "right_through_simulated_paths": "7 of 8"
   }
  ]
 }

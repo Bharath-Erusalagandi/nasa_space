@@ -38,11 +38,17 @@ def window_features(mel_frames):
     return ((db - db.mean()) / (std if std > 1e-6 else 1.0)).T.astype(np.float32)
 
 
-def windows(signal, step):
-    """Every window of FRAMES frames, `step` frames apart, shape (n, N_MELS, FRAMES)."""
+def mel_windows(signal, step):
+    """Mel power of every window of FRAMES frames, `step` frames apart, shape (n, FRAMES, N_MELS)."""
     mel = power_frames(signal) @ MEL.T
     starts = range(0, len(mel) - FRAMES + 1, step)
-    return np.stack([window_features(mel[s:s + FRAMES]) for s in starts]) if len(mel) >= FRAMES else np.zeros((0, N_MELS, FRAMES), np.float32)
+    return np.stack([mel[s:s + FRAMES] for s in starts]) if len(mel) >= FRAMES else np.zeros((0, FRAMES, N_MELS), np.float32)
+
+
+def windows(signal, step):
+    """Every window of FRAMES frames, `step` frames apart, shape (n, N_MELS, FRAMES)."""
+    mel = mel_windows(signal, step)
+    return np.stack([window_features(m) for m in mel]) if len(mel) else np.zeros((0, N_MELS, FRAMES), np.float32)
 
 
 def load(path):

@@ -6,9 +6,18 @@
 Both splits are by recording, 75% train and 25% test with seed 42, as in the HumBugDB species notebook; 15% of
 the training recordings are held back to pick the best epoch. Nothing from a test recording is seen in training.
 
+In training most windows pass through a random speaker, room and noise (channel.py), because the page is shown
+with recordings played from a phone to a laptop microphone. Each model is tested twice on the same held-out
+recordings: as recorded, and through one fixed draw of that path per window ("through the air").
+
+A room where the page is shown is full of voices, so the detector also gets read speech (LibriSpeech dev-clean,
+Panayotov et al. 2015, CC BY 4.0, in DATA/speech/LibriSpeech/dev-clean, split by speaker) and synthetic steady
+voice-range tones as background. Without the speech folder it trains on the tones alone.
+
 Run with PyTorch, librosa and the HumBugDB audio in DATA/audio and its metadata in DATA/meta.csv:
   python models/mosquito/train.py DATA [species|detector|export|all]
 species and detector can run at the same time (THREADS=8 each); export then writes the files below.
+INIT=<folder> starts a model from the weights saved there (a shorter run then adapts it), LR sets the peak rate.
 Writes public/models/mosquito.json (weights), models/mosquito/results.json (test results) and
 lib/pod/__fixtures__/mosquito.json (feature and output checks for the browser code).
 """
@@ -27,6 +36,7 @@ import torch.nn as nn
 from sklearn.metrics import confusion_matrix, roc_auc_score
 
 sys.path.insert(0, str(Path(__file__).parent))
+import channel as C  # noqa: E402
 import features as F  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -54,9 +64,9 @@ def split(names, seed=SEED, train=0.75):
 def extract(job):
     path, step, cap = job
     try:
-        x = F.windows(F.load(path), step)
+        x = F.mel_windows(F.load(path), step)
     except Exception:
-        return np.zeros((0, F.N_MELS, F.FRAMES), np.float32)
+        return np.zeros((0, F.FRAMES, F.N_MELS), np.float32)
     if cap and len(x) > cap:
         x = x[np.linspace(0, len(x) - 1, cap).astype(int)]
     return x
@@ -73,6 +83,69 @@ def featurise(rows, label_of, step, cap):
             ys.append(np.full(len(x), label_of(r)))
             rec.append(np.full(len(x), r["name"]))
     return np.concatenate(xs), np.concatenate(ys), np.concatenate(rec)
+
+
+def feats(mel):
+    return C.to_features(torch.from_numpy(mel)).numpy()
+
+
+def aired(mel, noise, seed=SEED):
+    """The windows through one fixed draw of speaker, room and noise each, for validation and testing."""
+    gen = torch.Generator().manual_seed(seed)
+    return C.to_features(C.over_the_air(torch.from_numpy(mel), torch.from_numpy(noise), gen, keep=0.0)).numpy()
+
+
+def detector_split(rows):
+    pool = [r for r in rows if r["sound_type"] in ("mosquito", "background")]
+    train_names, test_names = set(), set()
+    for kind in ("mosquito", "background"):
+        tr, te = split([r["name"] for r in pool if r["sound_type"] == kind])
+        train_names |= tr
+        test_names |= te
+    fit_names, val_names = split(train_names, seed=SEED + 1, train=0.85)
+    return pool, fit_names, val_names, test_names
+
+
+def background(rows):
+    """Background windows used as room noise: training, validation and test recordings kept apart."""
+    pool, fit_names, val_names, test_names = detector_split(rows)
+    quiet = [r for r in pool if r["sound_type"] == "background"]
+    part = lambda names, step: featurise([r for r in quiet if r["name"] in names], lambda r: 0, step, cap=12)[0]
+    return part(fit_names, 10), part(val_names, 15), part(test_names, 15)
+
+
+def speech(step=10, cap=4):
+    """Mel windows of read speech for training, validation and testing, with no speaker in two of them."""
+    root = DATA / "speech" / "LibriSpeech" / "dev-clean"
+    speakers = sorted(p.name for p in root.iterdir()) if root.exists() else []
+    if not speakers:
+        return [np.zeros((0, F.FRAMES, F.N_MELS), np.float32)] * 3
+    train_names, test_names = split(speakers)
+    fit_names, val_names = split(train_names, seed=SEED + 1, train=0.85)
+
+    def part(names):
+        jobs = [(str(p), step, cap) for name in sorted(names) for p in sorted((root / name).rglob("*.flac"))]
+        with ProcessPoolExecutor() as pool:
+            return np.concatenate([x for x in pool.map(extract, jobs, chunksize=8) if len(x)])
+
+    return part(fit_names), part(val_names), part(test_names)
+
+
+def voice_tones(count, seed):
+    """Steady tones with a fundamental of 70 to 260 Hz and some of its harmonics: a hum or a held vowel, below any wingbeat."""
+    rng = np.random.RandomState(seed)
+    t = np.arange(F.WINDOW_SAMPLES) / F.RATE
+    out = []
+    for _ in range(count):
+        f0 = rng.uniform(70, 260)
+        wobble = 1 + rng.uniform(0, 0.03) * np.sin(2 * np.pi * rng.uniform(3, 7) * t + rng.uniform(0, 2 * np.pi))
+        phase = 2 * np.pi * np.cumsum(f0 * wobble) / F.RATE
+        k = np.arange(1, rng.randint(3, int(3800 / f0) + 1) + 1)
+        amp = k ** -rng.uniform(0.3, 2.0) * rng.uniform(0.3, 1.0, len(k))
+        tone = (amp[:, None] * np.sin(k[:, None] * phase[None, :] + rng.uniform(0, 2 * np.pi, (len(k), 1)))).sum(0)
+        tone = tone / np.abs(tone).max() + rng.uniform(0.003, 0.1) * rng.randn(len(t))
+        out.append(F.mel_windows(tone.astype(np.float32), 1)[0])
+    return np.stack(out)
 
 
 class Net(nn.Module):
@@ -118,14 +191,19 @@ def predict(model, x):
         return torch.cat([torch.softmax(model(torch.from_numpy(x[i:i + 2048])), 1) for i in range(0, len(x), 2048)]).numpy()
 
 
-def train(name, xtr, ytr, xva, yva, classes, epochs, width=1):
+def train(name, xtr, ytr, xva, yva, classes, epochs, noise, noise_val, width=1):
     model = Net(classes, width)
+    if os.environ.get("INIT"):
+        model.load_state_dict(torch.load(Path(os.environ["INIT"]) / f"{name}.pt"))
+    peak = float(os.environ.get("LR", 2e-3))
     counts = np.bincount(ytr, minlength=classes)
     weights = torch.tensor(len(ytr) / (classes * np.maximum(counts, 1)), dtype=torch.float32)
     loss_fn = nn.CrossEntropyLoss(weight=weights)
-    opt = torch.optim.AdamW(model.parameters(), lr=2e-3, weight_decay=1e-4)
-    sched = torch.optim.lr_scheduler.OneCycleLR(opt, max_lr=2e-3, total_steps=epochs * ((len(ytr) + 127) // 128))
+    opt = torch.optim.AdamW(model.parameters(), lr=peak, weight_decay=1e-4)
+    sched = torch.optim.lr_scheduler.OneCycleLR(opt, max_lr=peak, total_steps=epochs * ((len(ytr) + 127) // 128))
     xt, yt = torch.from_numpy(xtr), torch.from_numpy(ytr.astype(np.int64))
+    bank, gen = torch.from_numpy(noise), torch.Generator().manual_seed(SEED)
+    val_recorded, val_aired = feats(xva), aired(xva, noise_val)
     best, best_state = -1.0, None
     for epoch in range(epochs):
         model.train()
@@ -133,12 +211,14 @@ def train(name, xtr, ytr, xva, yva, classes, epochs, width=1):
         for i in range(0, len(order), 128):
             b = order[i:i + 128]
             opt.zero_grad()
-            loss = loss_fn(model(augment(xt[b])), yt[b])
+            loss = loss_fn(model(augment(C.to_features(C.over_the_air(xt[b], bank, gen)))), yt[b])
             loss.backward()
             opt.step()
             sched.step()
-        score = balanced_accuracy(yva, predict(model, xva).argmax(1), classes)
-        print(f"{name} epoch {epoch + 1}/{epochs} validation balanced accuracy {score:.3f}", flush=True)
+        recorded = balanced_accuracy(yva, predict(model, val_recorded).argmax(1), classes)
+        air = balanced_accuracy(yva, predict(model, val_aired).argmax(1), classes)
+        score = (recorded + air) / 2
+        print(f"{name} epoch {epoch + 1}/{epochs} validation balanced accuracy {recorded:.3f} as recorded, {air:.3f} through the air", flush=True)
         if score > best:
             best, best_state = score, {k: v.clone() for k, v in model.state_dict().items()}
     model.load_state_dict(best_state)
@@ -202,14 +282,19 @@ def run_species(rows):
     xs, ys, _ = featurise([r for r in cup if r["name"] in fit_names], label, step=5, cap=0)
     xv, yv, _ = featurise([r for r in cup if r["name"] in val_names], label, step=15, cap=0)
     xe, ye, re = featurise([r for r in cup if r["name"] in test_names], label, step=15, cap=0)
-    print("species windows", len(ys), len(yv), len(ye), flush=True)
+    noise_fit, noise_val, noise_test = background(rows)
+    print("species windows", len(ys), len(yv), len(ye), "noise windows", len(noise_fit), len(noise_val), len(noise_test), flush=True)
     width = int(os.environ.get("WIDTH", 1))
-    species, species_val = train("species", xs, ys, xv, yv, len(SPECIES), epochs=int(os.environ.get("EPOCHS", 30)), width=width)
+    species, species_val = train("species", xs, ys, xv, yv, len(SPECIES), epochs=int(os.environ.get("EPOCHS", 30)),
+                                 noise=noise_fit, noise_val=noise_val, width=width)
     species_result_width = width
-    pe = predict(species, xe)
+    pe = predict(species, feats(xe))
     names, rec_probs = by_recording(pe, re)
     rec_true = np.array([label(next(r for r in cup if r["name"] == n)) for n in names])
     rec_pred = rec_probs.argmax(1)
+    pa = predict(species, aired(xe, noise_test))
+    air_pred = by_recording(pa, re)[1].argmax(1)
+    genus = lambda c: LABELS[c].split(".")[0]
     species_result = {
         "classes": LABELS,
         "test_windows": int(len(ye)),
@@ -221,6 +306,12 @@ def run_species(rows):
         "recording_confusion": confusion_matrix(rec_true, rec_pred, labels=range(len(SPECIES))).tolist(),
         "validation_balanced_accuracy": species_val,
         "width": species_result_width,
+        "through_the_air": {
+            "window_balanced_accuracy": balanced_accuracy(ye, pa.argmax(1), len(SPECIES)),
+            "recording_balanced_accuracy": balanced_accuracy(rec_true, air_pred, len(SPECIES)),
+            "recording_recall": {LABELS[c]: float(np.mean(air_pred[rec_true == c] == c)) for c in range(len(SPECIES))},
+            "recording_genus_accuracy": float(np.mean([genus(p) == genus(t) for p, t in zip(air_pred, rec_true)])),
+        },
     }
     print(json.dumps(species_result, indent=1), flush=True)
     tag = os.environ.get("TAG", "")
@@ -229,21 +320,26 @@ def run_species(rows):
 
 
 def run_detector(rows):
-    pool = [r for r in rows if r["sound_type"] in ("mosquito", "background")]
-    groups = {}
-    for kind in ("mosquito", "background"):
-        tr, te = split([r["name"] for r in pool if r["sound_type"] == kind])
-        groups[kind] = (tr, te)
-    train_names = groups["mosquito"][0] | groups["background"][0]
-    test_names = groups["mosquito"][1] | groups["background"][1]
-    fit_names, val_names = split(train_names, seed=SEED + 1, train=0.85)
+    pool, fit_names, val_names, test_names = detector_split(rows)
     label = lambda r: 1 if r["sound_type"] == "mosquito" else 0
     xs, ys, _ = featurise([r for r in pool if r["name"] in fit_names], label, step=10, cap=12)
     xv, yv, _ = featurise([r for r in pool if r["name"] in val_names], label, step=15, cap=12)
     xe, ye, re = featurise([r for r in pool if r["name"] in test_names], label, step=15, cap=12)
-    print("detector windows", len(ys), len(yv), len(ye), flush=True)
-    detector, detector_val = train("detector", xs, ys, xv, yv, 2, epochs=int(os.environ.get("EPOCHS", 12)))
-    pe = predict(detector, xe)[:, 1]
+    speech_fit, speech_val, speech_test = speech()
+    tone_fit, tone_val, tone_test = voice_tones(3000, SEED), voice_tones(500, SEED + 1), voice_tones(1000, SEED + 2)
+    xs, ys = np.concatenate([xs, speech_fit, tone_fit]), np.concatenate([ys, np.zeros(len(speech_fit) + len(tone_fit), ys.dtype)])
+    xv, yv = np.concatenate([xv, speech_val, tone_val]), np.concatenate([yv, np.zeros(len(speech_val) + len(tone_val), yv.dtype)])
+    print("detector windows", len(ys), len(yv), len(ye), "speech windows", len(speech_fit), len(speech_val), len(speech_test), flush=True)
+    # the room noise is the dataset's own background windows, from the same part of the split as the sound
+    detector, detector_val = train("detector", xs, ys, xv, yv, 2, epochs=int(os.environ.get("EPOCHS", 12)),
+                                   noise=xs[ys == 0], noise_val=xv[yv == 0])
+    pe = predict(detector, feats(xe))[:, 1]
+    pa = predict(detector, aired(xe, xe[ye == 0]))[:, 1]
+
+    def flagged(mel, air):
+        if not len(mel):
+            return None
+        return float(np.mean(predict(detector, aired(mel, xe[ye == 0]) if air else feats(mel))[:, 1] >= 0.5))
     detector_result = {
         "test_windows": int(len(ye)),
         "test_mosquito_windows": int(np.sum(ye == 1)),
@@ -254,6 +350,20 @@ def run_detector(rows):
         "recall": float(np.mean(pe[ye == 1] >= 0.5)),
         "false_alarm_rate": float(np.mean(pe[ye == 0] >= 0.5)),
         "validation_balanced_accuracy": detector_val,
+        "through_the_air": {
+            "roc_auc": float(roc_auc_score(ye, pa)),
+            "recall": float(np.mean(pa[ye == 1] >= 0.5)),
+            "false_alarm_rate": float(np.mean(pa[ye == 0] >= 0.5)),
+        },
+        # held-out speakers and tones, none of them a mosquito
+        "voices": {
+            "speech_windows": int(len(speech_test)),
+            "speech_flagged": flagged(speech_test, False),
+            "speech_flagged_through_the_air": flagged(speech_test, True),
+            "tone_windows": int(len(tone_test)),
+            "tones_flagged": flagged(tone_test, False),
+            "tones_flagged_through_the_air": flagged(tone_test, True),
+        },
     }
     print(json.dumps(detector_result, indent=1), flush=True)
     torch.save(detector.state_dict(), WORK / "detector.pt")
@@ -276,7 +386,7 @@ def run_export(rows):
         "mel": mel_bands(),
         "detector": {"classes": ["background", "mosquito"], "layers": export(detector)},
         "species": {"classes": LABELS, "layers": export(species)},
-        "source": "Trained on HumBugDB (Kiskin et al. 2021, CC BY 4.0, doi:10.5281/zenodo.4904800) by models/mosquito/train.py",
+        "source": "Trained on HumBugDB (Kiskin et al. 2021, CC BY 4.0, doi:10.5281/zenodo.4904800), with LibriSpeech dev-clean (Panayotov et al. 2015, CC BY 4.0) as background for the detector, by models/mosquito/train.py",
     }
     out = ROOT / "public" / "models"
     out.mkdir(parents=True, exist_ok=True)
@@ -284,14 +394,16 @@ def run_export(rows):
     results = {"seed": SEED, "split": "by recording, 75% train / 25% test", "species": species_result, "detector": detector_result}
     (ROOT / "models" / "mosquito" / "results.json").write_text(json.dumps(results, indent=1))
 
-    # One demo clip per species, from the test recordings: the longest one the model gets right when scored the way the
-    # browser scores a recording (a window every 4096 samples, at least 3 accepted by the detector, species averaged over
-    # them). If none is right, the longest one. The screen and docs say how the clips were picked.
+    # One demo clip per species, from the 30 longest test recordings: the one the model gets right as recorded and through
+    # the most of 8 simulated speaker-and-room paths, scored the way the browser scores a recording (a window every 4096
+    # samples, at least 3 accepted by the detector, species averaged over them). The longer one wins a tie. If none is
+    # right as recorded, the one right through the most paths. The screen and docs say how the clips were picked.
     clips_dir = ROOT / "public" / "clips"
     clips_dir.mkdir(parents=True, exist_ok=True)
+    noise_test = background(rows)[2]
+    PATHS = 8
 
-    def browser_verdict(signal):
-        x = F.windows(signal, 8)
+    def verdict(x):
         if not len(x):
             return None
         accepted = predict(detector, x)[:, 1] >= 0.5
@@ -299,30 +411,36 @@ def run_export(rows):
             return None
         return LABELS[int(predict(species, x[accepted]).mean(0).argmax())]
 
+    def browser_verdict(signal):
+        return verdict(F.windows(signal, 8))
+
+    def right_through_the_air(signal, label):
+        mel = F.mel_windows(signal, 8)
+        return sum(verdict(aired(mel, noise_test, seed=SEED + path)) == label for path in range(PATHS)) if len(mel) else 0
+
     import soundfile
     clips = []
     for s, name in enumerate(SPECIES):
         candidates = sorted((r for r in cup if r["name"] in species_test and r["species"] == name), key=lambda r: -float(r["length"]))
-        chosen, says, right = None, None, False
-        for row in candidates:
+        chosen, says, right, best = None, None, False, (-1, -1)
+        for row in candidates[:30]:
             signal = F.load(str(DATA / "audio" / f"{row['id']}.wav"))[: F.RATE * 6]
             if len(signal) < F.RATE * 3:
                 continue
             signal = signal / max(1e-6, float(np.max(np.abs(signal)))) * 0.9
-            verdict = browser_verdict(signal)
-            if chosen is None:
-                chosen, says = (row, signal), verdict
-            if verdict == LABELS[s]:
-                chosen, says, right = (row, signal), verdict, True
-                break
+            said = browser_verdict(signal)
+            rank = (int(said == LABELS[s]), right_through_the_air(signal, LABELS[s]))
+            if rank > best:
+                chosen, says, right, best = (row, signal), said, said == LABELS[s], rank
         row, signal = chosen
         file = f"{LABELS[s].replace('. ', '-').replace(' ', '-').lower()}.wav"
         soundfile.write(str(clips_dir / file), signal, F.RATE, subtype="PCM_16")
         clips.append({"file": f"clips/{file}", "label": LABELS[s], "humbugdb_id": int(row["id"]),
-                      "seconds": round(len(signal) / F.RATE, 2), "model_says": says, "picked_because_right": right})
+                      "seconds": round(len(signal) / F.RATE, 2), "model_says": says, "picked_because_right": right,
+                      "right_through_simulated_paths": f"{best[1]} of {PATHS}"})
     (clips_dir / "clips.json").write_text(json.dumps({
         "source": "HumBugDB (Kiskin et al. 2021), CC BY 4.0, doi:10.5281/zenodo.4904800. Test-set recordings, cut to 6 s and normalised.",
-        "picked": "per species, the longest test recording the model gets right; the longest one if none is right",
+        "picked": "per species, of the 30 longest test recordings, the one the model gets right as recorded and through the most of 8 simulated speaker-and-room paths",
         "clips": clips,
     }, indent=1))
     print(json.dumps(clips, indent=1), flush=True)

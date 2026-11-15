@@ -15,6 +15,11 @@ test("a mosquito recording at the microphone is heard live and opens the convers
   await page.goto("/mission/");
   await page.getByRole("banner").getByRole("button", { name: "Verify" }).click();
   await ground(page).getByRole("button", { name: "Listen for mosquitoes" }).click();
+  // the microphone in use is named, its level moves, and the sound is scored
+  await expect(ground(page).getByRole("button", { name: /Microphone/ })).toContainText(/Fake/, { timeout: 15_000 });
+  await expect.poll(async () => Number(await ground(page).getByRole("meter", { name: "Microphone level" }).getAttribute("aria-valuenow"))).toBeGreaterThan(20);
+  await expect(ground(page).getByText(/Sounds like a mosquito: \d+%/)).toBeVisible();
+  await expect(ground(page).getByText("This microphone is sending no sound")).toHaveCount(0);
   const heard = ground(page).locator("[data-heard]");
   await expect(heard).toHaveCount(1, { timeout: 30_000 });
   await expect(heard).toContainText(/heard \d\d:\d\d, [A-Z][a-z]+ \d+%/);

@@ -1,10 +1,8 @@
 "use client";
 
-import { RiPlayFill, RiStopFill } from "@remixicon/react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { LinkButton } from "@/components/base/buttons/link-button";
-import { useShownStep } from "@/lib/mission/view";
-import { playClip, stopClip, useListener } from "@/lib/pod/listener";
+import { useListener } from "@/lib/pod/listener";
 import { SPECIES } from "@/lib/pod/species";
 import results from "@/models/mosquito/results.json";
 import { usePod } from "@/lib/pod/store";
@@ -39,90 +37,80 @@ function ModelScore() {
   );
 }
 
-// the eight species the model knows; the one heard last is outlined, and each card plays a held-out recording
+// who made the recordings and the photos; the phone's sound page shows the same lines
+export function SpeciesSources() {
+  return (
+    <div className="flex flex-col gap-1">
+      <Note>
+        Recordings: HumBugDB test set (Kiskin et al. 2021, CC BY 4.0), never used in training; each is the test recording of its
+        species the model gets right most often, as recorded and through a simulated speaker (none right for Ma. africanus). On
+        all test recordings it names the species {pct(results.species.recording_balanced_accuracy)} of the time, and{" "}
+        {pct(results.species.through_the_air.recording_balanced_accuracy)} through a simulated speaker and room (docs/METHODS.md).
+      </Note>
+      {SPECIES.filter((s, i) => SPECIES.findIndex((t) => t.photo.file === s.photo.file) === i).map((s) => (
+        <Note key={s.photo.file}>
+          Photo of {s.photo.shows}: {s.photo.credit}.
+        </Note>
+      ))}
+    </div>
+  );
+}
+
+// The eight species the model knows; the one heard last is outlined. The cards make no sound:
+// the recordings play from a phone (/sounds/) and reach the model through the microphone.
 export function SpeciesGrid() {
   const listened = useListener((s) => s.heard);
   const fromPod = usePod((s) => s.latest.mosquito);
   // a pod that names the species itself counts too
   const podHeard =
     fromPod?.label && fromPod.quality !== null
-      ? { label: fromPod.label, confidence: fromPod.quality, via: "microphone" as const, at: fromPod.at, genus: undefined, genusConfidence: undefined }
+      ? { label: fromPod.label, confidence: fromPod.quality, at: fromPod.at, genus: undefined, genusConfidence: undefined }
       : null;
   // the listener also stores its own detections as pod readings a moment later, so only a clearly newer one counts
   const heard = podHeard && (!listened || Date.parse(podHeard.at) - Date.parse(listened.at) > 1000) ? podHeard : listened;
-  const playing = useListener((s) => s.playing);
-  const note = useListener((s) => s.note);
   const [credits, setCredits] = useState(false);
-  const shown = useShownStep();
-
-  // a clip never keeps playing once its step is off screen
-  useEffect(() => {
-    if (shown !== "ground") stopClip();
-  }, [shown]);
 
   return (
     <section aria-label="Mosquitoes" className="flex min-w-0 flex-col gap-2">
       <ModelScore />
       <div className="flex items-baseline justify-between gap-4">
-        <FieldLabel>Tap a mosquito to play a recording of its wingbeat</FieldLabel>
-        <LinkButton size="small" aria-expanded={credits} onClick={() => setCredits(!credits)}>
-          {credits ? "Hide sources" : "Sources"}
-        </LinkButton>
+        <FieldLabel>Play a mosquito sound from a phone near the microphone</FieldLabel>
+        <span className="flex items-baseline gap-4">
+          <LinkButton size="small" href="/sounds/" target="_blank">
+            Phone sounds
+          </LinkButton>
+          <LinkButton size="small" aria-expanded={credits} onClick={() => setCredits(!credits)}>
+            {credits ? "Hide sources" : "Sources"}
+          </LinkButton>
+        </span>
       </div>
       <ul className="grid grid-cols-4 gap-2">
         {SPECIES.map((s) => {
           const isHeard = heard?.label === s.label;
-          const isPlaying = playing === s.clip;
-          const Icon = isPlaying ? RiStopFill : RiPlayFill;
           return (
-            <li key={s.label}>
-              <button
-                type="button"
-                aria-label={isPlaying ? `Stop the recording of ${s.name}` : `Play a recording of ${s.name}`}
-                aria-pressed={isPlaying}
-                data-heard={isHeard || undefined}
-                onClick={() => void playClip(s.clip)}
-                className={cx(
-                  "group relative flex w-full flex-col overflow-hidden rounded-xl border bg-background-primary-default text-start outline-none transition-colors duration-150 ease-out focus-visible:ring-2 focus-visible:ring-border-focus-ring motion-reduce:transition-none",
-                  isHeard ? "border-text-primary ring-1 ring-text-primary" : "border-border-button-default hover:border-border-button-hover",
-                )}
-              >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={`/species/${s.photo.file}`} alt={s.photo.shows} className="aspect-[3/2] w-full object-cover" loading="lazy" />
-                <span className="absolute end-1.5 top-1.5 flex size-6 items-center justify-center rounded-full bg-background-primary-default/90 text-foreground-icon-primary">
-                  <Icon className="size-3.5" aria-hidden />
-                </span>
-                <span className="flex min-w-0 flex-col px-2 py-1.5">
-                  <span className="truncate text-caption-1-semibold text-text-primary">{s.label}</span>
-                  {isHeard ? (
-                    <span className="truncate text-caption-1-regular text-text-secondary tabular-nums">
-                      {heard.via === "microphone" ? "heard" : "recording"} {hhmm(heard.at)}, {heard.genus ?? s.label}{" "}
-                      {Math.round((heard.genusConfidence ?? heard.confidence) * 100)}%
-                    </span>
-                  ) : isPlaying ? (
-                    <span className="truncate text-caption-1-regular text-text-tertiary">playing, tap to stop</span>
-                  ) : null}
-                </span>
-              </button>
+            <li
+              key={s.label}
+              data-heard={isHeard || undefined}
+              className={cx(
+                "flex flex-col overflow-hidden rounded-xl border bg-background-primary-default transition-colors duration-150 ease-out motion-reduce:transition-none",
+                isHeard ? "border-text-primary ring-1 ring-text-primary" : "border-border-button-default",
+              )}
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={`/species/${s.photo.file}`} alt={s.photo.shows} className="aspect-[3/2] w-full object-cover" loading="lazy" />
+              <span className="flex min-w-0 flex-col px-2 py-1.5">
+                <span className="truncate text-caption-1-semibold text-text-primary">{s.label}</span>
+                {isHeard ? (
+                  <span className="truncate text-caption-1-regular text-text-secondary tabular-nums">
+                    heard {hhmm(heard.at)}, {heard.genus ?? s.label} {Math.round((heard.genusConfidence ?? heard.confidence) * 100)}%
+                  </span>
+                ) : null}
+              </span>
             </li>
           );
         })}
       </ul>
-      {note ? <Note>{note}</Note> : null}
-      {credits ? (
-        <div className="flex flex-col gap-1">
-          <Note>
-            Recordings: HumBugDB test set (Kiskin et al. 2021, CC BY 4.0), never used in training; each is the longest test recording
-            of its species the model gets right (none for Ma. africanus). On all test recordings it names the species 55% of the time
-            and the genus 76% (docs/METHODS.md).
-          </Note>
-          {SPECIES.filter((s, i) => SPECIES.findIndex((t) => t.photo.file === s.photo.file) === i).map((s) => (
-            <Note key={s.photo.file}>
-              Photo of {s.photo.shows}: {s.photo.credit}.
-            </Note>
-          ))}
-        </div>
-      ) : null}
+      {credits ? <SpeciesSources /> : null}
     </section>
   );
 }

@@ -65,6 +65,12 @@ npm run e2e
 | `?sim=1` | Starts the development simulator, under a SIMULATION badge. |
 | `?record=1` | Records pod events and shows a "Download session" button. |
 
+### Mosquito sounds from a phone
+
+`/sounds/` is a page for a phone: eight mosquito photos, each looping a held-out recording of that species. On the laptop, open `/mission/`, go to Verify and press "Listen for mosquitoes"; the panel names the microphone in use, shows its level and lets you pick another one (a headset microphone often sends silence). Play a sound from the phone next to the laptop microphone and the species heard is outlined. `npm start` serves on every network interface, so a phone on the same Wi-Fi can open `http://<laptop address>:3000/sounds/`; the laptop itself must use `localhost`, or the browser blocks the microphone. With `?record=1`, "Save the last 20 s" downloads what the microphone heard as `microphone.wav`.
+
+To retrain the models, see the header of `models/mosquito/train.py`; `docs/METHODS.md` has the test results, including the simulated speaker and room.
+
 ### Connect the pod
 
 Flash `firmware/pod_k01` as described in `firmware/README.md` and plug the pod into the laptop. Open http://localhost:3000/mission/ in Chrome or Edge (Web Serial works only there, and only on `localhost` or HTTPS), press "Connect pod" in the GROUND panel and pick the pod's port. After the first time, the page opens the same port by itself. When no reading arrives for 5 seconds, the panel shows "pod offline".

@@ -4,7 +4,7 @@ import { triage } from "./triage";
 
 const run = (state: ChatState, inputs: Input[]) => inputs.reduce(reply, state);
 const pod = (state: ChatState) => state.messages.filter((m) => m.from === "pod").map((m) => m.text);
-const heard = (label: string, via: "microphone" | "recording" = "microphone") => ({ label, confidence: 0.87, via });
+const heard = (label: string) => ({ label, confidence: 0.87 });
 
 describe("chat", () => {
   it("with nothing heard, it asks about fever and then the danger signs", () => {
@@ -24,8 +24,8 @@ describe("chat", () => {
     expect(pod(s)[0]).toBe(
       "I just heard a mosquito near the pod: Anopheles, the kind that carries malaria (94% sure). Most likely An. arabiensis (87%). It is one of Zambia's main malaria mosquitoes. Did the patient sleep under a mosquito net last night?",
     );
-    expect(startChat({ ...heard("An. coustani", "recording"), genus: "Anopheles", genusConfidence: 0.9 }).messages[0].text).toBe(
-      "This recording is a mosquito: Anopheles, the kind that carries malaria (90% sure). Most likely An. coustani (87%). Did the patient sleep under a mosquito net last night?",
+    expect(startChat({ ...heard("An. coustani"), genus: "Anopheles", genusConfidence: 0.9 }).messages[0].text).toBe(
+      "I just heard a mosquito near the pod: Anopheles, the kind that carries malaria (90% sure). Most likely An. coustani (87%). Did the patient sleep under a mosquito net last night?",
     );
   });
 

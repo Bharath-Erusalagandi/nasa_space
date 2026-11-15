@@ -241,9 +241,20 @@ def mosquito_block(root):
         "By genus, which is what the conversation acts on: " + ", ".join(
             f"{k} {pct(v)} of {r['species_group']['count'][k]}" for k, v in r["species_group"]["recall"].items())
         + f" (balanced {pct(r['species_group']['balanced_accuracy'])}).",
-    ] if "species_group" in r else []) + [
+    ] if "species_group" in r else []) + ([
         "",
-        "The recording on each species card is the longest test recording of that species the model gets right, so the cards show the model at its best; the figures above are the honest rate.",
+        "The same test recordings through a simulated phone speaker, room and room noise (one random path per window, `models/mosquito/channel.py`): "
+        f"the detector finds {pct(d['through_the_air']['recall'])} of mosquito windows and flags {pct(d['through_the_air']['false_alarm_rate'])} of background windows; "
+        f"the species model is right for {pct(s['through_the_air']['recording_balanced_accuracy'])} of recordings (balanced) and names the right genus for {pct(s['through_the_air']['recording_genus_accuracy'])}. "
+        "This is a simulation. The models have not been measured with a real phone and laptop.",
+    ] if "through_the_air" in d and "through_the_air" in s else []) + ([
+        "",
+        f"Voices, none of them a mosquito: of {d['voices']['speech_windows']} windows of read speech from speakers the detector never heard (LibriSpeech dev-clean), "
+        f"it flags {pct(d['voices']['speech_flagged'])} as recorded and {pct(d['voices']['speech_flagged_through_the_air'])} through the simulated path; "
+        f"of {d['voices']['tone_windows']} synthetic steady tones in the voice range, {pct(d['voices']['tones_flagged'])} and {pct(d['voices']['tones_flagged_through_the_air'])}.",
+    ] if d.get("voices", {}).get("speech_windows") else []) + [
+        "",
+        "The recording for each species on the phone page is, of the 30 longest test recordings, the one the model gets right as recorded and through the most of 8 simulated paths, so the page shows the model at its best; the figures above are the honest rate.",
     ])
 
 

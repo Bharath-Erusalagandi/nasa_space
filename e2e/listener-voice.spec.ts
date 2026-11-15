@@ -10,7 +10,7 @@ test("a voice-range tone at the microphone is not reported as a mosquito", async
   await page.goto("/mission/");
   await page.getByRole("banner").getByRole("button", { name: "Verify" }).click();
   await ground(page).getByRole("button", { name: "Listen for mosquitoes" }).click();
-  await expect(ground(page).getByText("Listening through the microphone. A mosquito shows on its card below.")).toBeVisible({ timeout: 15_000 });
+  await expect(ground(page).getByRole("meter", { name: "Microphone level" })).toBeVisible({ timeout: 15_000 });
   await page.waitForTimeout(6000);
   await expect(ground(page).locator("[data-heard]")).toHaveCount(0);
   await expect(ground(page).getByTestId("question")).toHaveText("Has the patient had a fever in the last two days?");

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { classifySignal, createDecision, createScorer, withGenus } from "./listener";
+import { createDecision, createMeter, createScorer, createTape, withGenus } from "./listener";
 import type { MosquitoModel } from "./mosquitoModel";
 
 const CLASSES = ["An. arabiensis", "Ae. aegypti"];
@@ -48,11 +48,11 @@ describe("createDecision", () => {
     expect(next(r(0.9))?.label).toBe("An. arabiensis");
   });
 
-  it("reports a change of species straight away", () => {
+  it("reports another species only once it outweighs everything heard so far", () => {
     const next = createDecision(CLASSES);
     [r(0.9), r(0.9), r(0.9)].forEach(next);
     const changed = [r(0.9, [0.1, 0.9]), r(0.9, [0.1, 0.9]), r(0.9, [0.1, 0.9])].map(next).filter(Boolean);
-    // two of the four windows are the new species, which already outweighs the old one: (0.2 + 0.2 + 0.9 + 0.9) / 4
+    // after three windows of each the new species leads: (0.2 * 3 + 0.9 * 3) / 6 against (0.8 * 3 + 0.1 * 3) / 6
     expect(changed).toMatchObject([{ label: "Ae. aegypti", confidence: expect.closeTo(0.55, 6), genus: "Aedes", genusConfidence: expect.closeTo(0.55, 6) }]);
   });
 });
@@ -64,13 +64,39 @@ describe("withGenus", () => {
   });
 });
 
-describe("classifySignal", () => {
-  it("averages the species over the windows the detector accepts", () => {
-    const loud = new Float32Array(8000 * 3).fill(1);
-    expect(classifySignal(fakeModel(), loud)).toMatchObject({ label: "An. arabiensis", confidence: expect.closeTo(0.8, 6) });
+describe("createMeter", () => {
+  const feed = (meter: ReturnType<typeof createMeter>, value: number, seconds: number) => {
+    let last = null;
+    for (let i = 0; i < (8000 * seconds) / 128; i++) last = meter(new Float32Array(128).fill(value)) ?? last;
+    return last;
+  };
+
+  it("reports a level every quarter second, low for a quiet room and high for a loud sound", () => {
+    const meter = createMeter(8000);
+    expect(meter(new Float32Array(1999).fill(0.5))).toBeNull();
+    expect(meter(new Float32Array(1).fill(0.5))).toMatchObject({ silent: false });
+    expect(feed(createMeter(8000), 0.001, 1)!.level).toBeCloseTo(1 / 6, 2);
+    expect(feed(createMeter(8000), 0.3, 1)!.level).toBeGreaterThan(0.9);
   });
 
-  it("gives nothing for quiet audio", () => {
-    expect(classifySignal(fakeModel(), new Float32Array(8000 * 3))).toBeNull();
+  it("calls a microphone silent only after two seconds of exact silence, and hears it again at once", () => {
+    const meter = createMeter(8000);
+    expect(feed(meter, 0, 1.5)).toMatchObject({ level: 0, silent: false });
+    expect(feed(meter, 0, 1)).toMatchObject({ silent: true });
+    expect(feed(meter, 0.001, 0.3)).toMatchObject({ silent: false });
+    expect(feed(createMeter(8000), 0.001, 5)).toMatchObject({ silent: false });
+  });
+});
+
+describe("createTape", () => {
+  it("keeps the newest sound in order and writes it as a 16-bit mono WAV", () => {
+    const tape = createTape(4, 2);
+    tape.push(Float32Array.from([0.1, 0.2, 0.3]));
+    tape.push(Float32Array.from([0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, -1, 2]));
+    const wav = new DataView(tape.wav());
+    expect(String.fromCharCode(...new Uint8Array(wav.buffer, 0, 4))).toBe("RIFF");
+    expect([wav.getUint16(22, true), wav.getUint32(24, true), wav.getUint16(34, true), wav.getUint32(40, true)]).toEqual([1, 4, 16, 16]);
+    const samples = Array.from({ length: 8 }, (_, i) => wav.getInt16(44 + 2 * i, true) / 32767);
+    [0.5, 0.6, 0.7, 0.8, 0.9, 1, -1, 1].forEach((v, i) => expect(samples[i]).toBeCloseTo(v, 3));
   });
 });

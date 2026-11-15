@@ -5,7 +5,7 @@ import { GENUS, speciesFor } from "./species";
 
 export type Listening = "off" | "starting" | "on" | "denied" | "unsupported" | "failed";
 
-export type Detection = Heard & { at: string; clip?: string };
+export type Detection = Heard & { at: string };
 
 type Result = { mosquito: number; species: number[] };
 
@@ -45,20 +45,32 @@ export function createScorer(model: MosquitoModel, every = model.rate / 2) {
 
 type DecisionOptions = { need?: number; of?: number; release?: number; threshold?: number };
 
-// A mosquito counts as heard once `need` of the last `of` windows say so; the species is the mean over those
-// windows. It is reported again only after `release` quiet windows in a row, or when the species changes.
+// A mosquito counts as heard once `need` of the last `of` windows say so. The species is the mean over every
+// accepted window since then, so it settles as the mosquito keeps sounding instead of following each window.
+// It is reported again only when that mean names another species, or after `release` quiet windows in a row.
 export function createDecision(classes: string[], { need = 3, of = 4, release = 4, threshold = 0.5 }: DecisionOptions = {}) {
   let recent: Result[] = [];
   let quiet = 0;
   let reported: string | null = null;
+  let accepted: Result[] = [];
 
   return function next(result: Result): ReturnType<typeof withGenus> | null {
+    const positive = result.mosquito >= threshold;
     recent = [...recent, result].slice(-of);
-    quiet = result.mosquito >= threshold ? 0 : quiet + 1;
-    if (quiet >= release) reported = null;
-    const positive = recent.filter((r) => r.mosquito >= threshold);
-    if (positive.length < need) return null;
-    const mean = classes.map((_, c) => positive.reduce((s, r) => s + r.species[c], 0) / positive.length);
+    quiet = positive ? 0 : quiet + 1;
+    if (quiet >= release) {
+      reported = null;
+      accepted = [];
+      recent = [];
+    }
+    if (accepted.length) {
+      if (positive) accepted.push(result);
+    } else {
+      const first = recent.filter((r) => r.mosquito >= threshold);
+      if (first.length < need) return null;
+      accepted = first;
+    }
+    const mean = classes.map((_, c) => accepted.reduce((s, r) => s + r.species[c], 0) / accepted.length);
     const best = mean.indexOf(Math.max(...mean));
     if (classes[best] === reported) return null;
     reported = classes[best];
@@ -75,10 +87,136 @@ export function withGenus(classes: string[], probs: number[]) {
   return { label, confidence: probs[best], genus: group ? GENUS[group] : label, genusConfidence };
 }
 
-type State = { status: Listening; heard: Detection | null; playing: string | null; note: string | null };
+// The level of the newest quarter second on a 0 to 1 scale (-70 to -10 dB), and whether the microphone
+// has sent nothing at all for two seconds: a muted or disconnected one sends exact silence, a quiet room does not.
+export function createMeter(rate: number, every = rate / 4, deadAfter = rate * 2) {
+  let sum = 0;
+  let count = 0;
+  let dead = 0;
 
-export const listenerStore = createStore<State>()(() => ({ status: "off", heard: null, playing: null, note: null }));
+  return function push(chunk: Float32Array): { level: number; silent: boolean } | null {
+    for (let i = 0; i < chunk.length; i++) sum += chunk[i] * chunk[i];
+    count += chunk.length;
+    if (count < every) return null;
+    const rms = Math.sqrt(sum / count);
+    dead = rms < 1e-4 ? dead + count : 0;
+    sum = 0;
+    count = 0;
+    const db = 20 * Math.log10(Math.max(rms, 1e-6));
+    return { level: Math.min(1, Math.max(0, (db + 70) / 60)), silent: dead >= deadAfter };
+  };
+}
+
+// The last `seconds` the microphone heard, held in memory only, so a test can be saved and scored again later.
+export function createTape(rate: number, seconds = 20) {
+  const data = new Float32Array(rate * seconds);
+  let at = 0;
+  let filled = 0;
+
+  return {
+    push(chunk: Float32Array) {
+      for (let i = 0; i < chunk.length; i++) {
+        data[at] = chunk[i];
+        at = (at + 1) % data.length;
+      }
+      filled = Math.min(data.length, filled + chunk.length);
+    },
+    // a 16-bit mono WAV file, oldest sample first
+    wav(): ArrayBuffer {
+      const out = new DataView(new ArrayBuffer(44 + 2 * filled));
+      const text = (offset: number, word: string) => [...word].forEach((c, i) => out.setUint8(offset + i, c.charCodeAt(0)));
+      text(0, "RIFF");
+      out.setUint32(4, 36 + 2 * filled, true);
+      text(8, "WAVEfmt ");
+      out.setUint32(16, 16, true);
+      out.setUint16(20, 1, true);
+      out.setUint16(22, 1, true);
+      out.setUint32(24, rate, true);
+      out.setUint32(28, 2 * rate, true);
+      out.setUint16(32, 2, true);
+      out.setUint16(34, 16, true);
+      text(36, "data");
+      out.setUint32(40, 2 * filled, true);
+      const start = (at - filled + data.length) % data.length;
+      for (let i = 0; i < filled; i++) {
+        const sample = Math.max(-1, Math.min(1, data[(start + i) % data.length]));
+        out.setInt16(44 + 2 * i, Math.round(sample * 32767), true);
+      }
+      return out.buffer;
+    },
+  };
+}
+
+let tape: ReturnType<typeof createTape> | null = null;
+
+// downloads what the microphone heard in the last 20 seconds
+export function saveHeard(): void {
+  if (!tape) return;
+  const url = URL.createObjectURL(new Blob([tape.wav()], { type: "audio/wav" }));
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = "microphone.wav";
+  link.click();
+  setTimeout(() => URL.revokeObjectURL(url), 0);
+}
+
+export type Microphone = { id: string; label: string };
+
+type State = {
+  status: Listening;
+  heard: Detection | null;
+  note: string | null;
+  // the microphone in use, and the ones the browser offers
+  microphone: string | null;
+  microphones: Microphone[];
+  level: number;
+  silent: boolean;
+  // how much the newest window sounds like a mosquito, 0 to 1
+  score: number | null;
+};
+
+const IDLE = { microphone: null, microphones: [], level: 0, silent: false, score: null };
+
+export const listenerStore = createStore<State>()(() => ({ status: "off", heard: null, note: null, ...IDLE }));
 const set = (patch: Partial<State>) => listenerStore.setState(patch);
+
+const CHOSEN = "orbit:microphone";
+
+function chosen(): string | null {
+  try {
+    return localStorage.getItem(CHOSEN);
+  } catch {
+    return null;
+  }
+}
+
+function remember(id: string | null) {
+  try {
+    if (id) localStorage.setItem(CHOSEN, id);
+    else localStorage.removeItem(CHOSEN);
+  } catch {}
+}
+
+// the browser's voice filters change the sound the model was trained on, so they are off
+const RAW = { echoCancellation: false, noiseSuppression: false, autoGainControl: false };
+
+// opens the chosen microphone, or the computer's default one when none is chosen or the chosen one is gone
+async function open(media: MediaDevices): Promise<MediaStream> {
+  const id = chosen();
+  if (!id) return media.getUserMedia({ audio: RAW });
+  try {
+    return await media.getUserMedia({ audio: { ...RAW, deviceId: { exact: id } } });
+  } catch (error) {
+    if ((error as DOMException).name !== "OverconstrainedError" && (error as DOMException).name !== "NotFoundError") throw error;
+    remember(null);
+    return media.getUserMedia({ audio: RAW });
+  }
+}
+
+async function microphones(media: MediaDevices): Promise<Microphone[]> {
+  const devices = await media.enumerateDevices().catch(() => []);
+  return devices.filter((d) => d.kind === "audioinput" && d.label && d.deviceId !== "communications").map((d) => ({ id: d.deviceId, label: d.label }));
+}
 
 let stop: (() => void) | null = null;
 let cancelled = false;
@@ -104,8 +242,7 @@ export async function startListening(): Promise<void> {
   }
   let stream: MediaStream;
   try {
-    // the browser's voice filters change the sound the model was trained on, so they are off
-    stream = await media.getUserMedia({ audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: false } });
+    stream = await open(media);
   } catch {
     return set({ status: "denied" });
   }
@@ -119,12 +256,16 @@ export async function startListening(): Promise<void> {
   const source = context.createMediaStreamSource(stream);
   const push = createScorer(model);
   const decide = createDecision(model.speciesClasses);
+  const meter = createMeter(model.rate);
+  tape = createTape(model.rate);
   const onAudio = (chunk: Float32Array) => {
-    // a clip playing from this page would reach the microphone too; it is scored from the file instead
-    if (listenerStore.getState().playing) return;
+    tape?.push(chunk);
+    const measured = meter(chunk);
+    if (measured) set(measured);
     for (const result of push(chunk)) {
+      set({ score: result.mosquito });
       const found = decide(result);
-      if (found) report({ ...found, via: "microphone" });
+      if (found) report(found);
     }
   };
 
@@ -150,9 +291,18 @@ export async function startListening(): Promise<void> {
     for (const track of stream.getTracks()) track.stop();
     void context.close().catch(() => {});
     stop = null;
-    set({ status: "off" });
+    set({ status: "off", ...IDLE });
   };
-  set({ status: "on" });
+  const track = stream.getAudioTracks()[0];
+  set({ status: "on", microphone: track?.getSettings().deviceId ?? null, microphones: await microphones(media) });
+}
+
+// switches to another microphone and keeps the choice for next time
+export function chooseMicrophone(id: string): void {
+  remember(id);
+  if (!stop) return;
+  stop();
+  void startListening();
 }
 
 export function stopListening(): void {
@@ -164,72 +314,8 @@ export function stopListening(): void {
 }
 
 // a detection is the browser's own, from whatever microphone it was given, so it is not stored as a pod reading
-function report(found: Omit<Detection, "at">) {
+function report(found: Heard) {
   set({ heard: { ...found, at: new Date().toISOString() } });
-}
-
-// runs the model over a whole recording: the species is the mean over the windows the detector accepts
-export function classifySignal(model: MosquitoModel, signal: Float32Array, need = 3, threshold = 0.5) {
-  const results = createScorer(model)(signal);
-  const positive = results.filter((r) => r.mosquito >= threshold);
-  if (positive.length < Math.min(need, results.length) || positive.length === 0) return null;
-  const mean = model.speciesClasses.map((_, c) => positive.reduce((s, r) => s + r.species[c], 0) / positive.length);
-  return withGenus(model.speciesClasses, mean);
-}
-
-async function decode(url: string, rate: number): Promise<Float32Array> {
-  const data = await (await fetch(url)).arrayBuffer();
-  const probe = new OfflineAudioContext(1, 1, rate);
-  const audio = await probe.decodeAudioData(data);
-  const offline = new OfflineAudioContext(1, Math.ceil(audio.duration * rate), rate);
-  const source = offline.createBufferSource();
-  source.buffer = audio;
-  source.connect(offline.destination);
-  source.start();
-  return (await offline.startRendering()).getChannelData(0);
-}
-
-let clip: { url: string; audio: HTMLAudioElement; done: () => void } | null = null;
-
-// stops the clip playing now, if any
-export function stopClip(): void {
-  if (!clip) return;
-  clip.audio.pause();
-  clip.done();
-  clip = null;
-  set({ playing: null });
-}
-
-// Plays a recorded clip out loud and scores the file itself; the result is labelled as a recording.
-// Tapping the clip again stops it, and tapping another one switches to it.
-export async function playClip(url: string): Promise<void> {
-  const again = clip?.url === url;
-  stopClip();
-  if (again) return;
-  set({ playing: url, note: null });
-  const audio = new Audio(url);
-  const ended = new Promise<void>((resolve) => {
-    clip = { url, audio, done: resolve };
-    audio.onended = () => resolve();
-    audio.onerror = () => resolve();
-  });
-  void audio.play().catch(() => {});
-  try {
-    const model = await loadMosquitoModel();
-    const found = classifySignal(model, await decode(url, model.rate));
-    if (clip?.url === url) {
-      if (found) report({ ...found, via: "recording", clip: url });
-      else set({ note: "No mosquito found in that recording." });
-    }
-    await ended;
-  } catch {
-    set({ note: "That recording could not be played." });
-  } finally {
-    if (clip?.url === url) {
-      clip = null;
-      set({ playing: null });
-    }
-  }
 }
 
 export const useListener = <T>(select: (state: State) => T) => useStore(listenerStore, select);

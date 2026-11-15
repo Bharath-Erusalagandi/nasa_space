@@ -38,11 +38,15 @@ Used for: what the POWER daily series is built from (MERRA-2 from 1981, GEOS nea
 
 **Kiskin, I., Sinka, M., Cobb, A., Rafique, W., Wang, L., Zilli, D., Gutteridge, B., Dam, R., Marinos, T., Li, Y., Msaky, D., Kaindoa, E., Killeen, G., Herreros-Moya, E., Willis, K., and Roberts, S. J. (2021).** HumBugDB: A Large-scale Acoustic Mosquito Dataset. *Proceedings of the Neural Information Processing Systems Track on Datasets and Benchmarks 1* (NeurIPS Datasets and Benchmarks 2021).
 https://datasets-benchmarks-proceedings.neurips.cc/paper/2021/hash/65ded5353c5ee48d0b7d48c591b8f430-Abstract-round2.html (preprint arXiv:2110.07607; data https://doi.org/10.5281/zenodo.4904800, CC BY 4.0)
-Used for: training and testing the two mosquito models (`models/mosquito/train.py`), and the held-out recordings played from the species cards (`public/clips/`). Data: CC BY 4.0.
+Used for: training and testing the two mosquito models (`models/mosquito/train.py`), and the held-out recordings played from the phone sound page (`/sounds/`, files in `public/clips/`). Data: CC BY 4.0.
 
 **Luxen, D., and Vetter, C. (2011).** Real-time routing with OpenStreetMap data. *Proceedings of the 19th ACM SIGSPATIAL International Conference on Advances in Geographic Information Systems*, 513-516.
 https://doi.org/10.1145/2093973.2094062
 Used for: OSRM, the router that computed `public/map/routes.json` offline.
+
+**Panayotov, V., Chen, G., Povey, D., and Khudanpur, S. (2015).** Librispeech: An ASR corpus based on public domain audio books. *2015 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)*, 5206-5210.
+https://doi.org/10.1109/ICASSP.2015.7178964 (data https://www.openslr.org/12, dev-clean, CC BY 4.0)
+Used for: read speech as background when training the mosquito detector, and held-out speakers to test that it does not call a voice a mosquito (`models/mosquito/train.py`). No speech is shipped in this repository.
 
 ### NASA POWER acknowledgement
 
