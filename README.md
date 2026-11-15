@@ -1,6 +1,6 @@
 # Orbit Health
 
-Orbit Health is one web page, `/mission/`, for one question: is the rainy season in Eastern Province, Zambia changing, and what should a health team do about it? It follows the loop Detect -> Verify -> Act. SKY tests 45 seasons of NASA POWER data for the grid cell around a village. GROUND shows live readings from a USB pod, K-01, each beside its tested error. ACTION turns a patient's danger-sign answer into a medicine order and a delivery on real roads.
+Orbit Health is one web page, `/mission/`, for one question: is the  rainy season in Eastern Province, Zambia changing, and what should a health team do about it? It follows the loop Detect -> Verify -> Act. SKY tests 45 seasons of NASA POWER data for the grid cell around a village. GROUND shows live readings from a USB pod, K-01, each beside its tested error. ACTION turns a patient's danger-sign answer into a medicine order and a delivery on real roads.
 
 The app is static. It reads JSON files under `public/` that the Python scripts in this repo write, works with Wi-Fi off, and makes no AI model calls. `docs/METHODS.md` explains the statistics and lists every limit, `docs/VALIDATION.md` holds the pod sensor checks, and `docs/SUBMISSION.md` is the NASA Space Apps entry.
 
