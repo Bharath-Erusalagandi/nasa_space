@@ -250,7 +250,7 @@ NASA POWER data comes from the NASA Langley Research Center POWER project, with 
 | [Copernicus DEM GLO-90 (AWS Open Data, copernicus-dem-90m)](https://copernicus-dem-90m.s3.amazonaws.com) | Copernicus DEM GLO-90, free licence; produced using Copernicus WorldDEM-90 (c) DLR e.V. 2010-2014 and (c) Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved | hillshade relief (49 tiles) |
 <!-- /fill_docs:credits -->
 
-This is a new codebase written at RiverHacks x NASA Space Apps 2026. It builds on the idea of an earlier project by another author, Orbit Health, Philip Mocanu's Cal Hacks 13.0 project (https://devpost.com/software/orbit-health). No code, data or assets from that project are used here. How we used AI tools is written up in [`docs/AI_USE.md`](docs/AI_USE.md).
+
 
 ---
 
