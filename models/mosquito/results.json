@@ -1,0 +1,155 @@
+{
+ "seed": 42,
+ "split": "by recording, 75% train / 25% test",
+ "species": {
+  "classes": [
+   "An. arabiensis",
+   "Cx. pipiens complex",
+   "Ae. aegypti",
+   "An. funestus",
+   "An. squamosus",
+   "An. coustani",
+   "Ma. uniformis",
+   "Ma. africanus"
+  ],
+  "test_windows": 8937,
+  "test_recordings": 353,
+  "window_balanced_accuracy": 0.4830260290398722,
+  "recording_balanced_accuracy": 0.5535941843578178,
+  "recording_recall": {
+   "An. arabiensis": 0.6589147286821705,
+   "Cx. pipiens complex": 0.7142857142857143,
+   "Ae. aegypti": 0.7692307692307693,
+   "An. funestus": 0.8870967741935484,
+   "An. squamosus": 0.5652173913043478,
+   "An. coustani": 0.3076923076923077,
+   "Ma. uniformis": 0.5263157894736842,
+   "Ma. africanus": 0.0
+  },
+  "recording_count": {
+   "An. arabiensis": 129,
+   "Cx. pipiens complex": 84,
+   "Ae. aegypti": 13,
+   "An. funestus": 62,
+   "An. squamosus": 23,
+   "An. coustani": 13,
+   "Ma. uniformis": 19,
+   "Ma. africanus": 10
+  },
+  "recording_confusion": [
+   [
+    85,
+    17,
+    0,
+    9,
+    14,
+    2,
+    2,
+    0
+   ],
+   [
+    7,
+    60,
+    0,
+    6,
+    5,
+    1,
+    5,
+    0
+   ],
+   [
+    0,
+    1,
+    10,
+    2,
+    0,
+    0,
+    0,
+    0
+   ],
+   [
+    2,
+    5,
+    0,
+    55,
+    0,
+    0,
+    0,
+    0
+   ],
+   [
+    6,
+    3,
+    0,
+    1,
+    13,
+    0,
+    0,
+    0
+   ],
+   [
+    1,
+    3,
+    0,
+    1,
+    4,
+    4,
+    0,
+    0
+   ],
+   [
+    4,
+    3,
+    0,
+    0,
+    0,
+    1,
+    10,
+    1
+   ],
+   [
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    9,
+    0
+   ]
+  ],
+  "validation_balanced_accuracy": 0.5179324809738819
+ },
+ "detector": {
+  "test_windows": 14581,
+  "test_mosquito_windows": 10826,
+  "test_background_windows": 3755,
+  "test_recordings": 804,
+  "roc_auc": 0.9914671195226367,
+  "threshold": 0.5,
+  "recall": 0.9534454092000739,
+  "false_alarm_rate": 0.022103861517976033,
+  "validation_balanced_accuracy": 0.9745557707580312
+ },
+ "species_group": {
+  "recall": {
+   "Anopheles": 0.8678414096916299,
+   "Culex": 0.7142857142857143,
+   "Aedes": 0.7692307692307693,
+   "Mansonia": 0.6896551724137931
+  },
+  "count": {
+   "Anopheles": 227,
+   "Culex": 84,
+   "Aedes": 13,
+   "Mansonia": 29
+  },
+  "balanced_accuracy": 0.7602532664054766
+ },
+ "malaria_vector": {
+  "recall": 0.8678414096916299,
+  "specificity": 0.7936507936507937,
+  "anopheles_recordings": 227,
+  "other_recordings": 126
+ }
+}

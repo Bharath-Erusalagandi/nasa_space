@@ -1,0 +1,70 @@
+{
+ "source": "HumBugDB (Kiskin et al. 2021), CC BY 4.0, doi:10.5281/zenodo.4904800. Test-set recordings, cut to 6 s and normalised.",
+ "picked": "per species, the longest test recording the model gets right; the longest one if none is right",
+ "clips": [
+  {
+   "file": "clips/an-arabiensis.wav",
+   "label": "An. arabiensis",
+   "humbugdb_id": 222324,
+   "seconds": 6.0,
+   "model_says": "An. arabiensis",
+   "picked_because_right": true
+  },
+  {
+   "file": "clips/cx-pipiens-complex.wav",
+   "label": "Cx. pipiens complex",
+   "humbugdb_id": 220054,
+   "seconds": 6.0,
+   "model_says": "Cx. pipiens complex",
+   "picked_because_right": true
+  },
+  {
+   "file": "clips/ae-aegypti.wav",
+   "label": "Ae. aegypti",
+   "humbugdb_id": 220405,
+   "seconds": 6.0,
+   "model_says": "Ae. aegypti",
+   "picked_because_right": true
+  },
+  {
+   "file": "clips/an-funestus.wav",
+   "label": "An. funestus",
+   "humbugdb_id": 221358,
+   "seconds": 6.0,
+   "model_says": "An. funestus",
+   "picked_because_right": true
+  },
+  {
+   "file": "clips/an-squamosus.wav",
+   "label": "An. squamosus",
+   "humbugdb_id": 221796,
+   "seconds": 6.0,
+   "model_says": "An. squamosus",
+   "picked_because_right": true
+  },
+  {
+   "file": "clips/an-coustani.wav",
+   "label": "An. coustani",
+   "humbugdb_id": 222170,
+   "seconds": 6.0,
+   "model_says": "An. coustani",
+   "picked_because_right": true
+  },
+  {
+   "file": "clips/ma-uniformis.wav",
+   "label": "Ma. uniformis",
+   "humbugdb_id": 220600,
+   "seconds": 6.0,
+   "model_says": "Ma. uniformis",
+   "picked_because_right": true
+  },
+  {
+   "file": "clips/ma-africanus.wav",
+   "label": "Ma. africanus",
+   "humbugdb_id": 221522,
+   "seconds": 6.0,
+   "model_says": "Ma. uniformis",
+   "picked_because_right": false
+  }
+ ]
+}
