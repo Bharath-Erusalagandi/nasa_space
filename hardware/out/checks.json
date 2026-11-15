@@ -1,0 +1,1344 @@
+{
+ "date": "2026-11-14",
+ "units": "mm",
+ "min_clearance_required": 0.3,
+ "envelope": {
+  "enclosure_mm": [
+   150.0,
+   98.5,
+   120.0
+  ],
+  "enclosure_note": "shell + rear plate + feet + finger lip + LED tip + cable clamp, X x Y(depth) x Z",
+  "with_stowed_capsule_mm": [
+   150.0,
+   128.0,
+   120.0
+  ],
+  "shell_mm": [
+   150.0,
+   92.0,
+   110.0
+  ]
+ },
+ "part_count": {
+  "printed": 9,
+  "bought_models": 16,
+  "total": 25
+ },
+ "parts": {
+  "shell": {
+   "kind": "printed",
+   "bbox_min": [
+    -0.0,
+    -0.0,
+    -8.0
+   ],
+   "bbox_max": [
+    150.0,
+    92.0,
+    110.0
+   ],
+   "volume_mm3": 171569.9,
+   "print_bbox_mm": [
+    150.0,
+    118.0,
+    92.0
+   ],
+   "fits_220_bed": true,
+   "print_orientation": "front face down",
+   "solids": 1,
+   "estimate": {
+    "volume_cm3": 171.57,
+    "extruded_cm3": 116.96,
+    "filament_g": 148.5,
+    "filament_m": 48.63,
+    "print_h": 6.13,
+    "material": "PETG"
+   },
+   "overhang_area_mm2_steeper_than_45deg": 164.2
+  },
+  "rear_plate": {
+   "kind": "printed",
+   "bbox_min": [
+    -0.0,
+    83.8,
+    -0.0
+   ],
+   "bbox_max": [
+    150.0,
+    94.0,
+    110.0
+   ],
+   "volume_mm3": 44679.3,
+   "print_bbox_mm": [
+    150.0,
+    110.0,
+    10.2
+   ],
+   "fits_220_bed": true,
+   "print_orientation": "outer face down",
+   "solids": 1,
+   "estimate": {
+    "volume_cm3": 44.68,
+    "extruded_cm3": 30.39,
+    "filament_g": 38.6,
+    "filament_m": 12.64,
+    "print_h": 1.67,
+    "material": "PETG"
+   },
+   "overhang_area_mm2_steeper_than_45deg": 25.0
+  },
+  "tray": {
+   "kind": "printed",
+   "bbox_min": [
+    2.7,
+    5.0,
+    11.6
+   ],
+   "bbox_max": [
+    147.3,
+    90.8,
+    18.6
+   ],
+   "volume_mm3": 38072.3,
+   "print_bbox_mm": [
+    144.6,
+    85.8,
+    7.0
+   ],
+   "fits_220_bed": true,
+   "print_orientation": "flat, standoffs up",
+   "solids": 1,
+   "estimate": {
+    "volume_cm3": 38.07,
+    "extruded_cm3": 24.28,
+    "filament_g": 30.8,
+    "filament_m": 10.09,
+    "print_h": 1.35,
+    "material": "PETG"
+   },
+   "overhang_area_mm2_steeper_than_45deg": 20.0
+  },
+  "finger_cradle": {
+   "kind": "printed",
+   "bbox_min": [
+    82.0,
+    -1.5,
+    23.25
+   ],
+   "bbox_max": [
+    134.0,
+    34.5,
+    47.8
+   ],
+   "volume_mm3": 12325.1,
+   "print_bbox_mm": [
+    52.0,
+    24.6,
+    36.0
+   ],
+   "fits_220_bed": true,
+   "print_orientation": "end stop down, tunnel axis vertical",
+   "solids": 1,
+   "estimate": {
+    "volume_cm3": 12.33,
+    "extruded_cm3": 7.41,
+    "filament_g": 9.4,
+    "filament_m": 3.08,
+    "print_h": 0.48,
+    "material": "PETG black"
+   },
+   "overhang_area_mm2_steeper_than_45deg": 42.8
+  },
+  "camera_bezel": {
+   "kind": "printed",
+   "bbox_min": [
+    97.0,
+    -0.0,
+    72.0
+   ],
+   "bbox_max": [
+    127.0,
+    3.9,
+    100.0
+   ],
+   "volume_mm3": 1012.8,
+   "print_bbox_mm": [
+    30.0,
+    28.0,
+    3.9
+   ],
+   "fits_220_bed": true,
+   "print_orientation": "flange down",
+   "solids": 1,
+   "estimate": {
+    "volume_cm3": 1.01,
+    "extruded_cm3": 1.01,
+    "filament_g": 1.3,
+    "filament_m": 0.42,
+    "print_h": 0.15,
+    "material": "PETG black"
+   },
+   "overhang_area_mm2_steeper_than_45deg": 11.9
+  },
+  "speaker_clamp": {
+   "kind": "printed",
+   "bbox_min": [
+    10.0,
+    4.4,
+    32.0
+   ],
+   "bbox_max": [
+    70.0,
+    12.6,
+    92.0
+   ],
+   "volume_mm3": 5658.6,
+   "print_bbox_mm": [
+    60.0,
+    60.0,
+    8.2
+   ],
+   "fits_220_bed": true,
+   "print_orientation": "flange down",
+   "solids": 1,
+   "estimate": {
+    "volume_cm3": 5.66,
+    "extruded_cm3": 4.6,
+    "filament_g": 5.8,
+    "filament_m": 1.91,
+    "print_h": 0.34,
+    "material": "PETG"
+   },
+   "overhang_area_mm2_steeper_than_45deg": 0.0
+  },
+  "cable_clamp": {
+   "kind": "printed",
+   "bbox_min": [
+    17.2,
+    94.0,
+    15.8
+   ],
+   "bbox_max": [
+    47.2,
+    97.0,
+    42.0
+   ],
+   "volume_mm3": 2148.8,
+   "print_bbox_mm": [
+    30.0,
+    26.2,
+    3.0
+   ],
+   "fits_220_bed": true,
+   "print_orientation": "outer face down",
+   "solids": 1,
+   "estimate": {
+    "volume_cm3": 2.15,
+    "extruded_cm3": 1.57,
+    "filament_g": 2.0,
+    "filament_m": 0.65,
+    "print_h": 0.18,
+    "material": "PETG"
+   },
+   "overhang_area_mm2_steeper_than_45deg": 0.0
+  },
+  "sensor_capsule": {
+   "kind": "printed",
+   "bbox_min": [
+    58.0,
+    102.5,
+    -5.0
+   ],
+   "bbox_max": [
+    92.0,
+    126.5,
+    19.0
+   ],
+   "volume_mm3": 4933.6,
+   "print_bbox_mm": [
+    24.0,
+    24.0,
+    34.0
+   ],
+   "fits_220_bed": true,
+   "print_orientation": "cap down, open end up",
+   "solids": 1,
+   "estimate": {
+    "volume_cm3": 4.93,
+    "extruded_cm3": 4.93,
+    "filament_g": 5.3,
+    "filament_m": 2.05,
+    "print_h": 0.35,
+    "material": "ASA white"
+   },
+   "overhang_area_mm2_steeper_than_45deg": 77.5
+  },
+  "capsule_clip": {
+   "kind": "printed",
+   "bbox_min": [
+    59.0,
+    94.0,
+    -7.5
+   ],
+   "bbox_max": [
+    91.0,
+    121.75,
+    24.0
+   ],
+   "volume_mm3": 9577.9,
+   "print_bbox_mm": [
+    31.5,
+    27.8,
+    32.0
+   ],
+   "fits_220_bed": true,
+   "print_orientation": "on one end face",
+   "solids": 1,
+   "estimate": {
+    "volume_cm3": 9.58,
+    "extruded_cm3": 5.17,
+    "filament_g": 5.5,
+    "filament_m": 2.15,
+    "print_h": 0.37,
+    "material": "ASA white"
+   },
+   "overhang_area_mm2_steeper_than_45deg": 40.1
+  },
+  "max30101": {
+   "kind": "bought",
+   "bbox_min": [
+    95.3,
+    8.8,
+    20.15
+   ],
+   "bbox_max": [
+    120.7,
+    34.2,
+    26.2
+   ],
+   "volume_mm3": 1154.1
+  },
+  "camera_ov5647": {
+   "kind": "bought",
+   "bbox_min": [
+    99.5,
+    2.0,
+    71.5
+   ],
+   "bbox_max": [
+    124.5,
+    13.5,
+    95.5
+   ],
+   "volume_mm3": 2206.6
+  },
+  "csi_ribbon": {
+   "kind": "bought",
+   "bbox_min": [
+    104.0,
+    12.0,
+    21.4
+   ],
+   "bbox_max": [
+    120.0,
+    50.0,
+    72.0
+   ],
+   "volume_mm3": 423.8
+  },
+  "vision_stack": {
+   "kind": "bought",
+   "bbox_min": [
+    91.0,
+    50.0,
+    17.1
+   ],
+   "bbox_max": [
+    132.0,
+    70.0,
+    33.1
+   ],
+   "volume_mm3": 4094.2
+  },
+  "usb_plug_vision": {
+   "kind": "bought",
+   "bbox_min": [
+    71.0,
+    54.0,
+    18.3
+   ],
+   "bbox_max": [
+    91.0,
+    66.0,
+    25.3
+   ],
+   "volume_mm3": 1641.4
+  },
+  "usb_plug_xiao": {
+   "kind": "bought",
+   "bbox_min": [
+    80.7,
+    54.0,
+    28.0
+   ],
+   "bbox_max": [
+    100.7,
+    66.0,
+    35.0
+   ],
+   "volume_mm3": 1641.4
+  },
+  "hub_ch334f": {
+   "kind": "bought",
+   "bbox_min": [
+    22.0,
+    33.0,
+    17.6
+   ],
+   "bbox_max": [
+    42.4,
+    65.4,
+    22.4
+   ],
+   "volume_mm3": 1249.1
+  },
+  "usb_plug_hub": {
+   "kind": "bought",
+   "bbox_min": [
+    26.2,
+    65.4,
+    17.3
+   ],
+   "bbox_max": [
+    38.2,
+    85.4,
+    24.3
+   ],
+   "volume_mm3": 1641.4
+  },
+  "usb_cable": {
+   "kind": "bought",
+   "bbox_min": [
+    30.2,
+    85.4,
+    -6.0
+   ],
+   "bbox_max": [
+    34.2,
+    137.0,
+    22.8
+   ],
+   "volume_mm3": 895.3
+  },
+  "audio_adapter": {
+   "kind": "bought",
+   "bbox_min": [
+    10.0,
+    6.0,
+    14.6
+   ],
+   "bbox_max": [
+    70.0,
+    31.0,
+    26.6
+   ],
+   "volume_mm3": 17794.0
+  },
+  "speaker": {
+   "kind": "bought",
+   "bbox_min": [
+    20.0,
+    2.4,
+    42.0
+   ],
+   "bbox_max": [
+    60.0,
+    22.4,
+    82.0
+   ],
+   "volume_mm3": 12829.1
+  },
+  "mic_dongle": {
+   "kind": "bought",
+   "bbox_min": [
+    50.85,
+    30.0,
+    99.6
+   ],
+   "bbox_max": [
+    69.15,
+    64.2,
+    106.6
+   ],
+   "volume_mm3": 3477.5
+  },
+  "mic_pigtail": {
+   "kind": "bought",
+   "bbox_min": [
+    52.75,
+    64.2,
+    99.6
+   ],
+   "bbox_max": [
+    67.25,
+    82.2,
+    106.6
+   ],
+   "volume_mm3": 1827.0
+  },
+  "uv_led": {
+   "kind": "bought",
+   "bbox_min": [
+    87.1,
+    38.1,
+    78.4
+   ],
+   "bbox_max": [
+    92.9,
+    43.9,
+    112.0
+   ],
+   "volume_mm3": 171.8
+  },
+  "sht31": {
+   "kind": "bought",
+   "bbox_min": [
+    67.0,
+    113.7,
+    0.65
+   ],
+   "bbox_max": [
+    85.0,
+    116.2,
+    13.35
+   ],
+   "volume_mm3": 363.5
+  },
+  "sensor_lead": {
+   "kind": "bought",
+   "bbox_min": [
+    48.25,
+    82.25,
+    -5.75
+   ],
+   "bbox_max": [
+    67.0,
+    116.25,
+    18.6
+   ],
+   "volume_mm3": 730.7
+  }
+ },
+ "print_totals": {
+  "filament_g": 247.2,
+  "print_h": 11.0,
+  "method": "extruded = min(V, 0.8 mm skin x area) + 15% infill of the rest; 7 mm3/s x 1.3 overhead + 6 min"
+ },
+ "pairs_checked": 52,
+ "pairs": [
+  {
+   "a": "shell",
+   "b": "rear_plate",
+   "distance": 0.0,
+   "intersection_mm3": 0.0,
+   "declared_contact": true,
+   "clearance_checked": false,
+   "ok": true
+  },
+  {
+   "a": "shell",
+   "b": "tray",
+   "distance": 0.0,
+   "intersection_mm3": 0.0,
+   "declared_contact": true,
+   "clearance_checked": false,
+   "ok": true
+  },
+  {
+   "a": "shell",
+   "b": "finger_cradle",
+   "distance": 0.0,
+   "intersection_mm3": 0.0,
+   "declared_contact": true,
+   "clearance_checked": false,
+   "ok": true
+  },
+  {
+   "a": "shell",
+   "b": "camera_bezel",
+   "distance": 0.0,
+   "intersection_mm3": 0.0,
+   "declared_contact": true,
+   "clearance_checked": false,
+   "ok": true
+  },
+  {
+   "a": "shell",
+   "b": "speaker_clamp",
+   "distance": 0.0,
+   "intersection_mm3": 0.0,
+   "declared_contact": true,
+   "clearance_checked": false,
+   "ok": true
+  },
+  {
+   "a": "shell",
+   "b": "max30101",
+   "distance": 6.4,
+   "intersection_mm3": 0.0,
+   "declared_contact": false,
+   "clearance_checked": true,
+   "ok": true
+  },
+  {
+   "a": "shell",
+   "b": "camera_ov5647",
+   "distance": 0.0,
+   "intersection_mm3": 0.0,
+   "declared_contact": true,
+   "clearance_checked": false,
+   "ok": true
+  },
+  {
+   "a": "shell",
+   "b": "csi_ribbon",
+   "distance": 7.367,
+   "intersection_mm3": 0.0,
+   "declared_contact": false,
+   "clearance_checked": false,
+   "ok": true
+  },
+  {
+   "a": "shell",
+   "b": "vision_stack",
+   "distance": 11.279,
+   "intersection_mm3": 0.0,
+   "declared_contact": false,
+   "clearance_checked": true,
+   "ok": true
+  },
+  {
+   "a": "shell",
+   "b": "usb_plug_vision",
+   "distance": 15.9,
+   "intersection_mm3": 0.0,
+   "declared_contact": false,
+   "clearance_checked": true,
+   "ok": true
+  },
+  {
+   "a": "shell",
+   "b": "usb_plug_xiao",
+   "distance": 25.6,
+   "intersection_mm3": 0.0,
+   "declared_contact": false,
+   "clearance_checked": true,
+   "ok": true
+  },
+  {
+   "a": "shell",
+   "b": "hub_ch334f",
+   "distance": 13.671,
+   "intersection_mm3": 0.0,
+   "declared_contact": false,
+   "clearance_checked": true,
+   "ok": true
+  },
+  {
+   "a": "shell",
+   "b": "usb_plug_hub",
+   "distance": 14.877,
+   "intersection_mm3": 0.0,
+   "declared_contact": false,
+   "clearance_checked": true,
+   "ok": true
+  },
+  {
+   "a": "shell",
+   "b": "usb_cable",
+   "distance": 16.4,
+   "intersection_mm3": 0.0,
+   "declared_contact": false,
+   "clearance_checked": false,
+   "ok": true
+  },
+  {
+   "a": "shell",
+   "b": "audio_adapter",
+   "distance": 3.527,
+   "intersection_mm3": 0.0,
+   "declared_contact": false,
+   "clearance_checked": true,
+   "ok": true
+  },
+  {
+   "a": "shell",
+   "b": "speaker",
+   "distance": 0.0,
+   "intersection_mm3": 0.0,
+   "declared_contact": true,
+   "clearance_checked": false,
+   "ok": true
+  },
+  {
+   "a": "shell",
+   "b": "mic_dongle",
+   "distance": 0.0,
+   "intersection_mm3": 0.0,
+   "declared_contact": true,
+   "clearance_checked": false,
+   "ok": true
+  },
+  {
+   "a": "shell",
+   "b": "mic_pigtail",
+   "distance": 1.0,
+   "intersection_mm3": 0.0,
+   "declared_contact": false,
+   "clearance_checked": true,
+   "ok": true
+  },
+  {
+   "a": "shell",
+   "b": "uv_led",
+   "distance": 0.0,
+   "intersection_mm3": 0.0,
+   "declared_contact": true,
+   "clearance_checked": false,
+   "ok": true
+  },
+  {
+   "a": "shell",
+   "b": "sensor_lead",
+   "distance": 1.25,
+   "intersection_mm3": 0.0,
+   "declared_contact": false,
+   "clearance_checked": false,
+   "ok": true
+  },
+  {
+   "a": "rear_plate",
+   "b": "tray",
+   "distance": 0.2,
+   "intersection_mm3": 0.0,
+   "declared_contact": false,
+   "clearance_checked": false,
+   "ok": true
+  },
+  {
+   "a": "rear_plate",
+   "b": "cable_clamp",
+   "distance": 0.0,
+   "intersection_mm3": 0.0,
+   "declared_contact": true,
+   "clearance_checked": false,
+   "ok": true
+  },
+  {
+   "a": "rear_plate",
+   "b": "capsule_clip",
+   "distance": 0.0,
+   "intersection_mm3": 0.0,
+   "declared_contact": true,
+   "clearance_checked": false,
+   "ok": true
+  },
+  {
+   "a": "rear_plate",
+   "b": "usb_plug_hub",
+   "distance": 4.2,
+   "intersection_mm3": 0.0,
+   "declared_contact": false,
+   "clearance_checked": true,
+   "ok": true
+  },
+  {
+   "a": "rear_plate",
+   "b": "usb_cable",
+   "distance": 0.2,
+   "intersection_mm3": 0.0,
+   "declared_contact": true,
+   "clearance_checked": false,
+   "ok": true
+  },
+  {
+   "a": "rear_plate",
+   "b": "sensor_lead",
+   "distance": 2.25,
+   "intersection_mm3": 0.0,
+   "declared_contact": false,
+   "clearance_checked": false,
+   "ok": true
+  },
+  {
+   "a": "tray",
+   "b": "vision_stack",
+   "distance": 0.0,
+   "intersection_mm3": 0.0,
+   "declared_contact": true,
+   "clearance_checked": false,
+   "ok": true
+  },
+  {
+   "a": "tray",
+   "b": "usb_plug_vision",
+   "distance": 1.461,
+   "intersection_mm3": 0.0,
+   "declared_contact": false,
+   "clearance_checked": true,
+   "ok": true
+  },
+  {
+   "a": "tray",
+   "b": "hub_ch334f",
+   "distance": 0.0,
+   "intersection_mm3": 0.0,
+   "declared_contact": true,
+   "clearance_checked": false,
+   "ok": true
+  },
+  {
+   "a": "tray",
+   "b": "usb_plug_hub",
+   "distance": 1.1,
+   "intersection_mm3": 0.0,
+   "declared_contact": false,
+   "clearance_checked": true,
+   "ok": true
+  },
+  {
+   "a": "tray",
+   "b": "usb_cable",
+   "distance": 0.2,
+   "intersection_mm3": 0.0,
+   "declared_contact": true,
+   "clearance_checked": false,
+   "ok": true
+  },
+  {
+   "a": "tray",
+   "b": "audio_adapter",
+   "distance": 0.0,
+   "intersection_mm3": 0.0,
+   "declared_contact": true,
+   "clearance_checked": false,
+   "ok": true
+  },
+  {
+   "a": "tray",
+   "b": "sensor_lead",
+   "distance": 2.25,
+   "intersection_mm3": 0.0,
+   "declared_contact": false,
+   "clearance_checked": false,
+   "ok": true
+  },
+  {
+   "a": "finger_cradle",
+   "b": "max30101",
+   "distance": 0.0,
+   "intersection_mm3": 0.0,
+   "declared_contact": true,
+   "clearance_checked": false,
+   "ok": true
+  },
+  {
+   "a": "finger_cradle",
+   "b": "csi_ribbon",
+   "distance": 12.5,
+   "intersection_mm3": 0.0,
+   "declared_contact": false,
+   "clearance_checked": false,
+   "ok": true
+  },
+  {
+   "a": "camera_bezel",
+   "b": "camera_ov5647",
+   "distance": 1.1,
+   "intersection_mm3": 0.0,
+   "declared_contact": false,
+   "clearance_checked": true,
+   "ok": true
+  },
+  {
+   "a": "speaker_clamp",
+   "b": "speaker",
+   "distance": 0.0,
+   "intersection_mm3": 0.0,
+   "declared_contact": true,
+   "clearance_checked": false,
+   "ok": true
+  },
+  {
+   "a": "cable_clamp",
+   "b": "usb_cable",
+   "distance": 0.0,
+   "intersection_mm3": 0.0,
+   "declared_contact": true,
+   "clearance_checked": false,
+   "ok": true
+  },
+  {
+   "a": "sensor_capsule",
+   "b": "capsule_clip",
+   "distance": 0.1,
+   "intersection_mm3": 0.0,
+   "declared_contact": true,
+   "clearance_checked": false,
+   "ok": true
+  },
+  {
+   "a": "sensor_capsule",
+   "b": "sht31",
+   "distance": 0.0,
+   "intersection_mm3": 0.0,
+   "declared_contact": true,
+   "clearance_checked": false,
+   "ok": true
+  },
+  {
+   "a": "sensor_capsule",
+   "b": "sensor_lead",
+   "distance": 0.15,
+   "intersection_mm3": 0.0,
+   "declared_contact": true,
+   "clearance_checked": false,
+   "ok": true
+  },
+  {
+   "a": "capsule_clip",
+   "b": "sht31",
+   "distance": 5.7,
+   "intersection_mm3": 0.0,
+   "declared_contact": false,
+   "clearance_checked": true,
+   "ok": true
+  },
+  {
+   "a": "capsule_clip",
+   "b": "sensor_lead",
+   "distance": 7.25,
+   "intersection_mm3": 0.0,
+   "declared_contact": false,
+   "clearance_checked": false,
+   "ok": true
+  },
+  {
+   "a": "max30101",
+   "b": "csi_ribbon",
+   "distance": 12.8,
+   "intersection_mm3": 0.0,
+   "declared_contact": false,
+   "clearance_checked": false,
+   "ok": true
+  },
+  {
+   "a": "camera_ov5647",
+   "b": "csi_ribbon",
+   "distance": 0.0,
+   "intersection_mm3": 0.0,
+   "declared_contact": true,
+   "clearance_checked": false,
+   "ok": true
+  },
+  {
+   "a": "csi_ribbon",
+   "b": "vision_stack",
+   "distance": 0.0,
+   "intersection_mm3": 0.0,
+   "declared_contact": true,
+   "clearance_checked": false,
+   "ok": true
+  },
+  {
+   "a": "vision_stack",
+   "b": "usb_plug_vision",
+   "distance": 0.0,
+   "intersection_mm3": 0.0,
+   "declared_contact": true,
+   "clearance_checked": false,
+   "ok": true
+  },
+  {
+   "a": "vision_stack",
+   "b": "usb_plug_xiao",
+   "distance": 0.0,
+   "intersection_mm3": 0.0,
+   "declared_contact": true,
+   "clearance_checked": false,
+   "ok": true
+  },
+  {
+   "a": "hub_ch334f",
+   "b": "usb_plug_hub",
+   "distance": 0.0,
+   "intersection_mm3": 0.0,
+   "declared_contact": true,
+   "clearance_checked": false,
+   "ok": true
+  },
+  {
+   "a": "usb_plug_hub",
+   "b": "usb_cable",
+   "distance": 0.0,
+   "intersection_mm3": 0.0,
+   "declared_contact": true,
+   "clearance_checked": false,
+   "ok": true
+  },
+  {
+   "a": "mic_dongle",
+   "b": "mic_pigtail",
+   "distance": 0.0,
+   "intersection_mm3": 0.0,
+   "declared_contact": true,
+   "clearance_checked": false,
+   "ok": true
+  },
+  {
+   "a": "sht31",
+   "b": "sensor_lead",
+   "distance": 0.0,
+   "intersection_mm3": 0.0,
+   "declared_contact": true,
+   "clearance_checked": false,
+   "ok": true
+  }
+ ],
+ "min_clearance_found": 1.0,
+ "mounting": {
+  "declared_contacts": 30,
+  "contacts_not_touching": [],
+  "floating_parts": []
+ },
+ "wall_thickness_mm": {
+  "shell side wall": 2.4,
+  "rebate lip": 1.07,
+  "cradle floor over sensor": 1.0,
+  "cradle floor at foam groove": 1.3,
+  "bezel tube wall": 2.0,
+  "mic pocket rail": 1.6,
+  "capsule tube wall": 2.9,
+  "capsule louvre (normal to cone)": 1.15
+ },
+ "min_wall_mm": 1.0,
+ "usb_bend_zones_blocked_by": {
+  "vision_plug_bend": [],
+  "xiao_plug_bend": []
+ },
+ "cables": {
+  "ribbon_path_mm": 88.6,
+  "sensor_lead_path_mm": 75.9
+ },
+ "fillets": [
+  {
+   "feature": "shell front perimeter",
+   "op": "chamfer",
+   "size": 1.5,
+   "edges": 8,
+   "ok": true
+  },
+  {
+   "feature": "shell back rim",
+   "op": "fillet",
+   "size": 1.0,
+   "edges": 8,
+   "ok": true
+  },
+  {
+   "feature": "foot bottom edges",
+   "op": "fillet",
+   "size": 1.0,
+   "edges": 4,
+   "ok": true
+  },
+  {
+   "feature": "foot bottom edges",
+   "op": "fillet",
+   "size": 1.0,
+   "edges": 4,
+   "ok": true
+  },
+  {
+   "feature": "foot bottom edges",
+   "op": "fillet",
+   "size": 1.0,
+   "edges": 4,
+   "ok": true
+  },
+  {
+   "feature": "foot bottom edges",
+   "op": "fillet",
+   "size": 1.0,
+   "edges": 4,
+   "ok": true
+  },
+  {
+   "feature": "rear plate outer edge",
+   "op": "fillet",
+   "size": 1.0,
+   "edges": 8,
+   "ok": true
+  },
+  {
+   "feature": "rear plate parting edge",
+   "op": "fillet",
+   "size": 0.5,
+   "edges": 8,
+   "ok": true
+  },
+  {
+   "feature": "tray corners",
+   "op": "fillet",
+   "size": 2.0,
+   "edges": 4,
+   "ok": true
+  },
+  {
+   "feature": "cradle lip",
+   "op": "fillet",
+   "size": 2.0,
+   "edges": 8,
+   "ok": true
+  },
+  {
+   "feature": "bezel flange",
+   "op": "fillet",
+   "size": 0.6,
+   "edges": 8,
+   "ok": true
+  },
+  {
+   "feature": "speaker clamp back edges",
+   "op": "fillet",
+   "size": 0.8,
+   "edges": 2,
+   "ok": true
+  },
+  {
+   "feature": "cable clamp outer edge",
+   "op": "fillet",
+   "size": 1.0,
+   "edges": 8,
+   "ok": true
+  },
+  {
+   "feature": "capsule cap edge",
+   "op": "chamfer",
+   "size": 1.0,
+   "edges": 1,
+   "ok": true
+  },
+  {
+   "feature": "capsule clip ends",
+   "op": "fillet",
+   "size": 0.8,
+   "edges": 18,
+   "ok": true
+  },
+  {
+   "feature": "usb plug body",
+   "op": "fillet",
+   "size": 1.5,
+   "edges": 4,
+   "ok": true
+  },
+  {
+   "feature": "usb plug body",
+   "op": "fillet",
+   "size": 1.5,
+   "edges": 4,
+   "ok": true
+  },
+  {
+   "feature": "usb plug body",
+   "op": "fillet",
+   "size": 1.5,
+   "edges": 4,
+   "ok": true
+  },
+  {
+   "feature": "adapter body",
+   "op": "fillet",
+   "size": 2.0,
+   "edges": 4,
+   "ok": true
+  },
+  {
+   "feature": "dongle body",
+   "op": "fillet",
+   "size": 1.5,
+   "edges": 4,
+   "ok": true
+  },
+  {
+   "feature": "capsule cap edge",
+   "op": "chamfer",
+   "size": 1.0,
+   "edges": 1,
+   "ok": true
+  },
+  {
+   "feature": "capsule cap edge",
+   "op": "chamfer",
+   "size": 1.0,
+   "edges": 1,
+   "ok": true
+  }
+ ],
+ "failures": [],
+ "passed": true,
+ "step_readback": {
+  "top_level_children": 25,
+  "named": 25,
+  "leaf_shapes": 42,
+  "leaf_coloured": 42
+ },
+ "files": [
+  {
+   "path": "out/drawings/foam_board_template.pdf",
+   "kb": 55.7
+  },
+  {
+   "path": "out/drawings/pod_k01_drawing.pdf",
+   "kb": 82.7
+  },
+  {
+   "path": "out/engineering_previews/README.md",
+   "kb": 0.5
+  },
+  {
+   "path": "out/engineering_previews/assembly_front.jpg",
+   "kb": 33.5
+  },
+  {
+   "path": "out/engineering_previews/assembly_rear.jpg",
+   "kb": 42.8
+  },
+  {
+   "path": "out/engineering_previews/exploded.jpg",
+   "kb": 93.3
+  },
+  {
+   "path": "out/engineering_previews/interior.jpg",
+   "kb": 48.2
+  },
+  {
+   "path": "out/engineering_previews/open.jpg",
+   "kb": 96.5
+  },
+  {
+   "path": "out/engineering_previews/print_parts.jpg",
+   "kb": 38.7
+  },
+  {
+   "path": "out/engineering_previews/section_tunnel_camera.jpg",
+   "kb": 42.1
+  },
+  {
+   "path": "out/engineering_previews/section_tunnel_detail.jpg",
+   "kb": 43.0
+  },
+  {
+   "path": "out/print/cable_clamp.3mf",
+   "kb": 36.5
+  },
+  {
+   "path": "out/print/camera_bezel.3mf",
+   "kb": 41.1
+  },
+  {
+   "path": "out/print/capsule_clip.3mf",
+   "kb": 104.5
+  },
+  {
+   "path": "out/print/finger_cradle.3mf",
+   "kb": 78.4
+  },
+  {
+   "path": "out/print/rear_plate.3mf",
+   "kb": 149.3
+  },
+  {
+   "path": "out/print/sensor_capsule.3mf",
+   "kb": 96.3
+  },
+  {
+   "path": "out/print/shell.3mf",
+   "kb": 441.1
+  },
+  {
+   "path": "out/print/speaker_clamp.3mf",
+   "kb": 51.8
+  },
+  {
+   "path": "out/print/tray.3mf",
+   "kb": 46.4
+  },
+  {
+   "path": "out/renders/README.md",
+   "kb": 1.7
+  },
+  {
+   "path": "out/renders/front.jpg",
+   "kb": 82.2
+  },
+  {
+   "path": "out/renders/hero.jpg",
+   "kb": 84.2
+  },
+  {
+   "path": "out/renders/rear.jpg",
+   "kb": 87.7
+  },
+  {
+   "path": "out/renders/top.jpg",
+   "kb": 77.8
+  },
+  {
+   "path": "out/renders/underside.jpg",
+   "kb": 76.9
+  },
+  {
+   "path": "out/step/cable_clamp.step",
+   "kb": 108.7
+  },
+  {
+   "path": "out/step/camera_bezel.step",
+   "kb": 120.0
+  },
+  {
+   "path": "out/step/capsule_clip.step",
+   "kb": 166.1
+  },
+  {
+   "path": "out/step/finger_cradle.step",
+   "kb": 638.7
+  },
+  {
+   "path": "out/step/pod_k01_assembly.step",
+   "kb": 5534.8
+  },
+  {
+   "path": "out/step/rear_plate.step",
+   "kb": 803.9
+  },
+  {
+   "path": "out/step/sensor_capsule.step",
+   "kb": 1086.5
+  },
+  {
+   "path": "out/step/shell.step",
+   "kb": 1458.7
+  },
+  {
+   "path": "out/step/speaker_clamp.step",
+   "kb": 35.3
+  },
+  {
+   "path": "out/step/tray.step",
+   "kb": 159.2
+  }
+ ]
+}
