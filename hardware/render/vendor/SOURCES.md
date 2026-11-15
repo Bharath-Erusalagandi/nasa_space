@@ -1,7 +1,7 @@
 # Vendor 3D models for the K-01 renders
 
 Downloads stay out of the repo, in `hardware/build/vendor/`. Converted assets, `manifest.json`,
-`differences.json` and `missing.json` are in `hardware/build/detail/`. Nothing here is synced to the Mac or
+`differences.json` and `missing.json` are in `hardware/build/detail/`. None of them are
 added to the repo. `hardware/cad/pod_k01.py` is unchanged; its simple models stay in the STEP assembly.
 All files were fetched on 2026-11-14.
 

@@ -1,5 +1,5 @@
 import { describe, expect, test } from "vitest";
-import { cellFile, index, indexCell, summary, trend } from "@/lib/trends/fixtures";
+import { cellFile, index, indexCell, summary, trend } from "@/lib/trends/__fixtures__/trends";
 import { formatP, next, prev, STORY, stepLabel } from "./story";
 
 const cell = cellFile({

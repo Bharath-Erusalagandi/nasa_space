@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 import { cellLayer, cellOutline, layerDomain, layerLegend, rampFor, slopeClass } from "./cellLayer";
-import { index, indexCell, summary } from "./fixtures";
+import { index, indexCell, summary } from "./__fixtures__/trends";
 
 const sample = index([
   indexCell("a", -14, 31.875, { october_temp_c: summary(0.36, 0.007, 0.02), wet_season_rain_mm: summary(0.9, 0.99, 0.99) }),

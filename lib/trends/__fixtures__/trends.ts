@@ -1,5 +1,5 @@
-import type { CellFile, IndexCell, Indicator, IndicatorKey, Trend, TrendIndex, TrendSummary } from "./types";
-import { INDICATOR_KEYS } from "./types";
+import type { CellFile, IndexCell, Indicator, IndicatorKey, Trend, TrendIndex, TrendSummary } from "../types";
+import { INDICATOR_KEYS } from "../types";
 
 // shapes for tests only; the numbers are made up and never shown
 export function trend(slope: number, p: number, extra: Partial<Trend> = {}): Trend {

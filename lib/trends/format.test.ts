@@ -1,5 +1,5 @@
 import { describe, expect, test } from "vitest";
-import { trend } from "./fixtures";
+import { trend } from "./__fixtures__/trends";
 import {
   agreement,
   descriptor,

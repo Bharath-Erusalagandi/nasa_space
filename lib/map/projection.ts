@@ -38,13 +38,6 @@ export function fitProjection(frame: Frame, size: Size, margin = 16): GeoProject
   return geoMercator().fitExtent(inner, corners(frame));
 }
 
-// the frame corners in screen pixels at zoom 1, as [x0, y0, x1, y1]
-export function frameBox(projection: GeoProjection, frame: Frame): [number, number, number, number] {
-  const [x0, y0] = projection([frame.west, frame.north]) ?? [0, 0];
-  const [x1, y1] = projection([frame.east, frame.south]) ?? [0, 0];
-  return [x0, y0, x1, y1];
-}
-
 export const clampZoom = (k: number) => Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, k));
 
 // keeps the zoomed map covering the viewport, so it can never be panned away

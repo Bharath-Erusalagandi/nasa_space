@@ -1,13 +1,12 @@
 import { createStore, useStore } from "zustand";
 import { loadCell as fetchCell, loadIndex as fetchIndex } from "@/lib/trends/load";
-import type { CellFile, IndexCell, IndicatorKey, Place, SeasonValue, Trend, TrendIndex, WindowChoice } from "@/lib/trends/types";
+import type { CellFile, IndexCell, IndicatorKey, Place, Trend, TrendIndex, WindowChoice } from "@/lib/trends/types";
 import type { Delivery } from "./orders";
 import { next, prev, STORY, type Panel } from "./story";
 
 export const DEFAULT_PLACE = "katete";
 export const DEFAULT_INDICATOR: IndicatorKey = "october_temp_c";
 export const DEFAULT_WINDOW: WindowChoice = "all";
-const NO_SERIES: SeasonValue[] = [];
 
 export type MissionState = {
   index: TrendIndex | null;
@@ -195,5 +194,3 @@ export const getTrend = (s: MissionState): Trend | null | undefined => {
   if (!indicator) return undefined;
   return s.window === "all" ? indicator.trend : indicator.windows[s.window];
 };
-
-export const getSeries = (s: MissionState): SeasonValue[] => getIndicator(s)?.series ?? NO_SERIES;

@@ -67,7 +67,9 @@ Used for: the nine seasonal indicators and the pod-site normals.
 **NASA GIBS**, Global Imagery Browse Services, part of NASA's Earth Science Data and Information System (ESDIS). Layer MODIS_Terra_CorrectedReflectance_TrueColor, 20 August 2025.
 https://gibs.earthdata.nasa.gov/wms/epsg3857/best/wms.cgi
 Used for: the map's Satellite ground.
-TODO (team): paste NASA's current GIBS acknowledgement sentence here. NASA has published more than one wording over the years; copy the current one from https://www.earthdata.nasa.gov/gibs.
+GIBS acknowledgement, copied on 2026-11-15 from the Data Use Guidance and Acknowledgements section of https://www.earthdata.nasa.gov/gibs:
+
+> We acknowledge the use of imagery provided by services from NASA's Global Imagery Browse Services (GIBS), part of NASA's Earth Science Data and Information System (ESDIS).
 
 **SerpApi**, Google Scholar API and Google News API. https://serpapi.com/
 Used for: the "What others have found" list in How we know. `trend/evidence.py` keeps each result's title, source, date and link, not its text.

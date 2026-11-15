@@ -1,5 +1,4 @@
 import { geoDistance } from "d3-geo";
-import { cellId, powerCell } from "./powerCell";
 import type { Bounds, IndexCell, Place, TrendIndex } from "./types";
 
 export const EARTH_RADIUS_KM = 6371.0088;
@@ -32,11 +31,6 @@ export function nearestPlace<P extends Pick<Place, "lat" | "lon">>(
     if (km < bestKm) [best, bestKm] = [place, km];
   }
   return best;
-}
-
-export function cellOfPlace(index: TrendIndex, place: Pick<Place, "lat" | "lon"> & { cell?: string }): IndexCell | undefined {
-  const id = place.cell ?? cellId(powerCell(place.lat, place.lon));
-  return index.cells.find((cell) => cell.id === id);
 }
 
 // prefers named places over the per-cell entries when one lies in the cell

@@ -2,7 +2,6 @@ import { describe, expect, test } from "vitest";
 import {
   dots,
   linear,
-  missingSeasons,
   pathD,
   pivot,
   rangeEnds,
@@ -69,7 +68,6 @@ describe("seasons used", () => {
     const d = dots(s, { first: 2002, last: 2003 });
     expect(d.map((p) => p.season)).toEqual([2000, 2002, 2003]);
     expect(d.map((p) => p.inWindow)).toEqual([false, true, true]);
-    expect(missingSeasons(s)).toEqual([2001]);
     expect(dots(s, null).every((p) => p.inWindow)).toBe(true);
   });
 });

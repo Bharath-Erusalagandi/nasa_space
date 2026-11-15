@@ -31,7 +31,3 @@ yarn-error.log*
 .pnpm-debug.log*
 .vercel
 *.tsbuildinfo
-
-# private build-box helper
-/vm
-scripts/vm/

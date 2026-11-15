@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
-import { index, indexCell } from "./fixtures";
-import { cellOfPlace, cellSizeKm, cellSizeLabel, distanceKm, nearestPlace, placeForCell } from "./geo";
+import { index, indexCell } from "./__fixtures__/trends";
+import { cellSizeKm, cellSizeLabel, distanceKm, nearestPlace, placeForCell } from "./geo";
 
 const katete = { south: -14.25, north: -13.75, west: 31.5625, east: 32.1875 };
 const sample = index([indexCell("-14.000_31.875", -14, 31.875, {}), indexCell("-13.500_32.500", -13.5, 32.5, {}), indexCell("-12.000_33.125", -12, 33.125, {})]);
@@ -25,12 +25,6 @@ describe("geo", () => {
   test("nearest place to a point", () => {
     expect(nearestPlace(sample.places, { lat: -13.7, lon: 32.6 })?.id).toBe("chipata");
     expect(nearestPlace([], { lat: 0, lon: 0 })).toBeUndefined();
-  });
-
-  test("cell of a place, from its cell id or its coordinates", () => {
-    expect(cellOfPlace(sample, sample.places[0])?.id).toBe("-14.000_31.875");
-    expect(cellOfPlace(sample, { lat: -13.62, lon: 32.6 })?.id).toBe("-13.500_32.500");
-    expect(cellOfPlace(sample, { lat: 0, lon: 0 })).toBeUndefined();
   });
 
   test("a cell selects the nearest named place inside it", () => {

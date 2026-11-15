@@ -1,144 +1,262 @@
-# Orbit Health
+<p align="center">
+  <img src="docs/banner.jpg" alt="Project Astrophage: the map of Eastern Province, Zambia coloured by October temperature trend, beside the SKY panel for Katete showing +0.36 °C per decade over 45 seasons" width="100%" />
+</p>
 
-Orbit Health is one web page, `/mission/`, for one question: is the rainy season in Eastern Province, Zambia changing, and what should a health team do about it? It follows the loop Detect -> Verify -> Act. SKY tests 45 seasons of NASA POWER data for the grid cell around a village. GROUND shows live readings from a USB pod, K-01, each beside its tested error. ACTION turns a patient's danger-sign answer into a medicine order and a delivery on real roads.
+<h1 align="center">Project Astrophage</h1>
 
-The app is static. It reads JSON files under `public/` that the Python scripts in this repo write, works with Wi-Fi off, and makes no AI model calls. One thing needs a connection: the map's Satellite ground, which loads a single NASA GIBS picture when you choose it. `docs/METHODS.md` explains the statistics and lists every limit, `docs/VALIDATION.md` holds the pod sensor checks, and `docs/SUBMISSION.md` is the NASA Space Apps entry.
+<p align="center"><b>Is the rainy season in eastern Zambia changing, and what should a health team do about it?</b></p>
 
-## Run it
+<p align="center">
+  <a href="docs/media/mission-walkthrough.mp4"><img alt="Demo video" src="https://img.shields.io/badge/Demo-Watch_the_walkthrough-0b5a8a?style=for-the-badge"></a>
+  <img alt="Status" src="https://img.shields.io/badge/Status-Hackathon_Demo-c25e43?style=for-the-badge">
+  <img alt="Hackathon" src="https://img.shields.io/badge/RiverHacks_x_NASA_Space_Apps-2026-141414?style=for-the-badge">
+  <a href="LICENSE"><img alt="License" src="https://img.shields.io/badge/License-MIT-3b3f45?style=for-the-badge"></a>
+</p>
 
-You need Python 3.10 or newer and Node 22. Run every command from the repo root.
+<p align="center">
+  <img alt="Next.js" src="https://img.shields.io/badge/Next.js-15-000?logo=next.js">
+  <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-5-3178c6?logo=typescript&logoColor=white">
+  <img alt="Tailwind" src="https://img.shields.io/badge/Tailwind-4-38bdf8?logo=tailwindcss&logoColor=white">
+  <img alt="Python" src="https://img.shields.io/badge/Python-3.10+-3776ab?logo=python&logoColor=white">
+  <img alt="PyTorch" src="https://img.shields.io/badge/PyTorch-2_CNNs-ee4c2c?logo=pytorch&logoColor=white">
+  <img alt="NASA POWER" src="https://img.shields.io/badge/NASA-POWER_%2B_GIBS-0b3d91?logo=nasa&logoColor=white">
+  <img alt="Arduino" src="https://img.shields.io/badge/Firmware-XIAO_nRF52840-00979d?logo=arduino&logoColor=white">
+</p>
 
-### Python: tests and data
+> **Try it in two minutes:** `npm ci && npm run build && npm start`, then open **http://localhost:3000/mission/?story=1&sim=1** and press the right arrow key to walk through the demo. No internet, accounts or API keys needed.
 
+---
+
+## The 30-second pitch
+
+Malaria medicine in rural Zambia travels on dirt roads, and those roads close when the rains come. Delivery calendars quietly assume the rainy season never changes. If it does shift, the calendar is wrong and clinics run out right when they need stock most.
+
+The catch is that nobody in the supply chain can easily tell whether the rains are *really* changing, or whether last year was just a bad year.
+
+**Project Astrophage answers that with 45 seasons of NASA data, checks it on the ground with a small village pod, and turns the answer into a real decision: a triage, a medicine order and a delivery on real roads.**
+
+What we found surprised us. Total rainfall isn't changing. The heat is: October is getting hotter in 27 of 28 NASA grid cells, and the wettest day of the season is getting heavier in 13. Not drier, just hotter, with heavier downpours.
+
+<p align="center">
+  <img src="docs/media/mission-sky.jpg" alt="The SKY panel for Katete: October temperature rising 0.36 °C per decade over 45 seasons, beside a map of Eastern Province coloured by trend" width="860" />
+  <br/>
+  <em>The SKY panel for Katete: 45 seasons of October temperature, the trend line and the map of every NASA cell.</em>
+</p>
+
+---
+
+## What it does
+
+Everything lives on one page, `/mission/`, and follows one loop: **Detect, Verify, Act.**
+
+| Part | What you get |
+|---|---|
+| **SKY (Detect)** | Pick any town or health facility in Eastern Province. The app finds its NASA POWER grid cell and tests 9 seasonal indicators over 45 seasons, with Sen's slope, a 95% range and a Mann-Kendall p-value, in a four-line plain-English verdict. |
+| **The map** | Every cell coloured by its trend, and outlined only if it survives a Benjamini-Hochberg correction across all 28 cells. Switch between trend, elevation, NASA GIBS satellite imagery and a plain map, with roads, rivers, districts and 144 health facilities. |
+| **Record switch** | Rerun any test on the last 10, 20 or 30 seasons to see how a short record can point the wrong way. |
+| **GROUND (Verify)** | Live pulse, SpO2, air temperature and humidity from pod K-01 over USB. Every reading sits next to its tested error, or says "not yet tested" when it hasn't been checked yet. |
+| **Mosquito ears** | Two small neural networks listen through the microphone, right in the browser, and say whether there's a mosquito and which of 8 species it is. |
+| **ACTION (Act)** | A short danger-sign check turns a patient's answer into a triage outcome, a medicine order and a delivery from Chipata along a real road route. |
+| **How we know** | The methods, the limits, every data source and a list of published research on each change. |
+
+<p align="center">
+  <img src="docs/media/mission-ground-dark.jpg" alt="The GROUND panel with pod readings, the mosquito species grid and the patient check" width="860" />
+  <br/>
+  <em>GROUND: pod readings, the 8 mosquito species and the patient check.</em>
+</p>
+
+---
+
+## How it works
+
+```mermaid
+flowchart LR
+    A[NASA POWER daily data, 28 cells, 1981 to 2026] --> B[9 seasonal indicators per cell]
+    B --> C[Sen's slope, Mann-Kendall, Benjamini-Hochberg]
+    E[ERA5 via Open-Meteo] --> C
+    C --> D[Static JSON files]
+    M[OpenStreetMap + OSRM] --> D
+    H[HumBugDB recordings] --> N[Two CNNs trained in PyTorch] --> D
+    D --> APP[Browser app, runs offline]
+    POD[Pod K-01 over Web Serial] --> APP
+    MIC[Microphone] --> APP
+    APP --> V[Verdict, readings, triage, order, route]
 ```
-python3 -m venv .venv
-. .venv/bin/activate
+
+The heavy lifting happens once, ahead of time. Python scripts pull NASA POWER data for every grid cell, run the trend tests, cross-check them against ERA5, build the road routes offline with OSRM and train the mosquito models. Everything lands as plain JSON in `public/`.
+
+On the day, the app is just a static site. It runs with Wi-Fi off and makes no AI or API calls. The one optional exception is the NASA GIBS satellite picture, which only loads if you pick that map style.
+
+### The mosquito model
+
+Every half second the app takes the newest 2.1 seconds of 8 kHz audio and turns it into a 128 by 30 log-mel picture of the sound. That goes through a small convolutional network: four 3×3 conv blocks (16, 32, 64, 64 channels) with batch norm, ReLU and max-pooling, then a global average and one dense layer. There are two copies, about 60,000 weights each. One answers "mosquito or not", the other names the species. Both run in plain TypeScript with no ML library.
+
+We trained on [HumBugDB](https://doi.org/10.5281/zenodo.4904800), split by recording so no test sound was ever seen in training. Because we demo by playing recordings from a phone, most training windows go through a simulated phone speaker, room echo and background noise, and read speech is added as examples of what isn't a mosquito.
+
+### Why we trust the numbers
+
+- **We correct for testing many cells at once.** With 28 cells, a few "significant" trends would show up by chance. The map only outlines cells that survive a Benjamini-Hochberg correction.
+- **We check against a second source.** Rain and temperature trends are re-run on ERA5 for all 28 cells.
+- **We say what isn't tested.** Until a sensor has been compared with a reference, the screen says "not yet tested" instead of showing a made-up accuracy.
+
+---
+
+## Results
+
+| Finding (NASA POWER, 1981/82 to 2025/26) | Cells with a significant trend after correction |
+|---|---|
+| October is getting hotter, +0.23 to +0.45 °C per decade | **27 of 28** |
+| The wettest day of the season is getting heavier | **13 of 28** |
+| Fewer rainy days | **5 of 28** |
+| Total wet-season rainfall | **0 of 28** (no trend) |
+
+| Mosquito model (held-out recordings) | Value |
+|---|---|
+| Detector ROC AUC | **0.988** |
+| Mosquitoes found / false alarms | **95% / 4%** (93% / 5% through a simulated phone speaker and room) |
+| Read speech flagged as a mosquito | under 1% |
+| Species, 8 classes, balanced per recording | **53%** (chance is 12.5%) |
+
+The full statistics and every limit are in [`docs/METHODS.md`](docs/METHODS.md).
+
+---
+
+## The pod
+
+Pod K-01 is a 3D-printable box, 150 × 98.5 × 120 mm, built around a Seeed XIAO nRF52840. A MAX30101 sensor in the finger port reads pulse and SpO2, and an SHT31-D on a short lead reads the air outside the box. Everything comes in over one USB-C cable as one JSON line per reading. The enclosure has room for a camera, speaker and UV LED that the software doesn't use yet.
+
+<p align="center">
+  <img src="hardware/out/renders/hero.jpg" alt="Render of pod K-01, a white box with a speaker grille, a camera and a finger port" width="520" />
+  <br/>
+  <em>A render of the CAD design. It prints in 9 parts with no supports, about 11 hours and 247 g of filament.</em>
+</p>
+
+---
+
+## Tech stack
+
+- **Web app:** Next.js 15 (static export), React 19, TypeScript, Tailwind CSS 4, BoardUI components, d3-geo for the map, zustand for state
+- **Data and stats:** Python, NumPy, SciPy (Sen's slope, Mann-Kendall, Benjamini-Hochberg), NASA POWER, ERA5 through Open-Meteo, SerpApi for the research list
+- **Maps:** OpenStreetMap, OSRM, osmium, GDAL, geoBoundaries, Natural Earth, Copernicus DEM, NASA GIBS
+- **Machine learning:** PyTorch and librosa for training, plain TypeScript for inference in the browser
+- **Hardware:** Arduino firmware for the XIAO nRF52840, build123d for the parametric CAD, Blender for the renders
+- **Testing:** Vitest, Playwright and pytest
+
+---
+
+## Run it locally
+
+You need **Node 22** and **Python 3.10+**. Run everything from the repo root.
+
+### The web app
+```bash
+npm ci
+npm run build      # writes the static site to out/
+npm start          # serves http://localhost:3000
+```
+
+Open **http://localhost:3000/mission/**. For development with hot reload, use `npm run dev` instead.
+
+| Try this | What happens |
+|---|---|
+| `/mission/?story=1&sim=1` | The guided demo. Right and left arrows step through it, with a simulated pod. |
+| `/mission/?place=katete` | Opens on a specific place (ids are in `trend/places.json`). |
+| `/mission/?record=1` | Records pod events and adds a "Download session" button. |
+| Press `R` | Replays `public/pod/replay.json`, if you've recorded one. |
+| `/sounds/` on a phone | Plays a held-out recording of each mosquito species. Hold it near the laptop and press "Listen for mosquitoes" in GROUND. |
+
+The laptop has to use `localhost` for the microphone to work. A phone on the same Wi-Fi can open `http://<laptop address>:3000/sounds/`.
+
+### Tests
+```bash
+npm test                         # unit tests (Vitest)
+npm run lint && npm run typecheck
+npx playwright install chromium
+npm run e2e                      # browser tests; run npm run build first
+
+python3 -m venv .venv && . .venv/bin/activate
 pip install -r trend/requirements.txt -r validation/requirements.txt
 python -m pytest trend validation scripts -q
 ```
 
-Build the trend files from NASA POWER, then add the ERA5 cross-check, then write the numbers into the docs:
+### Connect the real pod
 
-```
-python trend/build_trends.py --places trend/places.json --out public/trends
-python trend/cross_check.py --trends public/trends
-python scripts/fill_docs.py
-```
+Flash `firmware/pod_k01` (see [`firmware/README.md`](firmware/README.md)), plug the pod in, open the app in **Chrome or Edge** and press **Connect pod** in GROUND. Web Serial only works there, and only on `localhost` or HTTPS. If no reading arrives for 5 seconds, the panel says "pod offline".
 
-Optional: list published research and news for each indicator under "What others have found" in How we know. This needs a SerpApi key and uses two searches per indicator the first time:
+### Rebuild the data
 
-```
-SERPAPI_API_KEY=your_key python trend/evidence.py
-```
+You don't need to do this to run the app; the built files are already in `public/`.
 
-It writes `public/evidence/index.json` and caches the raw responses in `trend/cache/serpapi/`. Without that file the section does not appear. If Python reports a certificate error on macOS, run `pip install certifi` and put `SSL_CERT_FILE=$(python -m certifi)` in front of the command.
-
-`build_trends.py` downloads one file per grid cell into `trend/cache/` and pauses 1 second between requests. A second run reads the cache and downloads nothing. `cross_check.py` does the same for ERA5 into `trend/cache/era5/`, with a 3 second pause; a cell whose request fails is listed at the end and keeps its NASA result. Both scripts take `--cache <folder>` to reuse a cache kept somewhere else. Run `build_trends.py` before `cross_check.py`: the build rewrites the cell files and drops the ERA5 results.
-
-### Web app
-
-```
-npm ci
-npm test
-npm run typecheck
-npm run build
-npm start
+```bash
+python trend/build_trends.py --places trend/places.json --out public/trends   # NASA POWER trends
+python trend/cross_check.py --trends public/trends                            # ERA5 cross-check
+SERPAPI_API_KEY=your_key python trend/evidence.py                             # optional research list
+python scripts/fill_docs.py                                                   # writes the numbers into the docs
 ```
 
-`npm test` runs the unit tests (vitest). `npm run build` writes the static site to `out/`, and `npm start` serves `out/` at http://localhost:3000. Open http://localhost:3000/mission/.
+Downloads are cached in `trend/cache/`, so a second run doesn't hit the APIs again. Run `build_trends.py` before `cross_check.py`, since the build rewrites the cell files. If Python hits a certificate error on macOS, `pip install certifi` and put `SSL_CERT_FILE=$(python -m certifi)` in front of the command.
 
-Browser checks (Playwright; they build nothing, so run `npm run build` first):
+<details>
+<summary><b>More: venue normals, validation, map rebuild, CAD</b></summary>
 
-```
-npx playwright install chromium
-npm run e2e
-```
-
-### Keys and query flags
-
-| Key or flag | What it does |
-|---|---|
-| Map: Trend, Elevation, Satellite, Plain | Chooses what colours the map. "Layers" switches hill shading, contours, rivers, roads, districts and health facilities. |
-| `?place=<id>` | Selects a place by its id in `trend/places.json`, for example `/mission/?place=katete`. |
-| `?story=1` | Story mode. Right and left arrows step through the demo. |
-| `R` | Starts or stops replay of `public/pod/replay.json`, under a REPLAY badge. Without the file, a message says no replay is recorded yet. |
-| `?sim=1` | Starts the development simulator, under a SIMULATION badge. |
-| `?record=1` | Records pod events and shows a "Download session" button. |
-
-### Mosquito sounds from a phone
-
-`/sounds/` is a page for a phone: eight mosquito photos, each looping a held-out recording of that species. On the laptop, open `/mission/`, go to Verify and press "Listen for mosquitoes"; the panel names the microphone in use, shows its level and lets you pick another one (a headset microphone often sends silence). Play a sound from the phone next to the laptop microphone and the species heard is outlined. `npm start` serves on every network interface, so a phone on the same Wi-Fi can open `http://<laptop address>:3000/sounds/`; the laptop itself must use `localhost`, or the browser blocks the microphone. With `?record=1`, "Save the last 20 s" downloads what the microphone heard as `microphone.wav`.
-
-To retrain the models, see the header of `models/mosquito/train.py`; `docs/METHODS.md` has the test results, including the simulated speaker and room.
-
-### Connect the pod
-
-Flash `firmware/pod_k01` as described in `firmware/README.md` and plug the pod into the laptop. Open http://localhost:3000/mission/ in Chrome or Edge (Web Serial works only there, and only on `localhost` or HTTPS), press "Connect pod" in the GROUND panel and pick the pod's port. After the first time, the page opens the same port by itself. When no reading arrives for 5 seconds, the panel shows "pod offline".
-
-### Record a replay
-
-Open http://localhost:3000/mission/?record=1, connect the pod, take the readings you want to replay, then press "Download session". Save the file as `public/pod/replay.json` and run `npm run build` again so `out/` includes it. `R` then replays it.
-
-### Fill the validation CSVs
-
-Write real paired readings into `validation/pulse/readings.csv`, `validation/mosquito/trials.csv` and `validation/weather/log.csv` (the columns are in the header rows and in plan section A7), then run:
-
-```
-python validation/report.py
-python scripts/fill_docs.py
-npm run build
-```
-
-`report.py` rewrites `docs/VALIDATION.md`, `docs/validation_results.json` and `public/validation/results.json`, which the GROUND panel reads. A sensor with no data is left out of the two JSON files, so the screen says "not yet tested" for it. Rows with a blank reading or an unknown condition are left out and counted.
-
-### Rebuild the normals for the venue
-
-The GROUND panel compares the live air reading with NASA POWER's normal range for today's date at the pod's location. `public/trends/pod_site.json` is built for Austin, Texas. To build it for another place, give its latitude and longitude:
-
-```
+**Normals for the venue.** GROUND compares the live air reading with NASA POWER's normal range for today at the pod's location. It's built for Austin, Texas. For somewhere else:
+```bash
 python trend/normals.py --lat 30.2672 --lon -97.7431 --name "Austin, Texas" --out public/trends/pod_site.json
 ```
 
-### Rebuild the map data
+**Validation.** Put real paired readings into `validation/pulse/readings.csv`, `validation/mosquito/trials.csv` and `validation/weather/log.csv`, then run `python validation/report.py`, `python scripts/fill_docs.py` and `npm run build`. The GROUND panel then shows each sensor's tested error.
 
-`mapdata/build.sh` downloads about 700 MB into `mapdata/raw/` and rewrites `public/map/*` and `trend/places.json`. It needs GDAL, osmium-tool and docker (for the OSRM router) on the path, and the Python packages shapely, pyproj and openpyxl:
+**Recording a replay.** Open `/mission/?record=1`, connect the pod, take some readings, press "Download session", save it as `public/pod/replay.json` and rebuild.
+
+**Map data.** `bash mapdata/build.sh` downloads about 700 MB and rewrites `public/map/` and `trend/places.json`. It needs GDAL, osmium-tool, Docker (for OSRM) and `pip install shapely pyproj openpyxl`. See [`mapdata/README.md`](mapdata/README.md), and rerun the trend build afterwards.
+
+**Mosquito models.** See the header of `models/mosquito/train.py`.
+
+**The enclosure.** [`hardware/cad/README.md`](hardware/cad/README.md) rebuilds the CAD and print files; [`hardware/render/README.md`](hardware/render/README.md) covers the Blender renders.
+
+</details>
+
+---
+
+## Project structure
 
 ```
-pip install shapely pyproj openpyxl
-bash mapdata/build.sh
+NASASpaceApps/
+├── app/                  # Next.js pages: /mission/ (the app) and /sounds/ (phone page)
+├── components/
+│   ├── mission/          # SKY, GROUND, ACTION, the map, story mode
+│   ├── sounds/           # the phone sound board
+│   └── base/ ...         # BoardUI components
+├── lib/
+│   ├── trends/           # loading and formatting the trend files
+│   ├── pod/              # Web Serial, the simulator, the mosquito listener and model
+│   ├── mission/          # triage, orders, delivery, story steps
+│   └── map/              # projection, layers, labels, NASA GIBS
+├── public/               # the built data: trends, map, model weights, clips
+├── trend/                # trend engine, NASA POWER build, ERA5 cross-check, SerpApi evidence
+├── models/mosquito/      # training and test scripts for the two CNNs
+├── mapdata/              # scripts that build the map and the road routes
+├── validation/           # CSVs for pod vs reference readings, and the report
+├── firmware/             # pod K-01 (XIAO) and the early Uno robot-car prototype
+├── hardware/             # parametric CAD, print files, renders
+├── docs/                 # methods, validation, references, submission, AI use
+├── scripts/              # fill_docs.py writes the numbers into the docs
+└── e2e/                  # Playwright browser tests
 ```
 
-`mapdata/README.md` describes each step. After a map rebuild, run the trend build again so the places match.
+---
 
-### The enclosure
+## What's tested, honestly
 
-`hardware/cad/README.md` has the commands that rebuild the CAD files and renders in `hardware/out/`.
+The trend analysis is complete and every number comes from files in this repo. The firmware compiles, but we haven't run the pod hardware with this app yet; the serial link is tested against a simulated port. The validation CSVs are still empty, so every pod reading says "not yet tested". The enclosure is a CAD design with renders and hasn't been printed. NASA POWER values come from the MERRA-2 model, and one cell covers about 56 × 67 km, so it isn't a village-level measurement. That's exactly why the pod exists.
 
-## Layout
-
-```
-app/, components/   Next.js 15 app; components/mission/ is the Mission view, the rest is BoardUI
-lib/                pod events (lib/pod), trend files (lib/trends), triage, orders and story (lib/mission), map
-public/trends/      index.json, one file per grid cell, pod_site.json
-public/map/         province, districts, roads, rivers, towns, facilities, routes, relief, sources.json
-trend/              trend engine, trend build, ERA5 cross-check, normals, places.json, tests
-validation/         validation CSVs and report.py
-mapdata/            scripts that build public/map/ and trend/places.json
-firmware/pod_k01/   Arduino sketch for the pod
-firmware/pod_uno/   early prototype on an Arduino Uno robot car kit (see firmware/README.md)
-hardware/           CAD source (cad/) and its outputs (out/)
-docs/               METHODS, VALIDATION, SUBMISSION, REFERENCES, AI_USE
-scripts/            fill_docs.py, which writes the numbers into the docs
-e2e/                Playwright checks
-```
-
-## What has been tested
-
-The firmware compiles. The pod hardware has not been run with this software by the authors of this repo; the serial path is tested with a simulated port. The validation CSV files are empty until people fill them, so every pod reading says "not yet tested". The enclosure is a CAD design with renders and has not been built. `docs/METHODS.md` lists the rest.
+---
 
 ## Credits and licences
 
-NASA POWER data: NASA Langley Research Center POWER project, values from the MERRA-2 reanalysis (NASA GMAO). Cross-check: ECMWF ERA5 reanalysis through the Open-Meteo archive API. The citations are in `docs/REFERENCES.md`. Map and facility data:
+The code is under the [MIT License](LICENSE). The data keeps its own licences:
+
+NASA POWER data comes from the NASA Langley Research Center POWER project, with values from the MERRA-2 reanalysis (NASA GMAO). The cross-check uses the ECMWF ERA5 reanalysis through the Open-Meteo archive API. Mosquito recordings are from HumBugDB (Kiskin et al. 2021, CC BY 4.0). Full citations are in [`docs/REFERENCES.md`](docs/REFERENCES.md). Map and facility data:
 
 <!-- fill_docs:credits -->
 | Data | Licence | Used for |
@@ -152,10 +270,10 @@ NASA POWER data: NASA Langley Research Center POWER project, values from the MER
 | [Copernicus DEM GLO-90 (AWS Open Data, copernicus-dem-90m)](https://copernicus-dem-90m.s3.amazonaws.com) | Copernicus DEM GLO-90, free licence; produced using Copernicus WorldDEM-90 (c) DLR e.V. 2010-2014 and (c) Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved | hillshade relief (49 tiles) |
 <!-- /fill_docs:credits -->
 
-## Earlier project
+This is a new codebase written at RiverHacks x NASA Space Apps 2026. It builds on the idea of an earlier project by another author, Orbit Health, Philip Mocanu's Cal Hacks 13.0 project (https://devpost.com/software/orbit-health). No code, data or assets from that project are used here. How we used AI tools is written up in [`docs/AI_USE.md`](docs/AI_USE.md).
 
-This is a new codebase written at RiverHacks x NASA Space Apps 2026. It follows the idea of an earlier project by another author: Orbit Health, Philip Mocanu's Cal Hacks 13.0 project (https://devpost.com/software/orbit-health). No code, data or assets from that project are used here.
+---
 
-## Licence
-
-The team still has to choose an open-source licence before publishing this repository.
+<p align="center">
+  <sub>Built for <b>RiverHacks × NASA Space Apps 2026</b> by the Project Astrophage team</sub>
+</p>

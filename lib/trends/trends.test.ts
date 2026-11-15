@@ -1,6 +1,5 @@
 import { describe, expect, test } from "vitest";
 import { cellId, powerCell } from "./powerCell";
-import { senLine } from "./senLine";
 
 describe("powerCell and cellId", () => {
   test("plan cases", () => {
@@ -22,16 +21,5 @@ describe("powerCell and cellId", () => {
 
   test("a cell at zero has no negative zero", () => {
     expect(cellId(powerCell(-0.1, -0.1))).toBe("0.000_0.000");
-  });
-});
-
-describe("senLine", () => {
-  test("plan case", () => {
-    // line value = intercept + slope_per_year * season
-    expect(senLine({ intercept: 100, slope_per_year: 2 }, [2000, 2001])).toEqual([4100, 4102]);
-  });
-
-  test("empty seasons give an empty line", () => {
-    expect(senLine({ intercept: 1, slope_per_year: 1 }, [])).toEqual([]);
   });
 });

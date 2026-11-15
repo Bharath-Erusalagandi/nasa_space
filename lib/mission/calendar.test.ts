@@ -1,5 +1,5 @@
 import { describe, expect, test } from "vitest";
-import { trend } from "@/lib/trends/fixtures";
+import { trend } from "@/lib/trends/__fixtures__/trends";
 import { calendarLine } from "./calendar";
 
 describe("calendar line", () => {

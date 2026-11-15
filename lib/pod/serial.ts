@@ -32,8 +32,6 @@ export function serialApi(): SerialLike | undefined {
   return (navigator as Navigator & { serial?: SerialLike }).serial;
 }
 
-export const supported = () => serialApi() !== undefined;
-
 export const MAX_LINE = 4096;
 
 const stripCR = (line: string) => line.replace(/\r$/, "");

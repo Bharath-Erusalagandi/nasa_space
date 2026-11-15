@@ -4,11 +4,11 @@
 
 ## Project name
 
-Orbit Health: Trend Detective
+Project Astrophage
 
 ## High-level project summary
 
-Is the rainy season in eastern Zambia changing, and does that matter for getting malaria medicine to villages before the roads close? Orbit Health lets you pick a place in Eastern Province and one of seven indicators built from NASA data, see 45 seasons (1981/82 to 2025/26), and read a four-line verdict: what is changing, where, how much, and whether it is statistically significant. After a correction for testing every cell, total wet-season rainfall has a significant trend in 0 of 28 NASA grid cells, while October temperature is rising significantly in 27 of them. The number of rainy days falls significantly in 5 cells, and the wettest day of the season gets heavier in 13. A village pod sends live pulse and air readings into the same screen, each shown beside its tested error or the words "not yet tested", and a danger-sign check turns a patient's answer into a medicine order and a delivery on real roads.
+Is the rainy season in eastern Zambia changing, and does that matter for getting malaria medicine to villages before the roads close? Project Astrophage lets you pick a place in Eastern Province and one of nine indicators built from NASA data, see 45 seasons (1981/82 to 2025/26), and read a four-line verdict: what is changing, where, how much, and whether it is statistically significant. After a correction for testing every cell, total wet-season rainfall has a significant trend in 0 of 28 NASA grid cells, while October temperature is rising significantly in 27 of them. The number of rainy days falls significantly in 5 cells, and the wettest day of the season gets heavier in 13. A village pod sends live pulse and air readings into the same screen, each shown beside its tested error or the words "not yet tested", and a danger-sign check turns a patient's answer into a medicine order and a delivery on real roads.
 
 ## Link to project demo
 
@@ -34,9 +34,9 @@ Limits we state on screen and in `docs/METHODS.md`: MERRA-2 is a model reanalysi
 
 NASA POWER daily point API (NASA Langley Research Center), with values from the MERRA-2 reanalysis (NASA GMAO): corrected precipitation (`PRECTOTCORR`), 2 m air temperature (`T2M`), 2 m relative humidity (`RH2M`) and root-zone soil wetness (`GWETROOT`), 1 January 1981 to 2026-09-15, one request per 0.5 x 0.625 degree cell, 28 cells. We use it to build nine seasonal indicators, test each one for a trend, and give the normal temperature range that the pod's live air reading is compared with.
 
-TODO (team): paste the acknowledgement sentence that NASA POWER asks users to include. `docs/REFERENCES.md` gives the sentence and its source.
+The data was obtained from National Aeronautics and Space Administration (NASA) Langley Research Center's Prediction Of Worldwide Energy Resources (POWER) project funded through the NASA Earth Science Division. The data was obtained from the POWER Project's Daily 2.10.3 version on 2026/11/14.
 
-NASA GIBS (Global Imagery Browse Services, NASA ESDIS): the map's Satellite ground shows the MODIS Terra corrected reflectance, true colour, picture of 20 August 2025. It is the one thing the page loads from the internet, and only when that ground is chosen.
+NASA GIBS (Global Imagery Browse Services, NASA ESDIS): the map's Satellite ground shows the MODIS Terra corrected reflectance, true colour, picture of 20 August 2025. It is the one thing the page loads from the internet, and only when that ground is chosen. We acknowledge the use of imagery provided by services from NASA's Global Imagery Browse Services (GIBS), part of NASA's Earth Science Data and Information System (ESDIS).
 
 ## Space agency partner and other data
 

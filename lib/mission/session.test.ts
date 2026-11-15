@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { index, indexCell } from "@/lib/trends/fixtures";
+import { index, indexCell } from "@/lib/trends/__fixtures__/trends";
 import type { Routes } from "@/lib/trends/types";
 import type { StoredEvent } from "@/lib/pod/store";
 import { createSession, oxygenFor, planVisit } from "./session";

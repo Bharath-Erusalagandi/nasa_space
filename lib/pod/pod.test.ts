@@ -1,7 +1,7 @@
 import { describe, expect, test } from "vitest";
 import { parseLine } from "./parseLine";
 import { replay } from "./replay";
-import { errorLabel, recallLabel } from "./errorLabel";
+import { errorLabel } from "./errorLabel";
 
 describe("parseLine", () => {
   test("turns each line format into a pod event", () => {
@@ -90,13 +90,10 @@ describe("replay", () => {
   });
 });
 
-describe("errorLabel and recallLabel", () => {
+describe("errorLabel", () => {
   test("plan cases", () => {
     expect(errorLabel({ n: 48, loa_low: -3.8, loa_high: 5.8 }, "bpm")).toBe("tested on 48 pairs: 95% of readings within -3.8 to +5.8 bpm of the reference");
     expect(errorLabel(undefined, "bpm")).toBe("not yet tested");
-    expect(recallLabel({ recall: { "An. arabiensis": 0.85 }, n: 60 }, "An. arabiensis")).toBe("recognised 85% of recorded An. arabiensis clips (60 clips tested)");
-    expect(recallLabel({ recall: { "An. arabiensis": 0.85 }, n: 60 }, "Culex")).toBe("not yet tested");
-    expect(recallLabel(undefined, "An. arabiensis")).toBe("not yet tested");
   });
 
   test("errorLabel with a negative upper limit", () => {

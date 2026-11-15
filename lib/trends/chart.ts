@@ -74,15 +74,6 @@ export function dots(series: SeasonValue[], used: Span | null): Dot[] {
     }));
 }
 
-export function missingSeasons(series: SeasonValue[]): number[] {
-  const span = fullSpan(series);
-  if (!span) return [];
-  const have = new Set(series.filter((s) => s.value !== null).map((s) => s.season));
-  const missing: number[] = [];
-  for (let s = span.first; s <= span.last; s++) if (!have.has(s)) missing.push(s);
-  return missing;
-}
-
 export function senEnds(trend: Pick<Trend, "intercept" | "slope_per_year">, span: Span): [Point, Point] {
   const at = (season: number) => ({ season, value: trend.intercept + trend.slope_per_year * season });
   return [at(span.first), at(span.last)];

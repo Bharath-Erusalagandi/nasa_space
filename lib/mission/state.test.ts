@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { cellFile, index, indexCell, summary, trend } from "@/lib/trends/fixtures";
+import { cellFile, index, indexCell, summary, trend } from "@/lib/trends/__fixtures__/trends";
 import type { CellFile } from "@/lib/trends/types";
-import { createMissionStore, defaultPlace, getCellFailed, getCellLoading, getCellSummary, getPlace, getSeries, getTrend } from "./state";
+import { createMissionStore, defaultPlace, getCellFailed, getCellLoading, getCellSummary, getPlace, getTrend } from "./state";
 import { STORY } from "./story";
 
 const sample = index([
@@ -127,7 +127,6 @@ describe("mission store", () => {
     expect(getTrend(store.getState())?.slope_per_decade).toBe(-1.04);
     store.getState().setWindow("20");
     expect(getTrend(store.getState())).toBeNull();
-    expect(getSeries(store.getState())).toEqual([]);
     store.getState().setIndicator("wet_days");
     expect(store.getState().layer).toBe("wet_days");
   });

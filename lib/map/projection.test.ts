@@ -1,5 +1,14 @@
 import { describe, expect, it } from "vitest";
-import { unionFrame, clampView, fitProjection, frameBox, IDENTITY, MAX_ZOOM, panBy, project, scaleBar, zoomAt } from "./projection";
+import type { GeoProjection } from "d3-geo";
+import type { Frame } from "@/lib/trends/types";
+import { unionFrame, clampView, fitProjection, IDENTITY, MAX_ZOOM, panBy, project, scaleBar, zoomAt } from "./projection";
+
+// the frame corners in screen pixels at zoom 1, as [x0, y0, x1, y1]
+function frameBox(projection: GeoProjection, frame: Frame): [number, number, number, number] {
+  const [x0, y0] = projection([frame.west, frame.north]) ?? [0, 0];
+  const [x1, y1] = projection([frame.east, frame.south]) ?? [0, 0];
+  return [x0, y0, x1, y1];
+}
 
 const frame = { west: 29.7283, south: -15.2479, east: 33.7996, north: -11.3252 };
 const size = { width: 800, height: 700 };
